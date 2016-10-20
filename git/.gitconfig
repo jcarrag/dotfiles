@@ -1,0 +1,8 @@
+# This is Git's per-user configuration file.
+[user]
+	name = James Carragher
+	email = james@carragher.org
+[push]
+	default = simple
+[core]
+	editor = vim
