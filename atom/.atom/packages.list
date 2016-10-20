@@ -1,7 +1,11 @@
 advanced-open-file@0.16.4
 atom-beautify@0.29.13
 ex-mode@0.13.0
+ink@0.5.3
 linter@1.11.18
 linter-eslint@8.0.0
+lisp-paredit@0.5.4
+proto-repl@1.4.7
 vim-mode@0.65.1
+
 
