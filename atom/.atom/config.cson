@@ -1,6 +1,10 @@
 "*":
   core:
     telemetryConsent: "no"
+    themes: [
+      "one-light-ui"
+      "solarized-light-syntax"
+    ]
   "exception-reporting":
     userId: "9b67037b-7fd9-2eb9-1ecd-3f85d1d983d2"
   welcome:
