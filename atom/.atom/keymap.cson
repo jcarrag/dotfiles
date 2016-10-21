@@ -28,3 +28,28 @@
 
 'atom-text-editor.vim-mode.insert-mode':
   'j j': 'vim-mode:activate-normal-mode'
+
+# Override lisp-paredit:expand-selection
+'atom-text-editor':
+  'ctrl-w': 'unset!'
+'atom-text-editor[data-grammar~="clojure"], atom-text-editor[data-grammar~="lisp"], atom-text-editor[data-grammar~="newlisp"], atom-text-editor[data-grammar~="racket"], atom-text-editor[data-grammar~="scheme"]':
+  'cmd-up': 'lisp-paredit:expand-selection'
+
+# Override pane split to allow atom-workspaces
+'atom-workspace.vim-mode:not(.insert-mode)':
+  'ctrl-w ctrl-s': 'pane:split-down'
+'atom-workspace.vim-mode:not(.insert-mode)':
+  'ctrl-w ctrl-v': 'pane:split-right'
+'atom-workspace.vim-mode:not(.insert-mode)':
+  'ctrl-w s': 'pane:split-down'
+'atom-workspace.vim-mode:not(.insert-mode)':
+  'ctrl-w v': 'pane:split-right'
+# Override pane move to allow atom-workspaces
+'atom-workspace.vim-mode:not(.insert-mode)':
+  'ctrl-w h': 'window:focus-pane-on-left'
+'atom-workspace.vim-mode:not(.insert-mode)':
+  'ctrl-w j': 'window:focus-pane-below'
+'atom-workspace.vim-mode:not(.insert-mode)':
+  'ctrl-w k': 'window:focus-pane-above'
+'atom-workspace.vim-mode:not(.insert-mode)':
+  'ctrl-w l': 'window:focus-pane-on-right'
