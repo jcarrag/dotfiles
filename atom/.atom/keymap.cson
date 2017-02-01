@@ -26,5 +26,22 @@
 # Atom Flight Manual:
 # https://atom.io/docs/latest/using-atom-basic-customization#cson
 
-'atom-text-editor.vim-mode.insert-mode':
-  'j j': 'vim-mode:activate-normal-mode'
+'atom-text-editor.vim-mode-plus.insert-mode':
+  'j j': 'vim-mode-plus:activate-normal-mode'
+
+# Override lisp-paredit:expand-selection
+'atom-text-editor':
+  'ctrl-w': 'unset!'
+'atom-text-editor[data-grammar~="clojure"], atom-text-editor[data-grammar~="lisp"], atom-text-editor[data-grammar~="newlisp"], atom-text-editor[data-grammar~="racket"], atom-text-editor[data-grammar~="scheme"]':
+  'cmd-up': 'lisp-paredit:expand-selection'
+
+# Rebind jump to definition to match vim-fireplace
+'atom-text-editor[data-grammar="source scala"]':
+  '[ d': 'ensime:go-to-definition'
+
+# Cursor history
+'atom-workspace':
+  'ctrl-i':     'cursor-history:next'
+  'ctrl-o':     'cursor-history:prev'
+  'ctrl-cmd-i': 'cursor-history:next-within-editor'
+  'ctrl-cmd-o': 'cursor-history:prev-within-editor'
