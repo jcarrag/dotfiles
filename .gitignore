@@ -1,1 +1,7 @@
 clojure/.lein/repl-history
+atom/.atom/packages
+atom/.atom/.apm
+atom/.atom/.node-gyp/
+atom/.atom/blob-store/
+atom/.atom/compile-cache/
+atom/.atom/storage/
