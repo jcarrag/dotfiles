@@ -27,7 +27,7 @@
 # https://atom.io/docs/latest/using-atom-basic-customization#cson
 
 'atom-text-editor.vim-mode-plus.insert-mode':
-  'j j': 'vim-mode-plus:activate-normal-mode'
+  'f d': 'vim-mode-plus:reset-normal-mode'
 
 # Override lisp-paredit:expand-selection
 'atom-text-editor':
