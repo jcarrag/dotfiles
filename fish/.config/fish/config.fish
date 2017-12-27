@@ -9,3 +9,5 @@ fundle plugin 'fisherman/last_job_id'
 fundle plugin 'fisherman/fzf'
 fundle plugin 'fisherman/simple'
 fundle init
+
+set -x HOMEBREW_AUTO_UPDATE_SECS 86400
