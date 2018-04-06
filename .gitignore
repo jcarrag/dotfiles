@@ -6,3 +6,6 @@ atom/.atom/blob-store/
 atom/.atom/compile-cache/
 atom/.atom/storage/
 atom/.atom/github.cson
+project/
+target/
+sbt/.sbt/1.0/zinc

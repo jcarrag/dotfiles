@@ -1,3 +1,7 @@
+set runtimepath^=~/.vim runtimepath+=~/.vim/after
+let &packpath = &runtimepath
+source ~/.vimrc
+
 " better safe than sorry https://stackoverflow.com/a/5845583/4596773
 set nocompatible
 
@@ -12,6 +16,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'VundleVim/Vundle.vim'
 
 Plug 'derekwyatt/vim-scala'
+Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'vim-scripts/paredit.vim'
 Plug 'guns/vim-clojure-static'
