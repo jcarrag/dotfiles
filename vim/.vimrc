@@ -8,43 +8,86 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-call plug#begin('~/.vim/plugged')
+call plug#begin()
 Plug 'VundleVim/Vundle.vim'
 
-Plug 'derekwyatt/vim-scala'
+" Misc
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+Plug 'majutsushi/tagbar'
+Plug 'scrooloose/nerdtree'
+"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'chrisbra/Colorizer'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'w0rp/ale'
+Plug 'vim-airline/vim-airline'
+Plug 'guns/vim-slamhound'
+Plug 'mileszs/ack.vim'
 
+" Git
+Plug 'tpope/vim-fugitive'
+
+" Scala
+Plug 'derekwyatt/vim-scala'
+Plug 'ensime/ensime-vim'
+
+" Clojure
 Plug 'vim-scripts/paredit.vim'
 Plug 'guns/vim-clojure-static'
 Plug 'guns/vim-clojure-highlight'
 Plug 'tpope/vim-fireplace'
 Plug 'tpope/vim-classpath'
-Plug 'tpope/vim-fugitive'
-Plug 'terryma/vim-multiple-cursors'
 
-Plug 'w0rp/ale'
+" Aesthetics - Main
+Plug 'dracula/vim'
 Plug 'vim-airline/vim-airline'
-Plug 'guns/vim-slamhound'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'ryanoasis/vim-devicons'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
 
-Plug 'mileszs/ack.vim'
 call plug#end()
+
+""" Colouring
+
+" colourscheme
+set encoding=utf8
+syntax on
+color dracula
+"highlight Pmenu guibg=white guifg=black gui=bold
+"highlight Comment gui=bold
+"highlight Normal gui=none
+"highlight NonText guibg=noned=light
+
+" Opaque Background (Comment out to use terminal's profile)
+"set termguicolors
+
+""" Vim config
+
+" osx clipboard
+set clipboard=unnamed
 
 " enable mouse highlighting with Mouse Reporting
 set mouse=a
-
-" rebind <leader>
-let mapleader=","
-
-" bind fd to <Esc> non-recursively in insert mode
-inoremap fd <Esc>
-
-" eagerly attempty vim-clojure-highlight
-autocmd BufRead *.clj try | silent! Require | catch /^Fireplace/ | endtry
 
 " show line numbers
 set number
 
 " Highlight all occurrences of a search
 set hlsearch
+
+" stop vim from creating automatic backups
+set noswapfile
+set nobackup
+set nowb
+
+""" Bindings
+
+" rebind <leader>
+let mapleader=","
 
 " remap window navigation non-recursively in normal mode
 nnoremap <C-J> <C-W><C-J>
@@ -53,14 +96,6 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
-
-" integrate ale with airline
-let g:airline#extensions#ale#enabled = 1
-
-" stop vim from creating automatic backups
-set noswapfile
-set nobackup
-set nowb
 
 " jk instead of arrows
 " http://stackoverflow.com/questions/4016649/vim-word-completion-navigating-with-j-and-k
@@ -71,6 +106,55 @@ inoremap <expr> k pumvisible() ? "\<C-P>" : "k"
 imap <S-Tab> <Esc><<i
 nmap <S-tab> <<
 
+" bind fd to <Esc> non-recursively in insert mode
+inoremap fd <Esc>
+
+""" Plugin config
+
+" NERDTree
+let NERDTreeShowHidden=1
+let g:NERDTreeDirArrowExpandable = '↠'
+let g:NERDTreeDirArrowCollapsible = '↡'
+
+" Airline
+let g:airline_powerline_fonts = 1
+let g:airline_section_z = ' %{strftime("%-I:%M %p")}'
+let g:airline_section_warning = ''
+
+" Deoplete
+let g:deoplete#enable_at_startup = 1
+" Disable documentation window
+set completeopt-=preview
+
+" fzf-vim
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit' }
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'Type'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Character'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+" vim-fireplace
+autocmd BufRead *.clj try | silent! Require | catch /^Fireplace/ | endtry
+
+" autocomplete
+let g:deoplete#enable_at_startup = 1
+
+" integrate ale with airline
+let g:airline#extensions#ale#enabled = 1
+
 " use Ag with Ack
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
@@ -79,3 +163,4 @@ cnoreabbrev ag Ack!
 cnoreabbrev aG Ack!
 cnoreabbrev Ag Ack!
 cnoreabbrev AG Ack!
+
