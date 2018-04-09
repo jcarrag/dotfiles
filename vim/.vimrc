@@ -87,7 +87,7 @@ set nowb
 """ Bindings
 
 " rebind <leader>
-let mapleader=","
+let maplocalleader=","
 
 " remap window navigation non-recursively in normal mode
 nnoremap <C-J> <C-W><C-J>
@@ -110,6 +110,9 @@ nmap <S-tab> <<
 inoremap fd <Esc>
 
 """ Plugin config
+
+" Ensime
+au FileType scala nnoremap <localleader>df :EnDeclaration<CR>
 
 " NERDTree
 let NERDTreeShowHidden=1
