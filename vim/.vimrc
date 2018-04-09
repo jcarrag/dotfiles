@@ -16,7 +16,13 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdtree'
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
@@ -80,9 +86,9 @@ set number
 set hlsearch
 
 " stop vim from creating automatic backups
-set noswapfile
-set nobackup
-set nowb
+"set noswapfile
+"set nobackup
+"set nowb
 
 """ Bindings
 
@@ -128,6 +134,10 @@ let g:airline_section_warning = ''
 let g:deoplete#enable_at_startup = 1
 " Disable documentation window
 set completeopt-=preview
+" Let <Tab> also do completion
+inoremap <silent><expr> <Tab>
+\ pumvisible() ? "\<C-n>" :
+\ deoplete#mappings#manual_complete()
 
 " fzf-vim
 let g:fzf_action = {
