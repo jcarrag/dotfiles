@@ -38,6 +38,10 @@ myKeys config =
      [ key "Kill"             "M-<Backspace>"   $ kill
      , key "Switch to window" "M-w"             $ spawn "rofi -show window"
      ]
+   ^++^
+   keySet "Layouts"
+     [ key "Cycle all layouts" "M-<Tab>" $ sendMessage NextLayout
+     ]
    where
      keySet s ks = subtitle s : mkNamedKeymap config ks
      key n k a = (k, addName n a)
