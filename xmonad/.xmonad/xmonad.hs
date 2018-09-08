@@ -24,19 +24,23 @@ myConfig = def
     }
 
 myKeys config =
-	 keySet "Audio"
- 	   [ key "Mute"         "<XF86AudioMute>"        $ spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-           , key "Raise Volume" "<XF86AudioRaiseVolume>" $ spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%"
-           , key "Lower Volume" "<XF86AudioLowerVolume>" $ spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%"
-           ]
-	^++^
-   	keySet "Windows"
-           [ key "Kill"             "M-<Backspace>"   $ kill
-           , key "Switch to window" "M-w"             $ spawn "rofi -show window"
-   	   ]
-        where
-   	  keySet s ks = subtitle s : mkNamedKeymap config ks
-   	  key n k a = (k, addName n a)
+   keySet "Launchers"
+     [ key "Launcher" "M-<Space>" $ spawn myLauncher
+     ]
+   ^++^
+   keySet "Audio"
+     [ key "Mute"         "<XF86AudioMute>"        $ spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+     , key "Raise Volume" "<XF86AudioRaiseVolume>" $ spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%"
+     , key "Lower Volume" "<XF86AudioLowerVolume>" $ spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%"
+     ]
+   ^++^
+   keySet "Windows"
+     [ key "Kill"             "M-<Backspace>"   $ kill
+     , key "Switch to window" "M-w"             $ spawn "rofi -show window"
+     ]
+   where
+     keySet s ks = subtitle s : mkNamedKeymap config ks
+     key n k a = (k, addName n a)
 
 showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
 showKeybindings x = addName "Show Keybindings" $ io $ do
@@ -44,4 +48,6 @@ showKeybindings x = addName "Show Keybindings" $ io $ do
   hPutStr h (unlines $ showKm x)
   hClose h
   return ()
+
+myLauncher = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
 
