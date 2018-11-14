@@ -2,7 +2,7 @@ self: super:
 
 {
   neovim = super.neovim.override {
-    extraPythonPackages = with self.pythonPackages; [ websocket_client sexpdata ];
+    extraPython3Packages = with self.python3Packages; [ websocket_client sexpdata ];
   };
 }
 

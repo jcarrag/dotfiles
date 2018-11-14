@@ -29,6 +29,8 @@ Plug 'sheerun/vim-polyglot'
 Plug 'chrisbra/Colorizer'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'eagletmt/ghcmod-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'guns/vim-slamhound'
 Plug 'mileszs/ack.vim'
@@ -39,6 +41,10 @@ Plug 'tpope/vim-fugitive'
 " Scala
 Plug 'derekwyatt/vim-scala'
 Plug 'ensime/ensime-vim'
+
+" Purescript
+Plug 'raichoo/purescript-vim'
+Plug 'frigoeu/psc-ide-vim'
 
 " Clojure
 Plug 'vim-scripts/paredit.vim'
@@ -61,6 +67,7 @@ call plug#end()
 
 " colourscheme
 set encoding=utf8
+set expandtab
 syntax on
 color dracula
 "highlight Pmenu guibg=white guifg=black gui=bold
@@ -74,7 +81,7 @@ color dracula
 """ Vim config
 
 " osx clipboard
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 " enable mouse highlighting with Mouse Reporting
 set mouse=a
@@ -86,9 +93,9 @@ set number
 set hlsearch
 
 " stop vim from creating automatic backups
-"set noswapfile
-"set nobackup
-"set nowb
+set noswapfile
+set nobackup
+set nowb
 
 """ Bindings
 
