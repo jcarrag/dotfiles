@@ -11,7 +11,7 @@ import Data.Default (def)
 import Data.Monoid (Endo)
 import qualified Data.Map as M
 import System.IO (hClose)
-import System.Taffybar.Hooks.PagerHints (pagerHints)
+import System.Taffybar.Support.PagerHints (pagerHints)
 
 import XMonad hiding ((|||))
 

@@ -9,3 +9,5 @@ atom/.atom/github.cson
 project/
 target/
 sbt/.sbt/1.0/zinc
+*.hi
+*.o
