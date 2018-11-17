@@ -11,3 +11,5 @@ target/
 sbt/.sbt/1.0/zinc
 *.hi
 *.o
+*.errors
+xmonad-x86_64-linux
