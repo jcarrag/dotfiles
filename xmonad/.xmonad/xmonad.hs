@@ -265,6 +265,7 @@ myKeys config =
     ---------------------------------------------------------------------------
     keySet "Launchers"
       [ key "Launcher"                              "M-<Space>"       $ spawn myLauncher
+      , key "Lock"                                  "M-S-="           $ spawn "alock"
       , key "Terminal"                              "M-<Return>"      $ spawnApp myTerminal
       , key "Browser"                               "M-/"             $ spawnApp myBrowser
       , key "Spotify"                               "M-="             $ namedScratchpadAction myScratchpads "spotify"
