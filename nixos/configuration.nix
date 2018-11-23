@@ -17,6 +17,7 @@
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;
+  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
 
   # Select internationalisation properties.
   i18n = {
@@ -49,9 +50,11 @@
 
   fonts = {
     enableFontDir = true;
+    enableCoreFonts = true;
     enableGhostscriptFonts = true;
     fonts = with pkgs; [
       anonymousPro
+      emojione
       corefonts
       dejavu_fonts
       font-droid
@@ -65,16 +68,7 @@
       ttf_bitstream_vera
       ubuntu_font_family
     ];
-    fontconfig = {
-      #defaultFonts = {
-      #  monospace = [ "Source Code Pro" ];
-      #  sansSerif = [ "Source Sans Pro" ];
-      #  serif     = [ "Source Serif Pro" ];
-      #};
-      ultimate = {
-        enable = false;
-      };
-    };
+    fontconfig.ultimate.enable = false;
   };
   
   services.zerotierone = {
@@ -97,29 +91,15 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    #(pkgs.fetchFromGitHub {
-    #  owner  = "pjan";
-    #  repo   = "taffybar";
-    #  rev    = "8a2148602f189b37cd8acdc453c2f8714e702268";
-    #  sha256 = "1qsqjr6sq6sqfhw9kr7cjvy68xb8mli9kjspfrmm1m454i6pq37i";
-    #  # date = 2018-09-12T23:35:30+02:00;
-    #})
-    #(pkgs.fetchFromGitHub {
-    #  owner = "taffybar";
-    #  repo = "taffybar";
-    #  rev = "v2.1.1";
-    #  sha256 = "12g9i0wbh4i66vjhwzcawb27r9pm44z3la4693s6j21cig521dqq";
-    #})
-    haskellPackages.taffybar
     wget
     tree
     vim
+    hicolor-icon-theme
+    gnome3.adwaita-icon-theme
     neovim
     idea.idea-community
     redshift
     vlc
-    remmina
-    freerdp
     firefox
     tor-browser-bundle-bin
     zip
@@ -133,7 +113,10 @@
     slack
     xclip
     stow
+    gnupg
+    #haskell.compiler.ghc861
     ghc
+    taffybar
     gnumake
     clang
     nodejs
@@ -148,13 +131,15 @@
     lsof
     kitty
     rofi
+    arandr
     gnome3.zenity
     git
     htop
-    networkmanagerapplet
+    alock
+    #networkmanagerapplet
     nix-prefetch-scripts
-    nix-repl
     which
+    remmina
     tdesktop
     anki
     signal-desktop
@@ -167,7 +152,7 @@
       map (n: import (path + ("/" + n)))
           (filter (n: match ".*\\.nix" n != null ||
                       pathExists (path + ("/" + n + "/default.nix")))
-(attrNames (readDir path)));
+          (attrNames (readDir path)));
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -194,10 +179,9 @@
   # Enable sound.
   sound.enable = true;
   sound.mediaKeys.enable = true;
-  hardware.pulseaudio.enable = true;
-  hardware.pulseaudio.support32Bit = true;
 
   services.upower.enable = true;
+  systemd.services.upower.enable = true;
 
   services.redshift = {
     enable = true;
@@ -223,6 +207,8 @@
       enableContribAndExtras = true;
       extraPackages = hpkgs: [
         hpkgs.taffybar
+        hpkgs.xmonad-extras
+        hpkgs.xmonad-contrib
       ];
     };
   };
@@ -252,10 +238,14 @@
     uid = 1000;
   };
 
+  security.sudo.extraConfig = ''
+    Defaults timestamp_timeout=-1
+  '';
+
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "18.03"; # Did you read the comment?
+  system.stateVersion = "18.09"; # Did you read the comment?
 
 }
