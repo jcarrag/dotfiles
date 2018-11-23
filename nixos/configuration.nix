@@ -19,11 +19,15 @@
   networking.networkmanager.enable = true;
 
   # Select internationalisation properties.
-  # i18n = {
+  i18n = {
   #   consoleFont = "Lat2-Terminus16";
   #   consoleKeyMap = "us";
   #   defaultLocale = "en_US.UTF-8";
-  # };
+    inputMethod = {
+      enabled = "ibus";
+      ibus.engines = with pkgs.ibus-engines; [ anthy ];
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "Asia/Tokyo";
