@@ -55,6 +55,7 @@ import System.Taffybar.SimpleConfig
 import System.Taffybar.Widget
 import System.Taffybar.Widget.Generic.PollingGraph
 import System.Taffybar.Widget.Generic.PollingLabel
+import System.Taffybar.Widget.Text.NetworkMonitor
 import System.Taffybar.Widget.Util
 import System.Taffybar.Widget.Workspaces
 
@@ -124,6 +125,7 @@ main = do
           , cpu
           , mem
           , net
+          , networkMonitorNew defaultNetFormat Nothing
           , mpris2New
           ]
         , barPosition = Top
