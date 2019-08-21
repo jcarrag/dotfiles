@@ -1,0 +1,19 @@
+# This is Git's per-user configuration file.
+[user]
+       name = James Carragher
+       email = james@carragher.org
+[push]
+       default = simple
+[core]
+       editor = nvim
+       excludesfile = ~/.gitignore
+[commit]
+	gpgsign = true
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	last = log -1 HEAD
+[submodule]
+	recurse = true

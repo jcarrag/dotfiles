@@ -1,1 +1,2 @@
-imap fd <Esc>
+set clipboard=unnamedplus
+set smartcase

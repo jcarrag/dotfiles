@@ -9,20 +9,16 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin()
-Plug 'VundleVim/Vundle.vim'
-
 " Misc
+Plug 'vim-scripts/AnsiEsc.vim'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-abolish'
+Plug 'nelstrom/vim-visual-star-search'
 Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdtree'
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+Plug 'djoshea/vim-autoread'
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
@@ -30,21 +26,25 @@ Plug 'chrisbra/Colorizer'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'eagletmt/ghcmod-vim'
+Plug 'lervag/vimtex'
+"Plug 'eagletmt/ghcmod-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'guns/vim-slamhound'
-Plug 'mileszs/ack.vim'
 
 " Git
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+" Clang
+Plug 'rhysd/vim-clang-format'
 
 " Scala
 Plug 'derekwyatt/vim-scala'
-Plug 'ensime/ensime-vim'
+"Plug 'natebosch/vim-lsc'
 
 " Purescript
 Plug 'raichoo/purescript-vim'
-Plug 'frigoeu/psc-ide-vim'
+"Plug 'frigoeu/psc-ide-vim'
 
 " Clojure
 Plug 'vim-scripts/paredit.vim'
@@ -79,8 +79,17 @@ color dracula
 "set termguicolors
 
 """ Vim config
+set updatetime=100
 
-" osx clipboard
+" save on lose focus/change buffer
+:au FocusLost * silent! wa
+set autowriteall
+
+" open splits
+set splitbelow
+set splitright
+
+" system clipboard
 set clipboard=unnamedplus
 
 " enable mouse highlighting with Mouse Reporting
@@ -97,9 +106,14 @@ set noswapfile
 set nobackup
 set nowb
 
+" Smart case search
+set ignorecase
+set smartcase
+
 """ Bindings
 
 " rebind <leader>
+let mapleader=","
 let maplocalleader=","
 
 " remap window navigation non-recursively in normal mode
@@ -112,47 +126,61 @@ set splitright
 
 " jk instead of arrows
 " http://stackoverflow.com/questions/4016649/vim-word-completion-navigating-with-j-and-k
-inoremap <expr> j pumvisible() ? "\<C-N>" : "j"
-inoremap <expr> k pumvisible() ? "\<C-P>" : "k"
+inoremap <expr> <A-j> pumvisible() ? "\<C-N>" : "j"
+inoremap <expr> <A-k> pumvisible() ? "\<C-P>" : "k"
 
 " Shift+Tab unindents a line
 imap <S-Tab> <Esc><<i
 nmap <S-tab> <<
 
-" bind fd to <Esc> non-recursively in insert mode
-inoremap fd <Esc>
+" Like gJ, but always remove spaces
+fun! JoinSpaceless()
+    execute 'normal gJ'
+
+    " Character under cursor is whitespace?
+    if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\s'
+        " When remove it!
+        execute 'normal dw'
+    endif
+endfun
+
+" Map it to a key
+nnoremap gJ :call JoinSpaceless()<CR>
 
 """ Plugin config
 
-" Ensime
-au FileType scala nnoremap <localleader>df :EnDeclaration<CR>
+" vim-scala
+au BufRead,BufNewFile *.sbt set filetype=scala
 
 " NERDTree
 let NERDTreeShowHidden=1
 let g:NERDTreeDirArrowExpandable = '↠'
 let g:NERDTreeDirArrowCollapsible = '↡'
+map <silent> <C-b> :NERDTreeToggle<CR>
+map <silent> <C-f> :NERDTreeFind<CR>
+
+" Only close other windows other than this one and NERDTree
+function! OnlyAndNerdtree()
+    let currentWindowID = win_getid()
+
+    windo if win_getid() != currentWindowID && &filetype != 'nerdtree' | close | endif
+endfunction
+command! Only call OnlyAndNerdtree()
+" Map it to a key
+nnoremap <C-w>o :call OnlyAndNerdtree()<CR>
 
 " Airline
 let g:airline_powerline_fonts = 1
 let g:airline_section_z = ' %{strftime("%-I:%M %p")}'
 let g:airline_section_warning = ''
 
-" Deoplete
-let g:deoplete#enable_at_startup = 1
-" Disable documentation window
-set completeopt-=preview
-" Let <Tab> also do completion
-inoremap <silent><expr> <Tab>
-\ pumvisible() ? "\<C-n>" :
-\ deoplete#mappings#manual_complete()
-
 " fzf-vim
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
+let g:fzf_colors = {
+  \ 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
   \ 'hl':      ['fg', 'Comment'],
   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
@@ -165,22 +193,142 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
+let g:fzf_buffers_jump = 1
+nnoremap <C-S> :call fzf#run(fzf#wrap({'source': 'git ls-files --exclude-standard --others --cached'}))<CR>
 
 " vim-fireplace
 autocmd BufRead *.clj try | silent! Require | catch /^Fireplace/ | endtry
 
-" autocomplete
-let g:deoplete#enable_at_startup = 1
-
 " integrate ale with airline
 let g:airline#extensions#ale#enabled = 1
 
-" use Ag with Ack
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
-cnoreabbrev ag Ack!
-cnoreabbrev aG Ack!
-cnoreabbrev Ag Ack!
-cnoreabbrev AG Ack!
+""" CoC
+" Better display for messages
+set cmdheight=2
 
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+" always show signcolumns
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use `[c` and `]c` to navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+"nmap <silent> gs <Plug>(coc-document-symbol)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Augment :Rg with FZF's preview window
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case --word-regexp '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
+nnoremap <C-g> :Rg<Cr>
+
+
+" Add diagnostic info for https://github.com/itchyny/lightline.vim
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
+      \ },
+      \ }
+
+
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>

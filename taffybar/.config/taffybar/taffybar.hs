@@ -1,48 +1,3 @@
---import System.Taffybar
---
---import System.Taffybar.Systray
---import System.Taffybar.TaffyPager
---import System.Taffybar.SimpleClock
---import System.Taffybar.Battery
---import System.Taffybar.NetMonitor
---import System.Taffybar.FreedesktopNotifications
---import System.Taffybar.MPRIS
---
---import System.Taffybar.Widgets.PollingBar
---import System.Taffybar.Widgets.PollingGraph
---
---import System.Information.Memory
---import System.Information.CPU
---
---memCallback = do
---  mi <- parseMeminfo
---  return [memoryUsedRatio mi]
---
---cpuCallback = do
---  (userLoad, systemLoad, totalLoad) <- cpuLoad
---  return [totalLoad, systemLoad]
---
---main = do
---  let memCfg = defaultGraphConfig { graphDataColors = [(1, 0, 0, 1)]
---                                  , graphLabel = Just "mem"
---                                  }
---      cpuCfg = defaultGraphConfig { graphDataColors = [ (0, 1, 0, 1)
---                                                      , (1, 0, 1, 0.5)
---                                                      ]
---                                  , graphLabel = Just "cpu"
---                                  }
---  let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
---      battery = batteryBarNew defaultBatteryConfig 60
---      net = netMonitorNew 2 "wlp3s0"
---      pager = taffyPagerNew defaultPagerConfig
---      note = notifyAreaNew defaultNotificationConfig
---      mpris = mprisNew defaultMPRISConfig
---      mem = pollingGraphNew memCfg 1 memCallback
---      cpu = pollingGraphNew cpuCfg 0.5 cpuCallback
---      tray = systrayNew
---  defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager, note ]
---                                        , endWidgets = [ tray, clock, mem, cpu, battery, net, mpris ]
---                                        }
 -- -*- mode:haskell -*-
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
@@ -108,18 +63,20 @@ main = do
       workspaces = workspacesNew myWorkspacesConfig
       cpu = pollingGraphNew cpuCfg 0.5 cpuCallback
       mem = pollingGraphNew memCfg 1 memCallback
+      note = notifyAreaNew defaultNotificationConfig
       net = networkGraphNew netCfg Nothing
       clock = textClockNew Nothing "%a %b %_d %r" 1
       layout = layoutNew defaultLayoutConfig
       windows = windowsNew defaultWindowsConfig
           -- See https://github.com/taffybar/gtk-sni-tray#statusnotifierwatcher
           -- for a better way to set up the sni tray
-      tray = sniTrayThatStartsWatcherEvenThoughThisIsABadWayToDoIt
+      tray = sniTrayNew--sniTrayThatStartsWatcherEvenThoughThisIsABadWayToDoIt
       myConfig = defaultSimpleTaffyConfig
         { startWidgets =
             workspaces : map (>>= buildContentsBox) [ layout, windows ]
         , endWidgets = map (>>= buildContentsBox)
-          [ textBatteryNew "$percentage$%_$status$($time$)"
+          [ note
+          , textBatteryNew "$percentage$%_$status$($time$)"
           , clock
           , tray
           , cpu

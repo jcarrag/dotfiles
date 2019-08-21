@@ -6,10 +6,12 @@ atom/.atom/blob-store/
 atom/.atom/compile-cache/
 atom/.atom/storage/
 atom/.atom/github.cson
-git/.gitconfig
-project/
-target/
-sbt/.sbt/1.0/zinc
+fish/.config/*
+!fish/.config/config.fish
+sbt/.sbt/boot/
+sbt/.sbt/preloaded/
+sbt/.sbt/*
+!sbt/.sbt/*/plugins/plugins.sbt
 *.hi
 *.o
 *.errors
