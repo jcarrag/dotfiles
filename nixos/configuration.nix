@@ -15,12 +15,14 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos"; # Define your hostname.
+  networking.resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
   networking.extraHosts = ''
     127.0.0.1       akka1
     127.0.0.1       cassandra
     127.0.0.1       elastic
     127.0.0.1       elastic5
     127.0.0.1       elastic6
+    127.0.0.1       kafka
     127.0.0.1       redis
     127.0.0.1       consumers
     127.0.0.1       merchants
@@ -28,34 +30,26 @@
     127.0.0.1       webhooks
     127.0.0.1       pts
   '';
-  #networking.nameservers = [ "8.8.8.8" ];
-  #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager = {
     enable = true;
-    packages = [ pkgs.networkmanager-openvpn pkgs.networkmanagerapplet ];
+    packages = [ pkgs.networkmanager-openvpn (import <unstable> {}).networkmanagerapplet ];
   };
 
-  # Select internationalisation properties.
   i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
     inputMethod = {
-      enabled = "ibus";
-      ibus.engines = with pkgs.ibus-engines; [ anthy mozc uniemoji ];
+      enabled = "fcitx";
+      fcitx.engines = with pkgs.fcitx-engines; [ anthy mozc ];
     };
   };
 
   # Set your time zone.
-  time.timeZone =  "Asia/Tokyo"; #"Europe/London";
-
-  #hardware.powermanagement = {
-  #  enable = true;
-  #  cpuFreqGovernor = "ondemand";
-  #};
+  time.timeZone = "Asia/Tokyo"; #"Europe/London";
 
   hardware.bluetooth = {
     enable = true;
+    package = pkgs.bluezFull.overrideAttrs (oldAttrs: {
+      configureFlags = oldAttrs.configureFlags ++ [ "--enable-sixaxis" ];
+    });
     extraConfig = ''
       [General]
       Enable=Source,Sink,Media,Socket
@@ -73,6 +67,14 @@
   };
 
   nix = {
+    binaryCaches = [
+      "https://cache.nixos.org/"
+      "https://all-hies.cachix.org"
+    ];
+    binaryCachePublicKeys = [
+      "all-hies.cachix.org-1:JjrzAOEUsD9ZMt8fdFbzo3jNAyEWlPAwdVuHw4RD43k="
+    ];
+    trustedUsers = [ "root" "james" ];
     nixPath = [
       "/etc/nixos"
       "/nix/var/nix/profiles/per-user/root/channels"
@@ -82,12 +84,27 @@
     ];
   };
 
-  #services.resolved.enable = true;
-  #services.resolved.fallbackDns = [
-  #  "8.8.8.8"
-  #  "172.26.0.2" # hack to paidy-fargate-non-production vpn working
-  #];
-  #systemd.services.systemd-resolved.environment.SYSTEMD_LOG_LEVEL = "debug";
+  services.udev.extraRules = ''
+    # PS4 compat
+    # This rule is needed for basic functionality of the controller in Steam and keyboard/mouse emulation
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
+    # This rule is necessary for gamepad emulation
+    KERNEL=="uinput", MODE="0660", GROUP="users", OPTIONS+="static_node=uinput"
+    # Valve HID devices over USB hidraw
+    KERNEL=="hidraw*", ATTRS{idVendor}=="28de", MODE="0666"
+    # Valve HID devices over bluetooth hidraw
+    KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
+    # DualShock 4 over USB hidraw
+    KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="05c4", MODE="0666"
+    # DualShock 4 wireless adapter over USB hidraw
+    KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="0ba0", MODE="0666"
+    # DualShock 4 Slim over USB hidraw
+    KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="09cc", MODE="0666"
+    # DualShock 4 over bluetooth hidraw
+    KERNEL=="hidraw*", KERNELS=="*054C:05C4*", MODE="0666"
+    # DualShock 4 Slim over bluetooth hidraw
+    KERNEL=="hidraw*", KERNELS=="*054C:09CC*", MODE="0666"
+  '';
 
   services.openvpn.servers = {
     anonine-swe = {
@@ -101,68 +118,38 @@
   };
 
   fonts = {
-    #enableFontDir = true;
-    #enableCoreFonts = true;
-    #enableGhostscriptFonts = true;
-    #fonts = with pkgs; [
-    #  anonymousPro
-    #  emojione
-    #  corefonts
-    #  dejavu_fonts
-    #  freefont_ttf
-    #  google-fonts
-    #  inconsolata
-    #  liberation_ttf
-    #  powerline-fonts
-    #  source-code-pro
-    #  terminus_font
-    #  ttf_bitstream_vera
-    #  ubuntu_font_family
-    #];
-    #fontconfig.ultimate.enable = false;
     fonts = with pkgs; [ 
-      emojione
-      ipafont
+      hack-font
+      fira
+      fira-code
+      fira-mono
       powerline-fonts
-      ubuntu_font_family
-      google-fonts
-      inconsolata
-      baekmuk-ttf
-      kochi-substitute
-      carlito
-    ];
 
-    fontconfig = { 
-      defaultFonts = {
-        monospace = [ 
-          "DejaVu Sans Mono for Powerline"
-          "IPAGothic"
-          "Baekmuk Dotum"
-	  "EmojiOne Color"
-        ];
-        serif = [ 
-          "DejaVu Serif"
-          "IPAPMincho"
-          "Baekmuk Batang"
-	  "EmojiOne Color"
-        ];
-        sansSerif = [
-          "DejaVu Sans"
-          "IPAPGothic"
-          "Baekmuk Dotum"
-	  "EmojiOne Color"
-        ];
-      };
-    };
+      noto-fonts
+      noto-fonts-cjk
+
+      noto-fonts-emoji
+      emojione
+    ];
   };
   
-  # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; let
+    all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
+    easyPS = import (fetchFromGitHub {
+      owner = "justinwoo";
+      repo = "easy-purescript-nix";
+      rev = "6cb5825430ab44719139f28b93d50c5810891366";
+      sha256 = "1awsywpw92xr4jmkwfj2s89wih74iw4ppaifc97n9li4pyds56h4";
+    }) {};
   in
     [
+      dunst
+      unstable.awscli
+      cachix
       cassandra
       dolphin
       dfeet
+      unstable.bustle
       wget
       tree
       vim
@@ -172,39 +159,34 @@
       gnome3.adwaita-icon-theme
       unstable.gnome3.seahorse
       libsecret
-      networkmanagerapplet
+      wireshark
       my-neovim
       redshift
       vlc
-      firefox
-      google-chrome
-      unstable.chromium
+      unstable.firefox
+      unstable.google-chrome
+      calibre
       zip
       unzip
-      unstable.terraform
-      ammonite
+      my-terraform.terraform_0_12_6
       openvpn
       update-resolv-conf
       tor-browser-bundle-bin
       electrum
       dropbox
-      blueman
       pavucontrol # pulseaudio volume control
       paprefs # pulseaudio preferences
       pasystray # pulseaudio systray
       spotify
       unstable.steam
-      discord
+      unstable.discord
       skype
-      slack
+      unstable.slack
       xclip
       stow
       gnupg
       photon
-      #haskell.compiler.ghc861
-      ghc
-      unstable.stack
-      haskellPackages.hoogle
+      gcc
       taffybar
       ripgrep
       gnumake
@@ -212,27 +194,41 @@
       clang
       clang-tools
       cquery
-      nodejs
+      jdk
+      # Javascript
+      unstable.nodejs
       yarn
       nodePackages.node2nix
       nix-npm-install
-      psc-package
-      scala
-      python
-      clojure
-      leiningen
-      jdk
+      # Purescript
+      easyPS.purs
+      easyPS.spago
+      easyPS.psc-package
+      easyPS.purp
+      easyPS.purty
       nodePackages.pulp
       nodePackages.bower
-      #haskellPackages.ghc-mod
-      #hies
-      watchexec
-      cabal-install
+      # Scala
+      scala
       sbt
-      nodejs
+      # Python
+      python
+      unstable.pythonPackages.glances
+      # Clojure
+      clojure
+      leiningen
+      # Haskell
+      #haskellPackages.ghc-mod
+      (all-hies.selection { selector = p: { inherit (p) ghc844; }; })
+      #haskell.compiler.ghc861
+      ghc
+      unstable.stack
+      haskellPackages.hoogle
+      cabal-install
       docker_compose
+      watchexec
       lsof
-      kitty
+      unstable.kitty
       rofi
       arandr
       gnome3.zenity
@@ -251,9 +247,7 @@
       zotero
       tdesktop
       gnome3.pomodoro
-      unstable.anki
-      mecab
-      kakasi
+      anki
       signal-desktop
       unstable.idea.idea-community
     ];
@@ -281,12 +275,12 @@
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   programs.bash.enableCompletion = true;
-  # programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
   programs.fish.enable = true;
   programs.autojump.enable = true;
 
   # List services that you want to enable:
+  services.blueman.enable = true;
   services.printing = {
     enable = true;
     browsing = true;
@@ -305,12 +299,6 @@
 
   virtualisation.docker.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
   # Enable sound.
   sound.enable = true;
   sound.mediaKeys.enable = true;
@@ -321,16 +309,11 @@
   '';
   systemd.services.upower.enable = true;
 
+  location.provider = "geoclue2";
   services.redshift = {
     enable = true;
-    provider = "manual";
-    longitude = "139.69";
-    latitude = "35.69";
   };
 
-  # Enable the KDE Desktop Environment.
-  #services.xserver.displayManager.sddm.enable = true;
-  #services.xserver.desktopManager.plasma5.enable = true;
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -338,7 +321,6 @@
     libinput = {
       enable = true;
       disableWhileTyping = true;
-  #    accelSpeed = "0.5";
     };
     serverLayoutSection = ''
       Option "StandbyTime" "0"
@@ -350,19 +332,22 @@
         primary = true;
         monitorConfig = ''
           Option "PreferredMode" "2048x1152"
-          Option "Position" "512 1784"
-        ''; }
+          Option "Position" "4000 1024"
+        '';
+      }
       { output = "DP1";
         monitorConfig = ''
           Option "PreferredMode" "2560x1440"
-          Option "Position" "0 344"
-        ''; }
-      { output = "DP2";
-        monitorConfig = ''
-          Option "Rotate" "left"
-          Option "PreferredMode" "2560x1440"
-          Option "Position" "2560 0"
-        ''; }
+          Option "Position" "1440 496"
+        '';
+      }
+#      { output = "DP2";
+#        monitorConfig = ''
+#          Option "Rotate" "left"
+#          Option "PreferredMode" "2560x1440"
+#          Option "Position" "0 0"
+#        '';
+#      }
     ];
     resolutions = [
       { x = 2048; y = 1152; }
@@ -373,28 +358,24 @@
     ];
     layout = "us";
     xkbOptions = "shift:both_capslock, caps:ctrl_modifier";
-    #xkbOptions = "ctrl:nocaps, caps:ctrl_modifier";
     desktopManager = {
-      default = "none";
-      xterm.enable = false;
+      default = "xfce";
+      xterm.enable = true;
+      xfce = {
+        enable = true;
+	noDesktop = true;
+	enableXfwm = false;
+      };
     };
     displayManager = {
       lightdm = {
         enable = true;
       };
       sessionCommands = ''
-        ## Make space Super_L
-        #${pkgs.xorg.xmodmap}/bin/xmodmap -e "keycode 65 = Hyper_L"
-        #${pkgs.xorg.xmodmap}/bin/xmodmap -e "remove mod4 = Hyper_L" # hyper_l is mod4 by default
-        #${pkgs.xorg.xmodmap}/bin/xmodmap -e "add Super_L = Hyper_L"
-        ## Map space to an unused keycode (to keep it around for xcape to use).
-        #${pkgs.xorg.xmodmap}/bin/xmodmap -e "keycode any = space"
-        ## Finally use xcape to cause the space bar to generate a space when tapped.
-        #${pkgs.xcape}/bin/xcape -e "Hyper_L=space"
-
         ${pkgs.xorg.xmodmap}/bin/xmodmap -e 'Caps_Lock=Escape'
         ${pkgs.xcape}/bin/xcape -e 'Caps_Lock=Escape'
         ${pkgs.xorg.xinput}/bin/xinput disable 12 # Disable touchscreen
+        ${pkgs.xorg.xset}/bin/xset s 10800 10800
       '';
     };
     windowManager.default = "xmonad";
@@ -405,6 +386,7 @@
         hpkgs.taffybar
         hpkgs.xmonad-extras
         hpkgs.xmonad-contrib
+	hpkgs.xmonad
       ];
     };
   };
@@ -444,20 +426,6 @@
     };
   };
 
-  systemd.user.services.ibus = {
-    enable = true;
-    description = "Ibus";
-    wantedBy = [ "graphical-session.target" ];
-    after = [ "taffbar.service" ];
-    partOf = [ "graphical-session.target" ];
-    serviceConfig = {
-      ExecStart = [ "${pkgs.ibus-with-plugins}/bin/ibus-daemon -d -r" ];
-    };
-    environment = {
-      DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
-    };
-  };
-
   systemd.user.services.network-manager-applet = {
     enable = true;
     description = "Network Manager applet";
@@ -467,9 +435,9 @@
     serviceConfig = {
       ExecStart = toString (
         [
-          "${pkgs.networkmanagerapplet}/bin/nm-applet"
+          "${(import <unstable> {}).networkmanagerapplet}/bin/nm-applet"
           "--sm-disable"
-	  "--indicator"
+          "--indicator"
         ]
       );
     };
@@ -511,13 +479,13 @@
     home = "/home/james";
     isNormalUser = true;
     uid = 1000;
-    #shell = "/run/current-system/sw/bin/fish";
   };
 
   security.sudo.extraConfig = ''
     Defaults timestamp_timeout=-1
   '';
 
+  system.autoUpgrade.enable = true;
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you

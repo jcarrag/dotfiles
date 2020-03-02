@@ -9,16 +9,22 @@
         "cacheDirectory": "/tmp/cquery"
       }
     },
-    "metals": {
-      "command": "metals-vim",
-      "rootPatterns": ["build.sbt"],
-      "filetypes": ["scala", "sbt"]
-    },
     "haskell": {
       "command": "hie-wrapper",
-      "rootPatterns": [".stack.yaml", "cabal.config", "package.yaml"],
-      "filetypes": ["hs", "lhs", "haskell"],
-      "initializationOptions": {}
+      "rootPatterns": [
+        ".stack.yaml",
+        "cabal.config",
+        "package.yaml"
+      ],
+      "filetypes": [
+        "hs",
+        "lhs",
+        "haskell"
+      ],
+      "initializationOptions": {
+        "languageServerHaskell": {
+        }
+      }
     },
     "purescript": {
        "command": "purescript-language-server",
@@ -32,5 +38,6 @@
          "purescript.buildCommand": "spago build -- --json-errors"
        }
      }
-  }
+  },
+  "java.errors.incompleteClasspath.severity": "ignore"
 }

@@ -40,7 +40,9 @@ Plug 'rhysd/vim-clang-format'
 
 " Scala
 Plug 'derekwyatt/vim-scala'
-"Plug 'natebosch/vim-lsc'
+
+" JS
+Plug 'pangloss/vim-javascript'
 
 " Purescript
 Plug 'raichoo/purescript-vim'
@@ -66,7 +68,6 @@ call plug#end()
 """ Colouring
 
 " colourscheme
-set encoding=utf8
 set expandtab
 syntax on
 color dracula
@@ -80,6 +81,12 @@ color dracula
 
 """ Vim config
 set updatetime=100
+
+" use undo file
+set undofile
+set undodir=$HOME/.vim/undo
+set undolevels=1000
+set undoreload=10000
 
 " save on lose focus/change buffer
 :au FocusLost * silent! wa
@@ -110,6 +117,7 @@ set nowb
 set ignorecase
 set smartcase
 
+set cursorline
 """ Bindings
 
 " rebind <leader>
@@ -194,7 +202,7 @@ let g:fzf_colors = {
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 let g:fzf_buffers_jump = 1
-nnoremap <C-S> :call fzf#run(fzf#wrap({'source': 'git ls-files --exclude-standard --others --cached'}))<CR>
+nnoremap <silent> <C-S> :call fzf#run(fzf#wrap({'source': 'git ls-files --exclude-standard --others --cached'}))<CR>
 
 " vim-fireplace
 autocmd BufRead *.clj try | silent! Require | catch /^Fireplace/ | endtry
@@ -250,7 +258,7 @@ nmap <silent> gr <Plug>(coc-references)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
+  if &filetype == 'vim'
     execute 'h '.expand('<cword>')
   else
     call CocAction('doHover')

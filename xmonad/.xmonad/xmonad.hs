@@ -107,7 +107,7 @@ myStartupHook = startupHook def
 -------------------------------------------------------------------------------
 
 myClickJustFocuses = True
-myFocusFollowsMouse = False
+myFocusFollowsMouse = True
 
 -- colors
 base03  = "#002b37"

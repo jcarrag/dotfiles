@@ -15,5 +15,7 @@
 	ci = commit
 	st = status
 	last = log -1 HEAD
+        tree = log --graph --decorate --pretty=oneline --abbrev-commit
+        changelog = "!git log --reverse --pretty=format:'* %s' \"$1\"..\"$2\" #"
 [submodule]
 	recurse = true
