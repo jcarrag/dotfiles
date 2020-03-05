@@ -106,8 +106,8 @@ myStartupHook = startupHook def
 -- theme                                                                    {{{
 -------------------------------------------------------------------------------
 
-myClickJustFocuses = True
-myFocusFollowsMouse = True
+myClickJustFocuses = False
+myFocusFollowsMouse = False
 
 -- colors
 base03  = "#002b37"
@@ -265,7 +265,7 @@ myKeys config =
     ---------------------------------------------------------------------------
     keySet "Launchers"
       [ key "Launcher"                              "M-e"             $ spawn myLauncher
-      , key "Lock"                                  "M-S-="           $ spawn "alock"
+      , key "Lock"                                  "M-S-="           $ spawn "pkill -x -SIGUSR1 dunst" >> spawn "alock"
       , key "Terminal"                              "M-<Return>"      $ spawnApp myTerminal
       , key "Browser"                               "M-/"             $ spawnApp myBrowser
       , key "Spotify"                               "M-="             $ namedScratchpadAction myScratchpads "spotify"

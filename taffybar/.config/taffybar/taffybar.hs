@@ -11,7 +11,6 @@ import           Data.List
 import           Data.List.Split
 import qualified Data.Map as M
 import           Data.Maybe
-import           StatusNotifier.Tray
 import           System.Directory
 import           System.Environment
 import           System.FilePath.Posix
@@ -100,7 +99,6 @@ main = do
       layout = layoutNew defaultLayoutConfig
       windows = windowsNew defaultWindowsConfig
       notifySystemD = void $ runCommandFromPath ["systemd-notify", "--ready"]
-      note = notifyAreaNew defaultNotificationConfig
       myWorkspacesConfig =
         defaultWorkspacesConfig
         { underlineHeight = 3
@@ -116,8 +114,8 @@ main = do
       myClock =
         textClockNewWith
         defaultClockConfig
-        { clockUpdateStrategy = RoundedTargetInterval 60 0.0
-        , clockFormatString = "%a %b %_d %I:%M %p"
+        { clockUpdateStrategy = ConstantInterval 1.0
+        , clockFormatString = "%a %b %d %I:%M:%S %p"
         }
       longLaptopEndWidgets =
         map (>>= buildContentsBox)
@@ -127,6 +125,7 @@ main = do
               , cpuGraph
               , memoryGraph
               , networkGraphNew netCfg Nothing
+              , networkMonitorNew defaultNetFormat Nothing
               , mpris2New
               ]
       selectedConfig =
@@ -140,7 +139,7 @@ main = do
         , cssPath = return cssFilePath
         }
       simpleTaffyConfig = selectedConfig
-        { centerWidgets = [ note ]
+        { centerWidgets = []
         -- , endWidgets = []
         -- , startWidgets = []
         }

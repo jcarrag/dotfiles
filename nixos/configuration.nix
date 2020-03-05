@@ -143,7 +143,7 @@
     }) {};
   in
     [
-      dunst
+      libnotify
       unstable.awscli
       cachix
       cassandra
@@ -305,6 +305,7 @@
 
   services.upower.enable = true;
   powerManagement.resumeCommands = ''
+    ${pkgs.killall}/bin/killall -SIGUSR1 dunst
     ${pkgs.alock}/bin/alock
   '';
   systemd.services.upower.enable = true;
@@ -328,26 +329,26 @@
       Option "OffTime"     "0"
     '';
     xrandrHeads = [
-      { output = "eDP1";
+      { output = "eDP-1";
         primary = true;
         monitorConfig = ''
           Option "PreferredMode" "2048x1152"
-          Option "Position" "4000 1024"
+          Option "Position" "4000 984"
         '';
       }
-      { output = "DP1";
+      { output = "DP-1";
         monitorConfig = ''
           Option "PreferredMode" "2560x1440"
           Option "Position" "1440 496"
         '';
       }
-#      { output = "DP2";
-#        monitorConfig = ''
-#          Option "Rotate" "left"
-#          Option "PreferredMode" "2560x1440"
-#          Option "Position" "0 0"
-#        '';
-#      }
+      { output = "DP-2";
+        monitorConfig = ''
+          Option "PreferredMode" "2560x1440"
+          Option "Position" "0 0"
+	  Option "Rotate" "right"
+        '';
+      }
     ];
     resolutions = [
       { x = 2048; y = 1152; }
@@ -376,6 +377,10 @@
         ${pkgs.xcape}/bin/xcape -e 'Caps_Lock=Escape'
         ${pkgs.xorg.xinput}/bin/xinput disable 12 # Disable touchscreen
         ${pkgs.xorg.xset}/bin/xset s 10800 10800
+	${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &
+        ${pkgs.dunst}/bin/dunst &
+        ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
+        ${pkgs.taffybar}/bin/taffybar &
       '';
     };
     windowManager.default = "xmonad";
@@ -393,71 +398,6 @@
 
   services.dbus.enable = true;
   services.dbus.socketActivated = true;
-
-  systemd.user.services.status-notifer-watcher =
-    let
-      unstable = import <unstable> {};
-    in
-      {
-        enable = true;
-        description = "Status Notifier Watcher";
-        wantedBy = [ "graphical-session.target" ];
-        after = [ "graphical-session-pre.target" ];
-        partOf = [ "graphical-session.target" ];
-        serviceConfig = {
-          ExecStart = [ "${unstable.haskellPackages.status-notifier-item}/bin/status-notifier-watcher" ];
-        };
-        environment = {
-          DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
-        };
-      };
-
-  systemd.user.services.taffybar = {
-    enable = true;
-    description = "Taffybar status bar";
-    wantedBy = [ "graphical-session.target" ];
-    after = [ "status-notifier-watcher.service" ];
-    partOf = [ "graphical-session.target" ];
-    serviceConfig = {
-      ExecStart = [ "${pkgs.taffybar}/bin/taffybar" ];
-    };
-    environment = {
-      DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
-    };
-  };
-
-  systemd.user.services.network-manager-applet = {
-    enable = true;
-    description = "Network Manager applet";
-    wantedBy = [ "graphical-session.target" ];
-    after = [ "taffybar.service" ];
-    partOf = [ "graphical-session.target" ];
-    serviceConfig = {
-      ExecStart = toString (
-        [
-          "${(import <unstable> {}).networkmanagerapplet}/bin/nm-applet"
-          "--sm-disable"
-          "--indicator"
-        ]
-      );
-    };
-    environment = {
-      DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
-    };
-  };
-
-  systemd.services.alock = {
-    enable = true;
-    requires = [
-      "display-manager.service"
-    ];
-    description = "Alock";
-    serviceConfig = {
-      Type = "oneshot";
-      StandardOutput = "syslog";
-      ExecStart = "${pkgs.alock}/bin/alock";
-    };
-  };
 
   programs.light.enable = true;
   services.actkbd = with pkgs; {
