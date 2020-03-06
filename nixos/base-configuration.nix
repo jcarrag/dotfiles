@@ -209,7 +209,6 @@
       sbt
       # Python
       python
-      unstable.pythonPackages.glances
       # Clojure
       clojure
       leiningen
@@ -217,10 +216,10 @@
       #haskellPackages.ghc-mod
       (all-hies.selection { selector = p: { inherit (p) ghc844; }; })
       #haskell.compiler.ghc861
-      ghc
-      unstable.stack
-      haskellPackages.hoogle
-      cabal-install
+      #ghc
+      #unstable.stack
+      #haskellPackages.hoogle
+      #cabal-install
       docker_compose
       watchexec
       lsof
