@@ -9,6 +9,9 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.extraModprobeConfig = ''
+    xpad
+  '';
 
   networking.hostName = "nixos"; # Define your hostname.
   networking.resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
@@ -173,6 +176,7 @@
       pasystray # pulseaudio systray
       spotify
       unstable.steam
+      parsec
       unstable.discord
       skype
       unstable.slack
