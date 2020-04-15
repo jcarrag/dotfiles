@@ -198,14 +198,6 @@
       yarn
       nodePackages.node2nix
       nix-npm-install
-      # Purescript
-      easyPS.purs
-      easyPS.spago
-      easyPS.psc-package
-      easyPS.purp
-      easyPS.purty
-      nodePackages.pulp
-      nodePackages.bower
       # Scala
       scala
       sbt
@@ -237,6 +229,7 @@
       git-hub
       htop
       alock
+      haskellPackages.niv
       nix-prefetch-scripts
       which
       remmina
@@ -291,6 +284,7 @@
     publish.userServices = true;
   };
   services.gnome3.gnome-keyring.enable = true;
+  services.lorri.enable = true;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
