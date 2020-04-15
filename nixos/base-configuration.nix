@@ -207,6 +207,7 @@
       sbt
       # Python
       python
+      nix-pip-install
       # Clojure
       clojure
       leiningen
