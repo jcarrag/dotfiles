@@ -72,11 +72,9 @@
     ];
     trustedUsers = [ "root" "james" ];
     nixPath = [
-      "/etc/nixos"
       "/nix/var/nix/profiles/per-user/root/channels"
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
+      "nixpkgs=/home/james/nix-channels/19.09/nixpkgs"
       "nixos-config=/etc/nixos/configuration.nix"
-      "nixpkgs-overlays=/home/james/.config/nixpkgs/overlays"
     ];
   };
 
