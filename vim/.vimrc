@@ -27,9 +27,11 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'lervag/vimtex'
+Plug 'sbdchd/neoformat'
 "Plug 'eagletmt/ghcmod-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'guns/vim-slamhound'
+Plug 'direnv/direnv.vim'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -40,6 +42,7 @@ Plug 'rhysd/vim-clang-format'
 
 " Scala
 Plug 'derekwyatt/vim-scala'
+Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 
 " JS
 Plug 'pangloss/vim-javascript'
@@ -156,6 +159,12 @@ endfun
 nnoremap gJ :call JoinSpaceless()<CR>
 
 """ Plugin config
+
+" neoformat on save
+augroup fmt
+  autocmd!
+  autocmd BufWritePre * undojoin | Neoformat
+augroup END
 
 " vim-scala
 au BufRead,BufNewFile *.sbt set filetype=scala

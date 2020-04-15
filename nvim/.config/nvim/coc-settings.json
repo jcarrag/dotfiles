@@ -2,12 +2,42 @@
   "languageserver": {
     "cquery": {
       "command": "cquery",
-      "args": ["--log-file=/tmp/cq.log"],
-      "filetypes": ["c", "cpp"],
-      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+      "args": [
+        "--log-file=/tmp/cq.log"
+      ],
+      "filetypes": [
+        "c",
+        "cpp"
+      ],
+      "rootPatterns": [
+        "compile_flags.txt",
+        "compile_commands.json",
+        ".vim/",
+        ".git/",
+        ".hg/"
+      ],
       "initializationOptions": {
         "cacheDirectory": "/tmp/cquery"
       }
+    },
+    "clojure-lsp": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "clojure-lsp"
+      ],
+      "filetypes": [
+        "clojure"
+      ],
+      "rootPatterns": [
+        "project.clj"
+      ],
+      "additionalSchemes": [
+        "jar",
+        "zipfile"
+      ],
+      "trace.server": "verbose",
+      "initializationOptions": {}
     },
     "haskell": {
       "command": "hie-wrapper",
@@ -22,22 +52,31 @@
         "haskell"
       ],
       "initializationOptions": {
-        "languageServerHaskell": {
-        }
+        "languageServerHaskell": {}
       }
     },
     "purescript": {
-       "command": "purescript-language-server",
-       "args": ["--log", "/home/james/Downloads/purs-ide-server.log", "--stdio"],
-       "filetypes": ["purescript"],
-       "rootPatterns": ["spago.dhall", "bower.json", "psc-package.json"],
-       "trace.server": "verbose",
-       "initializationOptions": {
-         "purescript.addSpagoSources": true,
-         "purescript.addNpmPath": true,
-         "purescript.buildCommand": "spago build -- --json-errors"
-       }
-     }
+      "command": "purescript-language-server",
+      "args": [
+        "--log",
+        "/home/james/Downloads/purs-ide-server.log",
+        "--stdio"
+      ],
+      "filetypes": [
+        "purescript"
+      ],
+      "rootPatterns": [
+        "spago.dhall",
+        "bower.json",
+        "psc-package.json"
+      ],
+      "trace.server": "verbose",
+      "initializationOptions": {
+        "purescript.addSpagoSources": true,
+        "purescript.addNpmPath": true,
+        "purescript.buildCommand": "spago build -- --json-errors"
+      }
+    }
   },
   "java.errors.incompleteClasspath.severity": "ignore"
 }
