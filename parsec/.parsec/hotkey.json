@@ -1,0 +1,47 @@
+{
+	"disconnect":	{
+		"key":	53,
+		"mod":	320,
+		"global":	false
+	},
+	"window_mode":	{
+		"key":	26,
+		"mod":	65,
+		"global":	false
+	},
+	"menu":	{
+		"key":	16,
+		"mod":	65,
+		"global":	false
+	},
+	"chat":	{
+		"key":	6,
+		"mod":	65,
+		"global":	false
+	},
+	"immersive":	{
+		"key":	12,
+		"mod":	65,
+		"global":	false
+	},
+	"ignore":	{
+		"key":	0,
+		"mod":	0,
+		"global":	false
+	},
+	"accept_all":	{
+		"key":	58,
+		"mod":	64,
+		"global":	true
+	},
+	"kick_all":	{
+		"key":	60,
+		"mod":	64,
+		"global":	true
+	},
+	"detach":	{
+		"key":	29,
+		"mod":	320,
+		"global":	false
+	}
+}

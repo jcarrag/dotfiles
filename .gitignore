@@ -9,6 +9,8 @@ atom/.atom/*
 !atom/.atom/styles.less
 fish/.config/*
 !fish/.config/config.fish
+parsec/.parsec/lock
+parsec/.parsec/log.txt
 sbt/.sbt/boot/
 sbt/.sbt/preloaded/
 sbt/.sbt/*
