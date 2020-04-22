@@ -337,6 +337,7 @@
         enable = true;
       };
       sessionCommands = ''
+        ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
         ${pkgs.xorg.xmodmap}/bin/xmodmap -e 'Caps_Lock=Escape'
         ${pkgs.xcape}/bin/xcape -e 'Caps_Lock=Escape'
         ${pkgs.xorg.xinput}/bin/xinput disable 12 # Disable touchscreen
