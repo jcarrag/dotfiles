@@ -8,3 +8,7 @@
 	path = nix-channels/nix-channels/release-19.09
 	url = git@github.com:NixOS/nixpkgs.git
 	branch = release-19.09
+[submodule "nix-channels/nix-channels/release-unstable"]
+	path = nix-channels/nix-channels/release-unstable
+	url = git@github.com:nixos/nixpkgs
+	branch = nixpkgs-unstable
