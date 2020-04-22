@@ -163,7 +163,7 @@ nnoremap gJ :call JoinSpaceless()<CR>
 " neoformat on save
 augroup fmt
   autocmd!
-  autocmd BufWritePre * undojoin | Neoformat
+  au BufWritePre * try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | finally | silent Neoformat | endtry
 augroup END
 
 " vim-scala
