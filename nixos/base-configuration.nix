@@ -193,6 +193,7 @@
       clang-tools
       cquery
       jdk
+      direnv
       # Javascript
       unstable.nodejs
       yarn
