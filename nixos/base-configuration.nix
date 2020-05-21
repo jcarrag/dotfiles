@@ -49,10 +49,6 @@
     package = pkgs.bluezFull.overrideAttrs (oldAttrs: {
       configureFlags = oldAttrs.configureFlags ++ [ "--enable-sixaxis" ];
     });
-    extraConfig = ''
-      [General]
-      Enable=Source,Sink,Media,Socket
-    '';
   };
 
   hardware.opengl = {
@@ -75,8 +71,8 @@
     ];
     trustedUsers = [ "root" "james" ];
     nixPath = [
-      "/nix/var/nix/profiles/per-user/root/channels"
       "/home/james/nix-channels"
+      "/nix/var/nix/profiles/per-user/root/channels"
       "nixos-config=/etc/nixos/configuration.nix"
     ];
   };
@@ -185,7 +181,7 @@
       gnupg
       photon
       gcc
-      taffybar
+      unstable.taffybar
       ripgrep
       gnumake
       cmake
@@ -324,7 +320,6 @@
     layout = "us";
     xkbOptions = "shift:both_capslock, caps:ctrl_modifier";
     desktopManager = {
-      default = "xfce";
       xterm.enable = true;
       xfce = {
         enable = true;
@@ -333,6 +328,7 @@
       };
     };
     displayManager = {
+      defaultSession = "xfce+xmonad";
       lightdm = {
         enable = true;
       };
@@ -345,15 +341,14 @@
 	${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &
         ${pkgs.dunst}/bin/dunst &
         ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
-        ${pkgs.taffybar}/bin/taffybar &
+        ${(import <unstable> {}).taffybar}/bin/taffybar &
       '';
     };
-    windowManager.default = "xmonad";
     windowManager.xmonad = {
       enable = true;
       enableContribAndExtras = true;
       extraPackages = hpkgs: [
-        hpkgs.taffybar
+        (import <unstable> {}).haskellPackages.taffybar
         hpkgs.xmonad-extras
         hpkgs.xmonad-contrib
 	hpkgs.xmonad
