@@ -1,3 +1,3 @@
-#!/run/current-system/sw/bin/env
+#!/usr/bin/env bash
 
 find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin master \;

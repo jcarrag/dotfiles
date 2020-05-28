@@ -287,6 +287,9 @@
   # services.openssh.enable = true;
 
   virtualisation.docker.enable = true;
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  users.extraGroups.vboxusers.members = [ "james" ];
 
   # Enable sound.
   sound.enable = true;

@@ -28,6 +28,7 @@ Plug 'w0rp/ale'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'lervag/vimtex'
 Plug 'sbdchd/neoformat'
+Plug 'tpope/vim-commentary'
 "Plug 'eagletmt/ghcmod-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'guns/vim-slamhound'
