@@ -4,10 +4,6 @@
 [submodule "nixpkgs/.config/nixpkgs/derivations/easy-purescript-nix"]
 	path = nixpkgs/.config/nixpkgs/derivations/easy-purescript-nix
 	url = git@github.com:justinwoo/easy-purescript-nix.git
-[submodule "nix-channels/release-19.09"]
-	path = nix-channels/nix-channels/release-19.09
-	url = git@github.com:NixOS/nixpkgs.git
-	branch = release-19.09
 [submodule "nix-channels/nix-channels/release-unstable"]
 	path = nix-channels/nix-channels/release-unstable
 	url = git@github.com:nixos/nixpkgs
