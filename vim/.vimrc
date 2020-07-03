@@ -27,7 +27,6 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'lervag/vimtex'
-Plug 'sbdchd/neoformat'
 Plug 'tpope/vim-commentary'
 "Plug 'eagletmt/ghcmod-vim'
 Plug 'vim-airline/vim-airline'
@@ -160,13 +159,6 @@ endfun
 nnoremap gJ :call JoinSpaceless()<CR>
 
 """ Plugin config
-
-" neoformat on save
-augroup fmt
-  autocmd!
-  au BufWritePre * try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | finally | silent Neoformat | endtry
-augroup END
-
 " vim-scala
 au BufRead,BufNewFile *.sbt set filetype=scala
 
@@ -272,8 +264,8 @@ inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use `[c` and `]c` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+nmap <silent> [e <Plug>(coc-diagnostic-prev)
+nmap <silent> ]e <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
@@ -326,7 +318,7 @@ nmap <leader>qf  <Plug>(coc-fix-current)
 command! -nargs=0 Format :call CocAction('format')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}

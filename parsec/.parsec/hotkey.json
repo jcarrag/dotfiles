@@ -43,5 +43,10 @@
 		"key":	29,
 		"mod":	320,
 		"global":	false
+	},
+	"display":	{
+		"key":	0,
+		"mod":	0,
+		"global":	false
 	}
 }

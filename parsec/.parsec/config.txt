@@ -8,5 +8,6 @@
 # Example:
 # encoder_bitrate = 10
 
+app_flags = 1
 app_run_level = 3
 client_windowed = 1

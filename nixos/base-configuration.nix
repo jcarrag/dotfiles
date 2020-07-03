@@ -146,6 +146,7 @@
       wget
       tree
       vim
+      ferdi-my
       texlive.combined.scheme-small
       hicolor-icon-theme
       gnome2.gnome_icon_theme
@@ -161,6 +162,8 @@
       calibre
       zip
       unzip
+      jq
+      saml2aws
       my-terraform.terraform_0_12_6
       openvpn
       update-resolv-conf
@@ -175,6 +178,7 @@
       parsec
       unstable.discord
       skype
+      zoom-us
       unstable.slack
       xclip
       stow
@@ -236,6 +240,8 @@
       tdesktop
       gnome3.pomodoro
       anki
+      mecab
+      kakasi
       signal-desktop
       unstable.idea.idea-community
     ];
