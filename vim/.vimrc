@@ -37,6 +37,9 @@ Plug 'direnv/direnv.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
+" Nix
+Plug 'LnL7/vim-nix'
+
 " Clang
 Plug 'rhysd/vim-clang-format'
 
