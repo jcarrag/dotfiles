@@ -13,21 +13,6 @@
           popd
         '';
 
-        allToMp3 = with final; stdenv.mkDerivation {
-          version = "0.3.18";
-          pname = "allToMp3";
-          src = fetchFromGithub {
-            owner = "AllToMP3";
-            repo = "alltomp3-app";
-            rev = "047fd4be848a11948c44ede145112475a9614308";
-            sha256 = "1m9xh24p3dz7krv65w06n4iy856c9c2klwb5ma1nqfqhd9czc3sb";
-          };
-
-          nativeBuildInputs = [
-            npm nodePackages."@angular/cli@1.0.0" ffmpeg nodePackages.fpcalc python
-          ];
-        };
-
         ferdi-my = with final; stdenv.mkDerivation rec {
           version = "5.5.1-nightly.15";
           pname = "ferdi";
