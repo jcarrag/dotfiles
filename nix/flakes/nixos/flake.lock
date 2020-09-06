@@ -2,11 +2,11 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1592784995,
-        "narHash": "sha256-mj7GnZrzqwiaPf1WQ9HqOJ7eT+NHB1tDNN0mFTlgXzg=",
+        "lastModified": 1597850840,
+        "narHash": "sha256-OYlhqSfeq0oSSrsbYr4t2kQFtBWy/1+iZGSx3jjVUnE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "13c15f26d44cf7f54197891a6f0c78ce8149b037",
+        "rev": "fc966732c89f9485a1ea1a0f86b2a1bb97db862c",
         "type": "github"
       },
       "original": {
@@ -16,9 +16,40 @@
         "type": "github"
       }
     },
+    "overlays": {
+      "locked": {
+        "dir": "nix/flakes/overlays/nix-npm-install",
+        "lastModified": 1597928902,
+        "narHash": "sha256-Z1TWItPIPwbP8q8njt7mKCIgdDpqdcpBEPsbaDYUNQU=",
+        "type": "git",
+        "url": "file:///home/james/dotfiles?dir=nix%2fflakes%2foverlays%2fnix-npm-install"
+      },
+      "original": {
+        "id": "overlays",
+        "type": "indirect"
+      }
+    },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "overlays": "overlays",
+        "unstable": "unstable"
+      }
+    },
+    "unstable": {
+      "locked": {
+        "lastModified": 1596265691,
+        "narHash": "sha256-9ofCzFqttTsGrvTaS4RrDSTNQO9PFOz5uyn8V+2eA5M=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "840c782d507d60aaa49aa9e3f6d0b0e780912742",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     }
   },

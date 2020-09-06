@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, unstable, ... }:
 
 {
 
@@ -31,7 +31,10 @@
   '';
   networking.networkmanager = {
     enable = true;
-    packages = [ pkgs.networkmanager-openvpn (import <unstable> {}).networkmanagerapplet ];
+    packages = [
+      pkgs.networkmanager-openvpn
+      pkgs.networkmanagerapplet
+    ];
   };
 
   i18n = {
@@ -42,7 +45,9 @@
   };
 
   # Set your time zone.
-  time.timeZone = "Asia/Tokyo"; #"Europe/London";
+  time.timeZone = "Europe/London";
+
+  hardware.facetimehd.enable = true;
 
   hardware.bluetooth = {
     enable = true;
@@ -64,17 +69,18 @@
   nix = {
     binaryCaches = [
       "https://cache.nixos.org/"
-      "https://all-hies.cachix.org"
-    ];
-    binaryCachePublicKeys = [
-      "all-hies.cachix.org-1:JjrzAOEUsD9ZMt8fdFbzo3jNAyEWlPAwdVuHw4RD43k="
     ];
     trustedUsers = [ "root" "james" ];
     nixPath = [
-      "/home/james/nix-channels"
-      "/nix/var/nix/profiles/per-user/root/channels"
+      "nixpkgs=/run/current-system/nixpkgs"
+#      "/home/james/nix-channels"
+#      "/nix/var/nix/profiles/per-user/root/channels"
       "nixos-config=/etc/nixos/configuration.nix"
     ];
+    package = pkgs.nixUnstable;
+    extraOptions = ''
+      experimental-features = nix-command flakes ca-references
+    '';
   };
 
   services.udev.extraRules = ''
@@ -127,7 +133,6 @@
   };
   
   environment.systemPackages = with pkgs; let
-    all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
     easyPS = import (fetchFromGitHub {
       owner = "justinwoo";
       repo = "easy-purescript-nix";
@@ -137,140 +142,101 @@
   in
     [
       libnotify
-      unstable.awscli
+      awscli
       cachix
-      cassandra
-      dolphin
-      dfeet
-      unstable.bustle
-      wget
+      #dfeet
       tree
+      allToMp3
       vim
       ferdi-my
-      texlive.combined.scheme-small
       hicolor-icon-theme
       gnome2.gnome_icon_theme
       gnome3.adwaita-icon-theme
-      unstable.gnome3.seahorse
+      #gnome3.seahorse
       libsecret
-      wireshark
-      my-neovim
-      redshift
+      neovim
       vlc
-      unstable.firefox
-      unstable.google-chrome
+      firefox
+      google-chrome
       calibre
       zip
       unzip
       jq
-      saml2aws
-      my-terraform.terraform_0_12_6
       openvpn
       update-resolv-conf
-      tor-browser-bundle-bin
-      electrum
-      dropbox
+      #unstable.tor-browser-bundle-bin
       pavucontrol # pulseaudio volume control
       paprefs # pulseaudio preferences
       pasystray # pulseaudio systray
       spotify
-      unstable.steam
-      parsec
-      unstable.discord
+      steam
+      #parsec
+      discord
       skype
       zoom-us
-      unstable.slack
+      #slack
       xclip
       stow
       gnupg
-      photon
-      gcc
       unstable.taffybar
       ripgrep
-      gnumake
-      cmake
-      clang
-      clang-tools
-      cquery
-      jdk
       direnv
       # Javascript
-      unstable.nodejs
-      yarn
-      nodePackages.node2nix
+      nodejs
+      #yarn
+      #nodePackages.node2nix
       nix-npm-install
       # Scala
-      scala
-      sbt
+      #scala
+      #sbt
       # Python
-      python
-      nix-pip-install
+      #python
+      #nix-pip-install
       # Clojure
-      clojure
-      leiningen
+      #clojure
+      #leiningen
       # Haskell
       #haskellPackages.ghc-mod
-      (all-hies.selection { selector = p: { inherit (p) ghc844; }; })
       #haskell.compiler.ghc861
       #ghc
       #unstable.stack
       #haskellPackages.hoogle
       #cabal-install
-      docker_compose
+      rnix-lsp
+      ccls
       watchexec
       lsof
-      unstable.kitty
+      usbutils
+      kitty
       rofi
       arandr
       gnome3.zenity
-      shutter
-      my-postman
-      mitmproxy
+      #shutter
+      #my-postman
       gitAndTools.gitFull
-      git-hub
       htop
+      powertop
       alock
+      bat
       haskellPackages.niv
       nix-prefetch-scripts
       which
-      remmina
       okular
-      libreoffice
       zotero
-      tdesktop
-      gnome3.pomodoro
       anki
-      mecab
-      kakasi
-      signal-desktop
-      unstable.idea.idea-community
+      #mecab
+      #kakasi
     ];
+
   nixpkgs.config = {
     allowUnfree = true;
     allowBroken = true;
-    packageOverrides = pkgs: {
-      unstable = import <unstable> 
-        { 
-            # pass the nixpkgs config to the unstable alias
-            # to ensure `allowUnfree = true;` is propagated:
-            config = config.nixpkgs.config; 
-        };
-    };
   };
-  nixpkgs.overlays =
-      let
-        path = "/home/james/.config/nixpkgs/overlays";
-      in with builtins;
-      map (n: import (path + ("/" + n)))
-          (filter (n: match ".*\\.nix" n != null ||
-                      pathExists (path + ("/" + n + "/default.nix")))
-          (attrNames (readDir path)));
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   programs.bash.enableCompletion = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-  programs.fish.enable = true;
   programs.autojump.enable = true;
 
   # List services that you want to enable:
@@ -292,10 +258,10 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  virtualisation.docker.enable = true;
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
-  users.extraGroups.vboxusers.members = [ "james" ];
+  #virtualisation.docker.enable = true;
+  #virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
+  #users.extraGroups.vboxusers.members = [ "james" ];
 
   # Enable sound.
   sound.enable = true;
@@ -316,10 +282,15 @@
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
+    exportConfiguration = true;
     startDbusSession = true;
     libinput = {
       enable = true;
       disableWhileTyping = true;
+      accelSpeed = "0";
+      additionalOptions = ''
+        MatchIsTouchpad "on"
+      '';
     };
     serverLayoutSection = ''
       Option "StandbyTime" "0"
@@ -346,18 +317,19 @@
         ${pkgs.xorg.xmodmap}/bin/xmodmap -e 'Caps_Lock=Escape'
         ${pkgs.xcape}/bin/xcape -e 'Caps_Lock=Escape'
         ${pkgs.xorg.xinput}/bin/xinput disable 12 # Disable touchscreen
+        ${pkgs.xorg.xinput} set-prop 11 "libinput Accel Speed" 0.3
         ${pkgs.xorg.xset}/bin/xset s 10800 10800
 	${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &
         ${pkgs.dunst}/bin/dunst &
         ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
-        ${(import <unstable> {}).taffybar}/bin/taffybar &
+        ${unstable.taffybar}/bin/taffybar &
       '';
     };
     windowManager.xmonad = {
       enable = true;
       enableContribAndExtras = true;
       extraPackages = hpkgs: [
-        (import <unstable> {}).haskellPackages.taffybar
+        unstable.haskellPackages.taffybar
         hpkgs.xmonad-extras
         hpkgs.xmonad-contrib
 	hpkgs.xmonad

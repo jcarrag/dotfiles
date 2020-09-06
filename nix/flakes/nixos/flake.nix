@@ -1,30 +1,29 @@
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-20.03";
+  inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.overlays.url = "overlays";
 
-  outputs = { self, nixpkgs }: {
-
-    nixosConfigurations.container = nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, unstable, overlays }:
+    let
+      configuration = import ../../../nixos/macbook/configuration.nix;
       system = "x86_64-linux";
-      modules =
-        [ ({ pkgs, ... }: {
-            boot.isContainer = true;
-
-            # Let 'nixos-version --json' know about the Git revision
-            # of this flake.
-            system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
-
-            # Network configuration.
-            networking.useDHCP = false;
-            networking.firewall.allowedTCPPorts = [ 80 ];
-
-            # Enable a web server.
-            services.httpd = {
-              enable = true;
-              adminAddr = "morty@example.org";
-            };
-          })
-        ];
-    };
-
-  };
+    in
+      {
+        nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+          system = system;
+          modules =
+            [
+              (
+                { pkgs, ... }: {
+                  nixpkgs.overlays = [ overlays.overlays ];
+                  nix.registry.nixpkgs.flake = nixpkgs;
+                }
+              )
+              (
+                args@{ pkgs, ... }:
+                  configuration (args // { unstable = unstable.legacyPackages.${system}; })
+              )
+            ];
+        };
+      };
 }
