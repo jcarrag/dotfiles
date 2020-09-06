@@ -146,7 +146,6 @@
       cachix
       #dfeet
       tree
-      allToMp3
       vim
       ferdi-my
       hicolor-icon-theme
