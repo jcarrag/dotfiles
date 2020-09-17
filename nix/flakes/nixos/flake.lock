@@ -18,11 +18,9 @@
     },
     "overlays": {
       "locked": {
-        "dir": "nix/flakes/overlays/nix-npm-install",
-        "lastModified": 1597928902,
-        "narHash": "sha256-Z1TWItPIPwbP8q8njt7mKCIgdDpqdcpBEPsbaDYUNQU=",
-        "type": "git",
-        "url": "file:///home/james/dotfiles?dir=nix%2fflakes%2foverlays%2fnix-npm-install"
+        "narHash": "sha256-k0/loTqRcGQj8k2w6z6pz6X7UnnUd9F4vOU0Nci6sJc=",
+        "path": "/home/james/dotfiles/nix/flakes/overlays/nix-npm-install",
+        "type": "path"
       },
       "original": {
         "id": "overlays",
