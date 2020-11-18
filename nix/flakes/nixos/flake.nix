@@ -4,7 +4,7 @@
 
   outputs = { self, nixpkgs, unstable }:
     let
-      configuration = import ../../../nixos/macbook/configuration.nix;
+      configuration = import ./configuration/macbook/configuration.nix;
       overlays = import ../overlays;
       system = "x86_64-linux";
     in
