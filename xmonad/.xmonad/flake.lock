@@ -1,0 +1,37 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1605456368,
+        "narHash": "sha256-diRkanMtpGV9NgQY2SJsA2HWehNVLM9Jz0jchtZrcKY=",
+        "path": "/nix/store/blr1dh8j6d51s0qpnzbqbi3jrfc5prkz-source",
+        "rev": "98e46cec92fb877abaee7ed8f78cee722fd58a7e",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "taffybar-overlay": "taffybar-overlay"
+      }
+    },
+    "taffybar-overlay": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-Av/QK7Fwp6azp4D5NxbftrTiRTxmdDr3l8BxU72+zMs=",
+        "path": "/home/james/dotfiles/nix/flakes/overlays/taffybar.nix",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/james/dotfiles/nix/flakes/overlays/taffybar.nix",
+        "type": "path"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
