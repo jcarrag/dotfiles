@@ -45,7 +45,7 @@
   };
 
   # Set your time zone.
-  time.timeZone = "Europe/London";
+  services.localtime.enable = true;
 
   hardware.facetimehd.enable = true;
 
@@ -112,10 +112,7 @@
 
   fonts = {
     fonts = with pkgs; [ 
-      hack-font
-      fira
-      fira-code
-      fira-mono
+     hack-font
       powerline-fonts
 
       noto-fonts
@@ -149,8 +146,7 @@
       libsecret
       neovim
       vlc
-      firefox
-      google-chrome
+      brave
       calibre
       zip
       unzip
@@ -171,7 +167,7 @@
       xclip
       stow
       gnupg
-      unstable.taffybar
+      taffybar
       ripgrep
       direnv
       # Javascript
@@ -189,14 +185,13 @@
       #clojure
       #leiningen
       # Haskell
-      #haskellPackages.ghc-mod
-      #haskell.compiler.ghc861
-      #ghc
+      ghc
+      cabal-install
+      haskell-language-server
       #unstable.stack
       #haskellPackages.hoogle
-      #cabal-install
       rnix-lsp
-      ccls
+      unstable.ccls
       watchexec
       lsof
       usbutils
@@ -204,21 +199,15 @@
       rofi
       arandr
       gnome3.zenity
-      #shutter
-      #my-postman
       gitAndTools.gitFull
       htop
       powertop
       alock
       bat
-      haskellPackages.niv
       nix-prefetch-scripts
       which
-      okular
       zotero
       anki
-      #mecab
-      #kakasi
     ];
 
   nixpkgs.config = {
@@ -246,15 +235,6 @@
     publish.userServices = true;
   };
   services.gnome3.gnome-keyring.enable = true;
-  services.lorri.enable = true;
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  #virtualisation.docker.enable = true;
-  #virtualisation.virtualbox.host.enable = true;
-  #virtualisation.virtualbox.host.enableExtensionPack = true;
-  #users.extraGroups.vboxusers.members = [ "james" ];
 
   # Enable sound.
   sound.enable = true;
@@ -268,9 +248,7 @@
   systemd.services.upower.enable = true;
 
   location.provider = "geoclue2";
-  services.redshift = {
-    enable = true;
-  };
+  services.redshift.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver = {
@@ -280,10 +258,7 @@
     libinput = {
       enable = true;
       disableWhileTyping = true;
-      accelSpeed = "0";
-      additionalOptions = ''
-        MatchIsTouchpad "on"
-      '';
+      accelSpeed = "0.0";
     };
     serverLayoutSection = ''
       Option "StandbyTime" "0"
@@ -296,8 +271,8 @@
       xterm.enable = true;
       xfce = {
         enable = true;
-	noDesktop = true;
-	enableXfwm = false;
+        noDesktop = true;
+        enableXfwm = false;
       };
     };
     displayManager = {
@@ -310,22 +285,21 @@
         ${pkgs.xorg.xmodmap}/bin/xmodmap -e 'Caps_Lock=Escape'
         ${pkgs.xcape}/bin/xcape -e 'Caps_Lock=Escape'
         ${pkgs.xorg.xinput}/bin/xinput disable 12 # Disable touchscreen
-        ${pkgs.xorg.xinput} set-prop 11 "libinput Accel Speed" 0.3
         ${pkgs.xorg.xset}/bin/xset s 10800 10800
-	${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &
+        ${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &
         ${pkgs.dunst}/bin/dunst &
         ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
-        ${unstable.taffybar}/bin/taffybar &
+        ${pkgs.taffybar}/bin/taffybar &
       '';
     };
     windowManager.xmonad = {
       enable = true;
       enableContribAndExtras = true;
       extraPackages = hpkgs: [
-        unstable.haskellPackages.taffybar
+        hpkgs.taffybar
         hpkgs.xmonad-extras
         hpkgs.xmonad-contrib
-	hpkgs.xmonad
+        hpkgs.xmonad
       ];
     };
   };
@@ -364,6 +338,6 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.09"; # Did you read the comment?
+  system.stateVersion = "20.09"; # Did you read the comment?
 
 }

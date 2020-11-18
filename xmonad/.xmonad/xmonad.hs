@@ -31,6 +31,7 @@ import           XMonad.Hooks.FadeWindows
 import           XMonad.Hooks.InsertPosition
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.ManageHelpers
+import           XMonad.Hooks.SetWMName
 
 import           XMonad.Layout.Accordion
 import           XMonad.Layout.BinarySpacePartition
@@ -98,7 +99,7 @@ myConfig =
 
 myMouseBindings = mouseBindings def
 
-myStartupHook = startupHook def
+myStartupHook = startupHook def >> setWMName "LG3D"
 
 ----------------------------------------------------------------------------}}}
 -- theme                                                                    {{{
@@ -308,6 +309,7 @@ myKeys config
   keySet
     "Launchers"
     [ key "Launcher" "M-e" $ spawn myLauncher
+    , key "SudoLauncher" "M-S-e" $ spawn mySudoLauncher
     , key "Terminal" "M-<Return>" $ spawnApp myTerminal
     , key "Browser" "M-/" $ spawnApp myBrowser
     , key "Spotify" "M-=" $ namedScratchpadAction myScratchpads "spotify"
@@ -499,7 +501,7 @@ isInstance :: App -> Query Bool
 isInstance (ClassApp _ c)    = className =? c
 isInstance (ResourceApp _ r) = resource =? r
 
-myBrowser = ClassApp "browser" "chromium-browser"
+myBrowser = ClassApp "browser" "brave"
 
 myTerminal = ClassApp "kitty" "kitty"
 
@@ -546,6 +548,8 @@ console = ClassApp "kitty --class console --title console" "console"
 glances = ClassApp "kitty --class glances --title glances glances" "glances"
 
 myLauncher = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
+
+mySudoLauncher = "SUDO_ASKPASS=/home/james/bin/askpass-rofi " ++ myLauncher ++ " -run-command 'sudo -A {cmd}'"
 
 myScratchpads =
   [ scratchpadApp "spotify" spotify defaultFloating

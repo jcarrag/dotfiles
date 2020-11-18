@@ -97,7 +97,7 @@ main = do
                 unscaledDefaultGetWindowIconPixbuf <|||>
                 (\size _ -> lift $ loadPixbufByName size "application-default-icon")
       layout = layoutNew defaultLayoutConfig
-      windows = windowsNew defaultWindowsConfig
+      windows = windowsNew defaultWindowsConfig { getActiveLabel = pure mempty }
       notifySystemD = void $ runCommandFromPath ["systemd-notify", "--ready"]
       myWorkspacesConfig =
         defaultWorkspacesConfig
@@ -115,11 +115,11 @@ main = do
         textClockNewWith
         defaultClockConfig
         { clockUpdateStrategy = ConstantInterval 1.0
-        , clockFormatString = "%a %b %d %I:%M:%S %p"
+        , clockFormatString = "%a %d/%m %k:%M:%S"
         }
       longLaptopEndWidgets =
         map (>>= buildContentsBox)
-              [ textBatteryNew "$percentage$%_$status$($time$)"
+              [ batteryIconNew
               , myClock
               , sniTrayNew
               , cpuGraph
