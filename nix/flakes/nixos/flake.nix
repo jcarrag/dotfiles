@@ -1,11 +1,11 @@
 {
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-20.03";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-20.09";
   inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-  inputs.overlays.url = "overlays";
 
-  outputs = { self, nixpkgs, unstable, overlays }:
+  outputs = { self, nixpkgs, unstable }:
     let
       configuration = import ../../../nixos/macbook/configuration.nix;
+      overlays = import ../overlays;
       system = "x86_64-linux";
     in
       {
@@ -15,7 +15,7 @@
             [
               (
                 { pkgs, ... }: {
-                  nixpkgs.overlays = [ overlays.overlays ];
+                  nixpkgs.overlays = [ overlays ];
                   nix.registry.nixpkgs.flake = nixpkgs;
                 }
               )

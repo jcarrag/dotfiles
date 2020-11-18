@@ -2,45 +2,33 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1597850840,
-        "narHash": "sha256-OYlhqSfeq0oSSrsbYr4t2kQFtBWy/1+iZGSx3jjVUnE=",
+        "lastModified": 1605456368,
+        "narHash": "sha256-diRkanMtpGV9NgQY2SJsA2HWehNVLM9Jz0jchtZrcKY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "fc966732c89f9485a1ea1a0f86b2a1bb97db862c",
+        "rev": "98e46cec92fb877abaee7ed8f78cee722fd58a7e",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-20.03",
+        "ref": "nixos-20.09",
         "repo": "nixpkgs",
         "type": "github"
-      }
-    },
-    "overlays": {
-      "locked": {
-        "narHash": "sha256-k0/loTqRcGQj8k2w6z6pz6X7UnnUd9F4vOU0Nci6sJc=",
-        "path": "/home/james/dotfiles/nix/flakes/overlays/nix-npm-install",
-        "type": "path"
-      },
-      "original": {
-        "id": "overlays",
-        "type": "indirect"
       }
     },
     "root": {
       "inputs": {
         "nixpkgs": "nixpkgs",
-        "overlays": "overlays",
         "unstable": "unstable"
       }
     },
     "unstable": {
       "locked": {
-        "lastModified": 1596265691,
-        "narHash": "sha256-9ofCzFqttTsGrvTaS4RrDSTNQO9PFOz5uyn8V+2eA5M=",
+        "lastModified": 1604937552,
+        "narHash": "sha256-jT1VSLaUtZwx1JXOwEqzf+G6OIVcg9gJd+h0DqRGJvs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "840c782d507d60aaa49aa9e3f6d0b0e780912742",
+        "rev": "b839d4a8557adc80e522f674529e586ab2a88d23",
         "type": "github"
       },
       "original": {
