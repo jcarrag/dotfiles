@@ -71,12 +71,6 @@
       "https://cache.nixos.org/"
     ];
     trustedUsers = [ "root" "james" ];
-    nixPath = [
-      "nixpkgs=/run/current-system/nixpkgs"
-#      "/home/james/nix-channels"
-#      "/nix/var/nix/profiles/per-user/root/channels"
-      "nixos-config=/etc/nixos/configuration.nix"
-    ];
     package = pkgs.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes ca-references
