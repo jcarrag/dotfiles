@@ -68,6 +68,7 @@
       libnotify
       lsof
       neovim
+      yarn # needed for coc.nvim's post-install step
       powertop
       ripgrep
       stow
