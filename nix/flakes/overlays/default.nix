@@ -6,6 +6,7 @@ let
     ./ferdi.nix
     ./haskell-language-server.nix
     ./nix-npm-install.nix
+    ./parsec.nix
     ./taffybar.nix
   ];
 in

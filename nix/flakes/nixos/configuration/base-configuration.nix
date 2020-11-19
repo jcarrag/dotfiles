@@ -21,6 +21,7 @@
       anki
       brave
       calibre
+      parsec
       spotify
       steam
       vlc
