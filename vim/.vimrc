@@ -17,7 +17,6 @@ Plug 'tpope/vim-abolish'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdtree'
-Plug 'djoshea/vim-autoread'
 Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -92,6 +91,14 @@ set undofile
 set undodir=$HOME/.vim/undo
 set undolevels=1000
 set undoreload=10000
+
+"" autoread
+" trigger `autoread` when files changes on disk
+  set autoread
+  autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
+" notification after file change
+  autocmd FileChangedShellPost *
+    \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
 " save on lose focus/change buffer
 :au FocusLost * silent! wa
