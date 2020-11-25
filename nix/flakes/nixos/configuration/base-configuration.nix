@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, ... }:
+{ config, pkgs, unstable, colour, ... }:
 
 {
 
@@ -256,6 +256,7 @@
       displayManager = {
         defaultSession = "xfce+xmonad";
         lightdm = {
+          background = colour;
           enable = true;
         };
         sessionCommands = ''
@@ -264,6 +265,7 @@
           ${pkgs.xcape}/bin/xcape -e 'Caps_Lock=Escape'
           ${pkgs.xorg.xinput}/bin/xinput disable 12 # Disable touchscreen
           ${pkgs.xorg.xset}/bin/xset s 10800 10800
+          ${pkgs.picom}/bin/picom &
           ${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &

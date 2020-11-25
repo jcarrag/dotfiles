@@ -1,8 +1,12 @@
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-20.09";
   inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.colours = {
+    url = "/home/james/dotfiles/nix/flakes/nixos/colours";
+    flake = false;
+  };
 
-  outputs = { self, nixpkgs, unstable }:
+  outputs = { self, nixpkgs, unstable, colours }:
     let
       configuration = import ./configuration/macbook/configuration.nix;
       overlays = import ../overlays;
@@ -21,7 +25,10 @@
               )
               (
                 args@{ pkgs, ... }:
-                  configuration (args // { unstable = unstable.legacyPackages.${system}; })
+                configuration (args // {
+                  colour = "${colours}/0f111a.png";
+                  unstable = unstable.legacyPackages.${system};
+                })
               )
             ];
         };

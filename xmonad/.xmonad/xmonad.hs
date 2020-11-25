@@ -158,8 +158,6 @@ cUnfocus = base02
 -- sizes
 sGap = 10
 
-sTopbar = 10
-
 sBorder = 0
 
 sPrompt = 26
@@ -173,20 +171,6 @@ myNormalBorderColor = black
 myFocusedBorderColor = cActive
 
 myFont = "-*-terminus-medium-*-*-*-*-160-*-*-*-*-*-*"
-
-tTopBar =
-  def
-    { fontName = myFont
-    , inactiveBorderColor = base03
-    , inactiveColor = base03
-    , inactiveTextColor = base03
-    , activeBorderColor = cActive
-    , activeTextColor = cActive
-    , activeColor = cActive
-    , urgentBorderColor = red
-    , urgentTextColor = yellow
-    , decoHeight = sTopbar
-    }
 
 tPrompt =
   def
@@ -603,7 +587,6 @@ myLayoutHook =
       trimNamed 5 "Flex" $
       avoidStruts $
       windowNavigation $
-      addTopBar $
       addTabs shrinkText tTab $
       subLayout [] (Simplest ||| Accordion) $
       ifWider smallMonitorWidth wideLayouts standardLayouts
@@ -622,7 +605,7 @@ myLayoutHook =
     -- Tabs Layout
     tabs =
       named "Tabs" $
-      avoidStruts $ addTopBar $ addTabs shrinkText tTab $ Simplest
+      avoidStruts $ addTabs shrinkText tTab $ Simplest
     named n = renamed [(XMonad.Layout.Renamed.Replace n)]
     trimNamed w n =
       renamed
@@ -635,7 +618,7 @@ myLayoutHook =
         [ (XMonad.Layout.Renamed.CutWordsRight w)
         , (XMonad.Layout.Renamed.AppendWords n)
         ]
-    addTopBar = noFrillsDeco shrinkText tTopBar
+    --addTopBar = noFrillsDeco shrinkText tTopBar
     myGaps = gaps [(U, sGap), (D, sGap), (L, sGap), (R, sGap)]
     mySpacing = spacing sGap
 

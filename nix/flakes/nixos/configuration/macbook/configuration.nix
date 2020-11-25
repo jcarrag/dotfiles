@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, ... }:
+{ config, pkgs, unstable, colour, ... }:
 
 {
   imports =
@@ -7,6 +7,7 @@
       ../base-configuration.nix
     ];
   _module.args.unstable = unstable;
+  _module.args.colour = colour;
 
   boot.extraModprobeConfig = ''
     options snd_hda_intel enable=0,1
