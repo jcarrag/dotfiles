@@ -83,12 +83,11 @@
 
   fonts = {
     fonts = with pkgs; [
-      hack-font
-      powerline-fonts
+      emojione
+      (nerdfonts.override { fonts = [ "Hack" ]; })
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
-      emojione
     ];
   };
 
