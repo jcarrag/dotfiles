@@ -69,6 +69,11 @@ call plug#end()
 " colourscheme
 set expandtab
 set noshowmode
+" clear command bar after running a command
+augroup cmdline
+    autocmd!
+    autocmd CmdlineLeave : echo ''
+augroup end
 syntax on
 
 if (has('nvim'))
