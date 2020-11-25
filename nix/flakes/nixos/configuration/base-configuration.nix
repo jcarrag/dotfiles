@@ -266,6 +266,7 @@
           ${pkgs.xorg.xinput}/bin/xinput disable 12 # Disable touchscreen
           ${pkgs.xorg.xset}/bin/xset s 10800 10800
           ${pkgs.picom}/bin/picom &
+          ${pkgs.xbanish}/bin/xbanish &
           ${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
