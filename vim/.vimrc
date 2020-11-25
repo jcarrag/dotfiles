@@ -15,19 +15,15 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-abolish'
 Plug 'nelstrom/vim-visual-star-search'
-Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdtree'
 Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
-Plug 'chrisbra/Colorizer'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'tpope/vim-commentary'
-"Plug 'eagletmt/ghcmod-vim'
-Plug 'vim-airline/vim-airline'
 Plug 'guns/vim-slamhound'
 Plug 'direnv/direnv.vim'
 
@@ -50,7 +46,6 @@ Plug 'pangloss/vim-javascript'
 
 " Purescript
 Plug 'raichoo/purescript-vim'
-"Plug 'frigoeu/psc-ide-vim'
 
 " Clojure
 Plug 'vim-scripts/paredit.vim'
@@ -60,7 +55,7 @@ Plug 'tpope/vim-fireplace'
 Plug 'tpope/vim-classpath'
 
 " Aesthetics - Main
-Plug 'dracula/vim'
+Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
@@ -73,12 +68,19 @@ call plug#end()
 
 " colourscheme
 set expandtab
+set noshowmode
 syntax on
-color dracula
-"highlight Pmenu guibg=white guifg=black gui=bold
-"highlight Comment gui=bold
-"highlight Normal gui=none
-"highlight NonText guibg=noned=light
+
+if (has('nvim'))
+  let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+endif
+if (has('termguicolors'))
+  set termguicolors
+endif
+
+let g:material_terminal_italics = 1
+let g:material_theme_style = 'ocean'
+colorscheme material
 
 " Opaque Background (Comment out to use terminal's profile)
 "set termguicolors
@@ -119,6 +121,10 @@ set number
 
 " Highlight all occurrences of a search
 set hlsearch
+
+" Goyo & Limelight
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
 
 " stop vim from creating automatic backups
 set noswapfile
@@ -192,6 +198,7 @@ nnoremap <C-w>o :call OnlyAndNerdtree()<CR>
 let g:airline_powerline_fonts = 1
 let g:airline_section_z = ' %{strftime("%-I:%M %p")}'
 let g:airline_section_warning = ''
+let g:airline_theme = 'material'
 
 " fzf-vim
 let g:fzf_action = {
@@ -240,7 +247,7 @@ set nobackup
 set nowritebackup
 
 " Give more space for displaying messages.
-set cmdheight=2
+set cmdheight=1
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
