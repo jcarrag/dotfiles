@@ -59,6 +59,7 @@ Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
+Plug 'chrisbra/Colorizer'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 
