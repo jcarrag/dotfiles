@@ -14,7 +14,7 @@
     [
       ### Communication
       discord
-      ferdi-my
+      ferdi
       skype
       zoom-us
       ### Misc
