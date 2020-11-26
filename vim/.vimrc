@@ -226,7 +226,7 @@ let g:fzf_colors = {
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 let g:fzf_buffers_jump = 1
-nnoremap <silent> <C-g> :call fzf#run(fzf#wrap({'source': 'git ls-files --exclude-standard --others --cached'}))<CR>
+nnoremap <silent> <C-g> :call fzf#run(fzf#wrap({'source': 'git ls-files --exclude-standard --others --cached $(git rev-parse --show-toplevel)'}))<CR>
 
 " vim-fireplace
 autocmd BufRead *.clj try | silent! Require | catch /^Fireplace/ | endtry
