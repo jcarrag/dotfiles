@@ -5,6 +5,7 @@ let
   overlays = map import [
     ./ferdi.nix
     ./haskell-language-server.nix
+    ./metals.nix
     ./nix-npm-install.nix
     ./parsec.nix
     ./taffybar.nix

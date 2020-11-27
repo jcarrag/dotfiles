@@ -39,6 +39,8 @@
       ## Nix
       cachix
       rnix-lsp
+      ## Scala
+      metals
       ### Services
       awscli
       ### System
