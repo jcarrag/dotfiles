@@ -21,6 +21,7 @@
       parsec
       spotify
       steam
+      unstable.syncplay
       vlc
       zotero
       ### Programming
@@ -38,6 +39,8 @@
       rnix-lsp
       ## Scala
       metals
+      sbt
+      scala
       ### Services
       awscli
       ### System
