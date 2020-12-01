@@ -9,10 +9,6 @@
   _module.args.unstable = unstable;
   _module.args.colour = colour;
 
-  boot.extraModprobeConfig = ''
-    options snd_hda_intel enable=0,1
-  '';
-
   services.xserver = {
     xrandrHeads = [
       { output = "eDP-1";
