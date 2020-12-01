@@ -14,6 +14,7 @@ Plug 'vim-scripts/AnsiEsc.vim'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-abolish'
+Plug 'chrisbra/csv.vim'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'scrooloose/nerdtree'
 Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
@@ -43,6 +44,7 @@ Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 
 " JS
 Plug 'pangloss/vim-javascript'
+Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 
 " Purescript
 Plug 'raichoo/purescript-vim'
