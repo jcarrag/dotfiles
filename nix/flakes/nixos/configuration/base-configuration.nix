@@ -5,9 +5,6 @@
   boot = {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-    extraModprobeConfig = ''
-      xpad
-    '';
   };
 
   environment.systemPackages = with pkgs;
@@ -111,6 +108,7 @@
       enable = true;
       package = pkgs.pulseaudioFull;
     };
+    xpadneo.enable = true;
   };
 
   i18n = {
