@@ -38,7 +38,6 @@
       cachix
       rnix-lsp
       ## Scala
-      metals
       sbt
       scala
       ### Services

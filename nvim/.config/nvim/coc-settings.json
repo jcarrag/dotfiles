@@ -85,16 +85,6 @@
         "purescript.addNpmPath": true,
         "purescript.buildCommand": "spago build -- --json-errors"
       }
-    },
-    "scala": {
-      "command": "metals-vim",
-      "rootPatterns": [
-        "build.sbt"
-      ],
-      "filetypes": [
-        "scala",
-        "sbt"
-      ]
     }
   }
 }
