@@ -4,7 +4,7 @@ self: super:
   metals = super.metals.overrideAttrs (
     { pname, ... }:
       let
-        version = "0.9.7";
+        version = "0.9.7+42-f6fec8c3-SNAPSHOT";
       in
         rec {
           inherit version;
@@ -21,7 +21,8 @@ self: super:
             '';
             outputHashMode = "recursive";
             outputHashAlgo = "sha256";
-            outputHash = "0aky4vbbm5hi6jnd2n1aimqznbbaya05c7vdgaqhy3630ks3w4k9";
+            # nix-hash --type sha256 --to-base32 $SHA256_HASH
+            outputHash = "1xlbicjp4ahx2ahlcl2d9jrcp52g003xi24dl3d6gf7cz9zpqkp5";
           };
 
           buildInputs = [ self.jdk deps ];
