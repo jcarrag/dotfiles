@@ -38,6 +38,7 @@
       cachix
       rnix-lsp
       ## Scala
+      openjdk
       sbt
       scala
       ### Services
