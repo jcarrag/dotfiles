@@ -10,7 +10,7 @@
   environment.systemPackages = with pkgs;
     [
       ### Communication
-      discord
+      unstable.discord
       ferdi
       skype
       zoom-us
@@ -30,7 +30,7 @@
       ## Haskell
       cabal-install
       ghc
-      haskell-language-server
+      unstable.haskellPackages.haskell-language-server
       ## Javascript
       nix-npm-install
       nodejs
