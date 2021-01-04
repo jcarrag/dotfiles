@@ -34,7 +34,7 @@
       nix-npm-install
       nodejs
       ## Nix
-      cachix
+      unstable.cachix
       rnix-lsp
       ## Scala
       openjdk
