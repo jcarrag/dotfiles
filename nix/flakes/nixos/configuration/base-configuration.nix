@@ -135,6 +135,7 @@
   };
 
   nix = {
+    autoOptimiseStore = true;
     binaryCaches = [
       "https://cache.nixos.org/"
     ];
