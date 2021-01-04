@@ -45,6 +45,7 @@ Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 " JS
 Plug 'pangloss/vim-javascript'
 Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
 
 " Purescript
 Plug 'raichoo/purescript-vim'
