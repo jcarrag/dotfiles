@@ -11,16 +11,15 @@
     [
       ### Communication
       unstable.discord
-      ferdi
       skype
       zoom-us
       ### Misc
       anki
-      brave
+      unstable.brave
       calibre
       parsec
       spotify
-      steam
+      unstable.steam
       unstable.syncplay
       vlc
       zotero
@@ -28,8 +27,8 @@
       ## C++
       unstable.ccls
       ## Haskell
-      cabal-install
-      ghc
+      unstable.cabal-install
+      unstable.ghc
       unstable.haskellPackages.haskell-language-server
       ## Javascript
       nix-npm-install
