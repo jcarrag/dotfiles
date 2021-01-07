@@ -24,7 +24,10 @@
               (
                 { pkgs, ... }: {
                   nixpkgs.overlays = [ overlays ];
-                  nix.registry.nixpkgs.flake = nixpkgs;
+                  nix.registry = {
+                    self.flake = self;
+                    nixpkgs.flake = nixpkgs;
+                  };
                 }
               )
               (
