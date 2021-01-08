@@ -3,6 +3,7 @@
 {
 
   boot = {
+    kernelPackages = unstable.linuxPackages_latest;
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
