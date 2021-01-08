@@ -139,6 +139,10 @@
     binaryCaches = [
       "https://cache.nixos.org/"
     ];
+    trustedBinaryCaches = [
+      "https://hydra.iohk.io"
+      "https://jcarrag.cachix.org"
+    ];
     trustedUsers = [ "root" "james" ];
     package = pkgs.nixUnstable;
     extraOptions = ''
