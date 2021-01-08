@@ -66,6 +66,7 @@
       direnv
       jq
       gitAndTools.gitFull
+      glances
       htop
       libnotify
       lsof
