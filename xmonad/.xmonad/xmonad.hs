@@ -457,12 +457,12 @@ isInstance (ResourceApp _ r) = resource =? r
 
 myBrowser = ClassApp "browser" "brave"
 
-myTerminal = ClassApp "kitty" "kitty"
+myTerminal = ClassApp "termite" "termite"
 
 spotify = ClassApp "spotify" "Spotify"
 
 alsamixer =
-  ClassApp "kitty --class alsamixer --title alsamixer alsamixer" "alsamixer"
+  ClassApp "termite --class alsamixer --title alsamixer -e alsamixer" "alsamixer"
 
 vlc = ResourceApp "vlc" "vlc"
 
@@ -497,9 +497,9 @@ personalTrello =
     "dex $HOME/.local/share/applications/PersonalTrello.desktop"
     "crx_pkheepclhaffooboabnelkgnboncfbbf"
 
-console = ClassApp "kitty --class console --title console" "console"
+console = ClassApp "termite --class console --title console" "console"
 
-glances = ClassApp "kitty --class glances --title glances glances" "glances"
+glances = ClassApp "termite --class glances --title glances -e glances" "glances"
 
 myLauncher = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
 

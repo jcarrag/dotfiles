@@ -45,7 +45,6 @@
       ### System
       alock
       arandr
-      kitty
       gnome2.gnome_icon_theme
       gnome3.adwaita-icon-theme
       gnome3.zenity
@@ -59,6 +58,7 @@
       pavucontrol # pulseaudio volume control
       rofi
       taffybar
+      termite
       update-resolv-conf
       xclip
       ### Util
