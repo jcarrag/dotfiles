@@ -11,7 +11,7 @@
 
   outputs = { self, nixpkgs, unstable, colours }:
     let
-      configuration = import ./configuration/macbook/configuration.nix;
+      configuration = import ./configuration/xps13/configuration.nix;
       overlays = import ../overlays;
       unstable_ = import unstable { inherit system; config.allowUnfree = true; };
       system = "x86_64-linux";
