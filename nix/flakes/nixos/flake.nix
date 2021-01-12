@@ -27,6 +27,7 @@
                   nix.registry = {
                     self.flake = self;
                     nixpkgs.flake = nixpkgs;
+                    unstable.flake = unstable;
                   };
                 }
               )
