@@ -21,5 +21,11 @@
       "modesetting"
     ];
   };
+
+  users.extraGroups.vboxusers.members = [ "james" ];
+  virtualisation = {
+    docker.enable = true;
+    virtualbox.host.enable = true;
+    virtualbox.host.enableExtensionPack = true;
   };
 }
