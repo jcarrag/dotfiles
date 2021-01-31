@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, colour, ... }:
+{ config, pkgs, ... }:
 
 {
   imports =
@@ -6,8 +6,6 @@
       ./hardware-configuration.nix
       ../base-configuration.nix
     ];
-  _module.args.unstable = unstable;
-  _module.args.colour = colour;
 
   services.xserver = {
     xrandrHeads = [

@@ -1,5 +1,7 @@
-{ config, pkgs, unstable, colour, ... }:
+{ config, pkgs, ... }:
 
+let unstable = pkgs.unstable;
+in
 {
 
   boot = {
@@ -273,7 +275,7 @@
       displayManager = {
         defaultSession = "xfce+xmonad";
         lightdm = {
-          background = colour;
+          background = pkgs.colour;
           enable = true;
         };
         sessionCommands = ''

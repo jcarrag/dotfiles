@@ -11,35 +11,35 @@
 
   outputs = { self, nixpkgs, unstable, colours }:
     let
-      configuration = import ./configuration/xps13/configuration.nix;
-      overlays = import ../overlays;
-      unstable_ = import unstable { inherit system; config.allowUnfree = true; };
       system = "x86_64-linux";
+
+      configuration = import ./configuration/xps13/configuration.nix;
+
+      packageOverlays = import ../overlays;
+
+      extrasOverlay = _: _: {
+        unstable = import unstable {
+          system = system;
+          config.allowUnfree = true;
+          nixpkgs.overlays = [ packageOverlays ];
+        };
+        colour = "${colours}/0f111a.png";
+      };
     in
       {
         nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
           system = system;
           modules =
             [
-              (
-                { pkgs, ... }: {
-                  nixpkgs.overlays = [ overlays ];
-                  nix.registry = {
-                    self.flake = self;
-                    nixpkgs.flake = nixpkgs;
-                    unstable.flake = unstable;
-                  };
-                }
-              )
-              (
-                args@{ pkgs, ... }:
-                  configuration (
-                    args // {
-                      colour = "${colours}/0f111a.png";
-                      unstable = unstable_;
-                    }
-                  )
-              )
+              {
+                nixpkgs.overlays = [ extrasOverlay packageOverlays ];
+                nix.registry = {
+                  self.flake = self;
+                  nixpkgs.flake = nixpkgs;
+                  unstable.flake = unstable;
+                };
+              }
+              configuration
             ];
         };
       };
