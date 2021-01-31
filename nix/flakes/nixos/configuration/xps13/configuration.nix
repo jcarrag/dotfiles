@@ -16,5 +16,10 @@
           KEYBOARD_KEY_38=leftmeta
       '';
     };
+    xserver.videoDrivers = [
+      "amdgpu"
+      "modesetting"
+    ];
+  };
   };
 }
