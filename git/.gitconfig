@@ -21,3 +21,5 @@
         needsdeploy = "!git tag -l --sort=creatordate --format='%(refname:short)' | grep production | tail -1 | xargs -n1 sh -c 'printf \"$0..HEAD\n\n\"; git changelog $0 HEAD' #"
 [submodule]
 	recurse = true
+[pull]
+	ff = only
