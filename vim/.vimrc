@@ -68,6 +68,24 @@ Plug 'junegunn/limelight.vim'
 
 call plug#end()
 
+" rebind <leader>
+let mapleader=","
+let maplocalleader=","
+
+function OpenInBackground(args)
+  let init=expand('%')
+
+  for arg in a:args
+    execute 'edit' arg
+  endfor
+
+  if empty(init)
+    enew
+  else
+    b1
+  endif
+endfunction
+
 """ Colouring
 
 " colourscheme
@@ -146,10 +164,6 @@ set smartcase
 
 set cursorline
 """ Bindings
-
-" rebind <leader>
-let mapleader=","
-let maplocalleader=","
 
 " remap window navigation non-recursively in normal mode
 nnoremap <C-J> <C-W><C-J>
