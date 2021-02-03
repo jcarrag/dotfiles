@@ -20,6 +20,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'bogado/file-line'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
@@ -139,6 +140,10 @@ set splitright
 
 " system clipboard
 set clipboard=unnamedplus
+nnoremap yL :let @+=join([expand('%:p'),  line(".")], ':')<CR>
+
+" open links to files in the previous window (relies on 'bogado/file-line')
+nnoremap <silent> <leader>gF :let mycurf=fnamemodify(expand("<cWORD>"), ":p")<cr><C-w>p :execute("e ".mycurf)<cr>
 
 " enable mouse highlighting with Mouse Reporting
 set mouse=a
