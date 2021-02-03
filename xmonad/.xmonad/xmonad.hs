@@ -466,6 +466,11 @@ alsamixer =
 
 vlc = ResourceApp "vlc" "vlc"
 
+workBrowser =
+  ClassApp
+  "jq '.roots.bookmark_bar.children[] | select(.name == \"init\") | .children[].url' ~/.config/BraveSoftware/Brave-Browser/Profile\\ 2/Bookmarks | tr '\n' ' ' | tr -d '\"' | xargs brave --profile-directory='Profile 2' --new-window"
+  "Brave"
+
 workSlack =
   ResourceApp
     "dex $HOME/.local/share/applications/WorkSlack.desktop"
