@@ -15,6 +15,8 @@ in
       ### Communication
       unstable.discord
       skype
+      unstable.signal-desktop
+      unstable.slack
       zoom-us
       ### Misc
       anki
@@ -44,7 +46,7 @@ in
       sbt
       scala
       ### Services
-      awscli
+      unstable.awscli
       ### System
       alock
       arandr
@@ -69,12 +71,16 @@ in
       direnv
       jq
       gitAndTools.gitFull
+      git-crypt
       glances
       htop
+      fd
       libnotify
       lsof
+      usbutils
       neovim
       yarn # needed for coc.nvim's post-install step
+      pciutils
       powertop
       ripgrep
       stow
