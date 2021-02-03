@@ -47,6 +47,7 @@ Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 Plug 'pangloss/vim-javascript'
 Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-prettier', {'do': 'yarn install --frozen-lockfile'}
 
 " Purescript
 Plug 'raichoo/purescript-vim'
@@ -209,6 +210,7 @@ au BufRead,BufNewFile *.sbt set filetype=scala
 let NERDTreeShowHidden=1
 let g:NERDTreeDirArrowExpandable = '↠'
 let g:NERDTreeDirArrowCollapsible = '↡'
+let g:NERDTreeIgnore = ['^node_modules$[[dir]]']
 map <silent> <C-b> :NERDTreeToggle<CR>
 map <silent> <C-f> :NERDTreeFind<CR>
 
