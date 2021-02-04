@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
-let unstable = pkgs.unstable;
+let
+  unstable = pkgs.unstable;
 in
 {
 
@@ -14,8 +15,8 @@ in
     [
       ### Communication
       unstable.discord
-      skype
       unstable.signal-desktop
+      skype
       unstable.slack
       zoom-us
       ### Misc

@@ -9,7 +9,8 @@
 
   services.xserver = {
     xrandrHeads = [
-      { output = "eDP-1";
+      {
+        output = "eDP-1";
         primary = true;
         monitorConfig = ''
           Option "PreferredMode" "1920x1200"

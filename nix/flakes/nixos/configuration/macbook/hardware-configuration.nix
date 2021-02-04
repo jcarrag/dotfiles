@@ -10,17 +10,20 @@
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/1e084baa-69f4-4d23-a187-0524c94814cf";
+    {
+      device = "/dev/disk/by-uuid/1e084baa-69f4-4d23-a187-0524c94814cf";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/6360-69ED";
+    {
+      device = "/dev/disk/by-uuid/6360-69ED";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/e76e7a63-b917-486b-bb77-f205625b872d"; }
+    [
+      { device = "/dev/disk/by-uuid/e76e7a63-b917-486b-bb77-f205625b872d"; }
     ];
 
   nix.maxJobs = lib.mkDefault 4;
