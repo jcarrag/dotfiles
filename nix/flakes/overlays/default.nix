@@ -5,6 +5,7 @@ let
   overlays = map import [
     ./ferdi.nix
     ./nix-npm-install.nix
+    ./scripts.nix
     ./parsec.nix
     ./polar-bookshelf.nix
     ./virtualbox.nix

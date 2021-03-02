@@ -92,7 +92,7 @@ in
       watchexec
       which
       zip
-    ];
+    ] ++ scripts.all;
 
   fonts = {
     fonts = with pkgs; [

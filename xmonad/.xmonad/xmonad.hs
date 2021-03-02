@@ -264,6 +264,7 @@ myKeys config
     "Launchers"
     [ key "Launcher" "M-e" $ spawn myLauncher
     , key "SudoLauncher" "M-S-e" $ spawn mySudoLauncher
+    , key "Toggle Rotate Screen" "M-S-r" $ spawn "toggleRotateScreen"
     , key "Terminal" "M-<Return>" $ spawnApp myTerminal
     , key "Browser" "M-/" $ spawnApp myBrowser
     , key "Spotify" "M-=" $ namedScratchpadAction myScratchpads "spotify"
