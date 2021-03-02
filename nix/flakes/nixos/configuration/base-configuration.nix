@@ -24,6 +24,7 @@ in
       unstable.brave
       calibre
       parsec
+      polar-bookshelf
       spotify
       unstable.steam
       unstable.syncplay

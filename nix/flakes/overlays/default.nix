@@ -6,6 +6,7 @@ let
     ./ferdi.nix
     ./nix-npm-install.nix
     ./parsec.nix
+    ./polar-bookshelf.nix
     ./virtualbox.nix
   ];
 in
