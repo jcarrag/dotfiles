@@ -187,15 +187,8 @@ in
   '';
 
   services = {
-    actkbd = with pkgs; {
+    actkbd = {
       enable = true;
-      bindings = [
-        { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 5"; }
-        { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 5"; }
-        { keys = [ 67 ]; events = [ "key" ]; command = "${alsaUtils}/bin/amixer -q set Master toggle"; }
-        { keys = [ 68 ]; events = [ "key" "rep" ]; command = "${alsaUtils}/bin/amixer -q set Master ${config.sound.mediaKeys.volumeStep}- unmute"; }
-        { keys = [ 69 ]; events = [ "key" "rep" ]; command = "${alsaUtils}/bin/amixer -q set Master ${config.sound.mediaKeys.volumeStep}+ unmute"; }
-      ];
     };
     avahi = {
       enable = true;
@@ -210,22 +203,11 @@ in
     };
     gnome3.gnome-keyring.enable = true;
     localtime.enable = true;
-    openvpn.servers = {
-      anonine-swe = {
-        config = ''config /home/james/vpn/anonine-swe.ovpn'';
-        autoStart = false;
-      };
-      anonine-uk = {
-        config = ''config /home/james/vpn/anonine-uk-iplayer.ovpn'';
-        autoStart = false;
-      };
-    };
     printing = {
       enable = true;
       browsing = true;
       drivers = [];
     };
-    redshift.enable = true;
     upower.enable = true;
     udev = {
       # swap left alt with meta on magicforce keyboard
@@ -297,6 +279,7 @@ in
           ${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
+          ${pkgs.redshift}/bin/redshift-gtk &
           ${pkgs.taffybar}/bin/taffybar &
         '';
       };
