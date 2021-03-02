@@ -13,7 +13,7 @@
     let
       system = "x86_64-linux";
 
-      configuration = import ./configuration/xps13/configuration.nix;
+      laptopConfig = import ./configuration/xps13/configuration.nix;
 
       packageOverlays = import ../overlays;
 
@@ -39,7 +39,7 @@
                   unstable.flake = unstable;
                 };
               }
-              configuration
+              laptopConfig
             ];
         };
       };
