@@ -28,6 +28,7 @@ Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'tpope/vim-commentary'
 Plug 'guns/vim-slamhound'
 Plug 'direnv/direnv.vim'
+Plug 'zhimsel/vim-stay'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -151,6 +152,7 @@ set mouse=a
 
 " show line numbers
 set number
+set relativenumber
 
 " Highlight all occurrences of a search
 set hlsearch
@@ -226,9 +228,35 @@ nnoremap <C-w>o :call OnlyAndNerdtree()<CR>
 
 " Airline
 let g:airline_powerline_fonts = 1
-let g:airline_section_z = ' %{strftime("%-I:%M %p")}'
-let g:airline_section_warning = ''
 let g:airline_theme = 'material'
+let g:airline_section_b = 0
+let g:airline_section_x = '' " only show file type icon
+let g:airline_section_z = '%p%%:%v'
+let g:airline_mode_map = {
+      \ '__'     : '-',
+      \ 'c'      : 'C',
+      \ 'i'      : 'I',
+      \ 'ic'     : 'I',
+      \ 'ix'     : 'I',
+      \ 'n'      : 'N',
+      \ 'multi'  : 'M',
+      \ 'ni'     : 'N',
+      \ 'no'     : 'N',
+      \ 'R'      : 'R',
+      \ 'Rv'     : 'R',
+      \ 's'      : 'S',
+      \ 'S'      : 'S',
+      \ ''     : 'S',
+      \ 't'      : 'T',
+      \ 'v'      : 'V',
+      \ 'V'      : 'V',
+      \ ''     : 'V',
+      \ }
+let g:airline_stl_path_style = 'short'
+let g:airline#extensions#fugitiveline#enabled = 0 " https://github.com/vim-airline/vim-airline/issues/2338#issuecomment-782227550
+let g:airline#extensions#coc#enabled = 0
+let g:airline#extensions#nerdtree_statusline = 0
+let g:airline#extensions#ale#enabled = 1
 
 " fzf-vim
 let g:fzf_action = {
@@ -254,9 +282,6 @@ nnoremap <silent> <C-g> :call fzf#run(fzf#wrap({'source': 'git ls-files --exclud
 
 " vim-fireplace
 autocmd BufRead *.clj try | silent! Require | catch /^Fireplace/ | endtry
-
-" integrate ale with airline
-let g:airline#extensions#ale#enabled = 1
 
 " Augment :Rg with FZF's preview window
 command! -bang -nargs=* Rg
@@ -295,6 +320,12 @@ else
   set signcolumn=yes
 endif
 
+" Folding
+set foldmethod=indent
+set foldlevelstart=3
+autocmd BufWinEnter *.yml setlocal foldlevel=1
+autocmd BufWinEnter *.ts setlocal foldlevel=0
+
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -328,7 +359,7 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gt <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
@@ -411,11 +442,6 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Mappings for CoCList
 " Show all diagnostics.
