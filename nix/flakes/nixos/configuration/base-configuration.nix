@@ -42,7 +42,7 @@ in
       nodejs
       ## Nix
       unstable.cachix
-      rnix-lsp
+      unstable.rnix-lsp
       ## Scala
       openjdk
       sbt
