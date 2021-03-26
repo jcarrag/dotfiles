@@ -15,6 +15,8 @@
 
       laptopConfig = import ./configuration/xps13/configuration.nix;
 
+      anki = import ../modules/anki.nix;
+
       packageOverlays = import ../overlays;
 
       extrasOverlay = _: _: {
@@ -40,6 +42,7 @@
                 };
               }
               laptopConfig
+              anki
             ];
         };
       };

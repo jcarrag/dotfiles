@@ -20,7 +20,6 @@ in
       unstable.slack
       zoom-us
       ### Misc
-      anki
       unstable.brave
       calibre
       parsec
@@ -173,6 +172,26 @@ in
   '';
 
   programs = {
+    anki = {
+      enable = true;
+      addons = [
+        {
+          ankiWebId = "3918629684";
+          patches = [ pkgs.ankiJapanesePatch ];
+          buildInputs = with pkgs; [ mecab kakasi ];
+          sha256 = "yvhTyuu3FPM6P2rjWeV87jujnke8tBi+Pj1hGUDeOa8=";
+        }
+        {
+          ankiWebId = "2413435972";
+          patches = [ pkgs.ankiJapaneseExampleSentencesPatch ];
+          addonConfig = {
+            maxPermanent = 2;
+            noteTypes = [ "Japanese (recognition&recall)" ];
+          };
+          sha256 = "V3R/diLJCIgZRmz35/5QBTztf10hqhryvTp69UrWfj4=";
+        }
+      ];
+    };
     autojump.enable = true;
     bash.enableCompletion = true;
     gnupg.agent = {
