@@ -22,7 +22,6 @@ in
       ### Misc
       unstable.brave
       calibre
-      parsec
       polar-bookshelf
       spotify
       unstable.steam
