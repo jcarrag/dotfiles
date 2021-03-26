@@ -68,6 +68,7 @@ in
       xclip
       ### Util
       bat
+      asciicharts
       direnv
       jq
       gitAndTools.gitFull
