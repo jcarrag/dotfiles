@@ -22,7 +22,6 @@ in
       ### Misc
       unstable.brave
       calibre
-      polar-bookshelf
       spotify
       unstable.steam
       unstable.syncplay
@@ -66,9 +65,11 @@ in
       termite
       update-resolv-conf
       xclip
+      xfce.xfce4-power-manager
       ### Util
-      bat
       asciicharts
+      bat
+      cntr
       direnv
       jq
       gitAndTools.gitFull
@@ -78,14 +79,18 @@ in
       fd
       libnotify
       lsof
+      ncdu
       usbutils
-      neovim
+      unstable.neovim
       yarn # needed for coc.nvim's post-install step
+      p7zip
       pciutils
       powertop
       ripgrep
       stow
+      tldr
       tree
+      unrar
       unzip
       usbutils
       watchexec
@@ -103,7 +108,6 @@ in
   };
 
   hardware = {
-    facetimehd.enable = true;
     bluetooth = {
       enable = true;
       package = pkgs.bluezFull.overrideAttrs (
@@ -133,7 +137,6 @@ in
   location.provider = "geoclue2";
 
   networking = {
-    hostName = "nixos";
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
     networkmanager = {
       enable = true;
@@ -189,6 +192,16 @@ in
           };
           sha256 = "V3R/diLJCIgZRmz35/5QBTztf10hqhryvTp69UrWfj4=";
         }
+        {
+          # True retention
+          ankiWebId = "613684242";
+          sha256 = "MDDscb6XoJDkXyx7puY9y7EbOxZVGZXcmD1R1g2207g=";
+        }
+        {
+          # Edit field during review
+          ankiWebId = "385888438";
+          sha256 = "o/6kUXPU7TyMRRne43tJD4DQmhakjm1hyoKUorb+thU=";
+        }
       ];
     };
     autojump.enable = true;
@@ -205,9 +218,7 @@ in
   '';
 
   services = {
-    actkbd = {
-      enable = true;
-    };
+    actkbd.enable = true;
     avahi = {
       enable = true;
       nssmdns = true;
@@ -215,11 +226,8 @@ in
       publish.userServices = true;
     };
     blueman.enable = true;
-    dbus = {
-      enable = true;
-      socketActivated = true;
-    };
-    gnome3.gnome-keyring.enable = true;
+    dbus.enable = true;
+    gnome.gnome-keyring.enable = true;
     localtime.enable = true;
     printing = {
       enable = true;
@@ -259,11 +267,12 @@ in
     xserver = {
       enable = true;
       exportConfiguration = true;
-      startDbusSession = true;
       libinput = {
         enable = true;
-        disableWhileTyping = true;
-        accelSpeed = "0.0";
+        touchpad = {
+          disableWhileTyping = true;
+          accelSpeed = "0.0";
+        };
       };
       serverLayoutSection = ''
         Option "StandbyTime" "0"
@@ -328,6 +337,8 @@ in
     isNormalUser = true;
     uid = 1000;
   };
+
+  virtualisation.docker.enable = true;
 
   system.autoUpgrade.enable = true;
   system.stateVersion = "20.09";

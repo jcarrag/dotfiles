@@ -1,3 +1,4 @@
+# XPS 13 9310 2-in-1
 { config, pkgs, ... }:
 
 {
@@ -6,6 +7,8 @@
       ./hardware-configuration.nix
       ../base-configuration.nix
     ];
+
+  networking.hostName = "james";
 
   services = {
     udev = {

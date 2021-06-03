@@ -7,6 +7,12 @@
       ../base-configuration.nix
     ];
 
+  hardware = {
+    facetimehd.enable = true;
+  };
+
+  networking.hostName = "james";
+
   services.xserver = {
     xrandrHeads = [
       {
