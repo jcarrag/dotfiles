@@ -1,14 +1,10 @@
 {
-  inputs.taffybar-overlay = {
-    url = "/home/james/dotfiles/nix/flakes/overlays/taffybar.nix";
-    flake = false;
-  };
-  outputs = { self, nixpkgs, taffybar-overlay }: {
+  outputs = { self, nixpkgs }: {
 
     devShell.x86_64-linux =
       let
         system = "x86_64-linux";
-        pkgs = import nixpkgs { overlays = [ (import taffybar-overlay.outPath) ]; system = system; };
+        pkgs = import nixpkgs { system = system; };
       in
         with pkgs;
         mkShell {

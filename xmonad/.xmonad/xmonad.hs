@@ -11,7 +11,6 @@ import           Data.Default                        (def)
 import qualified Data.Map                            as M
 import           Data.Monoid                         (Endo)
 import           System.IO                           (hClose)
-import           System.Taffybar.Support.PagerHints  (pagerHints)
 
 import           XMonad                              hiding ((|||))
 
@@ -69,17 +68,25 @@ import           XMonad.Util.Run                     (hPutStr, spawnPipe)
 import           XMonad.Util.WorkspaceCompare        (getSortByIndex)
 import           XMonad.Util.XSelection              (getSelection)
 
+-- Imports for Polybar --
+import qualified Codec.Binary.UTF8.String              as UTF8
+import qualified DBus                                  as D
+import qualified DBus.Client                           as D
+import           XMonad.Hooks.DynamicLog
 ----------------------------------------------------------------------------}}}
 -- Main                                                                     {{{
 -------------------------------------------------------------------------------
 main :: IO ()
-main =
+main = mkDbusClient >>= main'
+
+main' :: D.Client -> IO ()
+main' dbus =
   xmonad $
   addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys $
   dynamicProjects projects $
-  docks $ ewmh $ pagerHints $ withNavigation2DConfig myNav2DConfig $ myConfig
+  docks $ ewmh $ withNavigation2DConfig myNav2DConfig $ myConfig dbus
 
-myConfig =
+myConfig dbus =
   def
     { borderWidth = myBorderWidth
     , clickJustFocuses = myClickJustFocuses
@@ -89,7 +96,7 @@ myConfig =
     , manageHook = myManageHook
     , handleEventHook = myHandleEventHook
     , layoutHook = myLayoutHook
-    , logHook = myLogHook
+    , logHook = myPolybarLogHook dbus
     , modMask = myModMask
     , mouseBindings = myMouseBindings
     , startupHook = myStartupHook
@@ -99,7 +106,7 @@ myConfig =
 
 myMouseBindings = mouseBindings def
 
-myStartupHook = startupHook def >> setWMName "LG3D"
+myStartupHook = startupHook def >> setWMName "λ"
 
 ----------------------------------------------------------------------------}}}
 -- theme                                                                    {{{
@@ -533,6 +540,46 @@ myScratchpads =
   where
     scratchpadApp :: String -> App -> Query (Endo WindowSet) -> NamedScratchpad
     scratchpadApp n a f = NS n (command a) (isInstance a) f
+
+----------------------------------------------------------------------------}}}
+-- Polybar settings (needs DBus client).                                    {{{
+-------------------------------------------------------------------------------
+mkDbusClient :: IO D.Client
+mkDbusClient = do
+  dbus <- D.connectSession
+  D.requestName dbus (D.busName_ "org.xmonad.log") opts
+  return dbus
+ where
+  opts = [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
+
+-- Emit a DBus signal on log updates
+dbusOutput :: D.Client -> String -> IO ()
+dbusOutput dbus str =
+  let opath  = D.objectPath_ "/org/xmonad/Log"
+      iname  = D.interfaceName_ "org.xmonad.Log"
+      mname  = D.memberName_ "Update"
+      signal = D.signal opath iname mname
+      body   = [D.toVariant $ UTF8.decodeString str]
+  in  D.emit dbus $ signal { D.signalBody = body }
+
+polybarHook :: D.Client -> PP
+polybarHook dbus =
+  let wrapper c s | s /= "NSP" = wrap ("%{F" <> c <> "} ") " %{F-}" s
+                  | otherwise  = mempty
+      blue   = "#2E9AFE"
+      gray   = "#7F7F7F"
+      orange = "#ea4300"
+      purple = "#9058c7"
+      red    = "#722222"
+  in  def { ppOutput          = dbusOutput dbus
+          , ppCurrent         = wrapper blue
+          , ppVisible         = wrapper gray
+          , ppUrgent          = wrapper orange
+          , ppHidden          = wrapper gray
+          , ppTitle           = wrapper purple . shorten 90
+          }
+
+myPolybarLogHook dbus = myLogHook <+> dynamicLogWithPP (polybarHook dbus)
 
 ----------------------------------------------------------------------------}}}
 -- Navigation                                                               {{{

@@ -56,13 +56,13 @@ in
       gnupg
       hicolor-icon-theme
       libsecret
+      mypolybar
       nix-prefetch-scripts
       openvpn
       paprefs # pulseaudio preferences
       pasystray # pulseaudio systray
       pavucontrol # pulseaudio volume control
       rofi
-      taffybar
       termite
       update-resolv-conf
       xclip
@@ -95,11 +95,10 @@ in
 
   fonts = {
     fonts = with pkgs; [
-      emojione
       (nerdfonts.override { fonts = [ "Hack" ]; })
-      noto-fonts
       noto-fonts-cjk
-      noto-fonts-emoji
+      font-awesome
+      feather-font
     ];
   };
 
@@ -299,14 +298,13 @@ in
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
           ${pkgs.redshift}/bin/redshift-gtk &
-          ${pkgs.taffybar}/bin/taffybar &
+          ${pkgs.mypolybar}/bin/polybar &
         '';
       };
       windowManager.xmonad = {
         enable = true;
         enableContribAndExtras = true;
         extraPackages = hpkgs: [
-          hpkgs.taffybar
           hpkgs.xmonad-extras
           hpkgs.xmonad-contrib
           hpkgs.xmonad

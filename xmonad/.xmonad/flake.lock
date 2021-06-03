@@ -15,20 +15,7 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "taffybar-overlay": "taffybar-overlay"
-      }
-    },
-    "taffybar-overlay": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-Av/QK7Fwp6azp4D5NxbftrTiRTxmdDr3l8BxU72+zMs=",
-        "path": "/home/james/dotfiles/nix/flakes/overlays/taffybar.nix",
-        "type": "path"
-      },
-      "original": {
-        "path": "/home/james/dotfiles/nix/flakes/overlays/taffybar.nix",
-        "type": "path"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

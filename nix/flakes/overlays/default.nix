@@ -5,10 +5,12 @@ let
   overlays = map import [
     ./anki.nix
     ./asciichart.nix
+    ./feather-font/feather-font.nix
     ./ferdi.nix
     ./nix-npm-install.nix
     ./scripts.nix
     ./polar-bookshelf.nix
+    ./polybar/polybar.nix
     ./virtualbox.nix
   ];
 in
