@@ -42,13 +42,9 @@ Plug 'rhysd/vim-clang-format'
 
 " Scala
 Plug 'derekwyatt/vim-scala'
-Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 
 " JS
 Plug 'pangloss/vim-javascript'
-Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-prettier', {'do': 'yarn install --frozen-lockfile'}
 
 " Purescript
 Plug 'raichoo/purescript-vim'
@@ -110,6 +106,7 @@ endif
 
 let g:material_terminal_italics = 1
 let g:material_theme_style = 'ocean'
+" let g:material_theme_style = 'lighter'
 colorscheme material
 
 " Opaque Background (Comment out to use terminal's profile)
@@ -293,6 +290,15 @@ command! -bang -nargs=* Rg
 
 nnoremap <leader><C-g> :Rg<Cr>
 
+let g:coc_global_extensions = [
+  \'coc-json',
+  \'coc-metals',
+  \'coc-tsserver',
+  \'coc-prettier',
+  \'coc-pyright',
+  \'coc-rls'
+  \]
+
 """ BEGIN COPIED FROM coc.nvim README
 " TextEdit might fail if hidden is not set.
 set hidden
@@ -359,10 +365,9 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gt <Plug>(coc-type-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
