@@ -2,7 +2,7 @@
 
   description = "A flake for my system";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-20.09";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
   inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.colours = {
     url = "/home/james/dotfiles/nix/flakes/nixos/colours";
@@ -29,7 +29,7 @@
       };
     in
       {
-        nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        nixosConfigurations.james = nixpkgs.lib.nixosSystem {
           system = system;
           modules =
             [
