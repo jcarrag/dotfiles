@@ -569,14 +569,11 @@ polybarHook dbus =
       blue   = "#2E9AFE"
       gray   = "#7F7F7F"
       orange = "#ea4300"
-      purple = "#9058c7"
-      red    = "#722222"
   in  def { ppOutput          = dbusOutput dbus
           , ppCurrent         = wrapper blue
           , ppVisible         = wrapper gray
           , ppUrgent          = wrapper orange
           , ppHidden          = wrapper gray
-          , ppTitle           = wrapper purple . shorten 90
           }
 
 myPolybarLogHook dbus = myLogHook <+> dynamicLogWithPP (polybarHook dbus)

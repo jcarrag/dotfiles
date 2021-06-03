@@ -314,6 +314,7 @@ in
         enable = true;
         enableContribAndExtras = true;
         extraPackages = hpkgs: [
+          hpkgs.dbus
           hpkgs.xmonad-extras
           hpkgs.xmonad-contrib
           hpkgs.xmonad
