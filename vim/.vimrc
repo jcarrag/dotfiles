@@ -11,9 +11,11 @@ endif
 call plug#begin()
 " Misc
 Plug 'vim-scripts/AnsiEsc.vim'
+Plug 'knsh14/vim-github-link'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-obsession'
 Plug 'chrisbra/csv.vim'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'scrooloose/nerdtree'
@@ -33,6 +35,9 @@ Plug 'zhimsel/vim-stay'
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+
+" Arduino
+Plug 'stevearc/vim-arduino'
 
 " Nix
 Plug 'LnL7/vim-nix'
@@ -327,10 +332,10 @@ else
 endif
 
 " Folding
-set foldmethod=indent
-set foldlevelstart=3
-autocmd BufWinEnter *.yml setlocal foldlevel=1
-autocmd BufWinEnter *.ts setlocal foldlevel=0
+" set foldmethod=indent
+" set foldlevelstart=3
+" autocmd BufWinEnter *.yml setlocal foldlevel=1
+" autocmd BufWinEnter *.ts setlocal foldlevel=0
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -422,8 +427,8 @@ omap ac <Plug>(coc-classobj-a)
 
 " Remap <C-f> and <C-b> for scroll float windows/popups.
 " Note coc#float#scroll works on neovim >= 0.4.0 or vim >= 8.2.0750
-nnoremap <nowait><expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <nowait><expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+" nnoremap <nowait><expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+" nnoremap <nowait><expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 inoremap <nowait><expr> <C-j> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
 inoremap <nowait><expr> <C-k> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
 

@@ -23,7 +23,6 @@ in
       unstable.brave
       calibre
       spotify
-      unstable.steam
       unstable.syncplay
       vlc
       zotero
@@ -104,6 +103,7 @@ in
       noto-fonts-cjk
       font-awesome
       feather-font
+      gnome3.adwaita-icon-theme
     ];
   };
 
@@ -211,6 +211,8 @@ in
       enableSSHSupport = true;
     };
     light.enable = true;
+    nm-applet.enable = true;
+    steam.enable = true;
   };
 
   security.sudo.extraConfig = ''

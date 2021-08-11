@@ -1,6 +1,6 @@
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-PATH=$PATH:~/.npm-global
+PATH=$PATH:~/.npm-global:~/.cargo/bin
 
 TERM=xterm
 
