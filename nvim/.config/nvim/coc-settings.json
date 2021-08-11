@@ -1,4 +1,5 @@
 {
+  "diagnostic.messageTarget": "echo",
   "coc.preferences.formatOnSaveFiletypes": [ "rust", "typescript" ],
   "languageserver": {
     "ccls": {
@@ -89,5 +90,6 @@
     }
   },
   "rust-client.disableRustup": true,
+  "tsserver.maxTsServerMemory": 32768,
   "tsserver.log": "verbose"
 }
