@@ -5,6 +5,10 @@ let
 in
 {
 
+  imports = [
+    ../../modules/anki.nix
+  ];
+
   boot = {
     kernelPackages = unstable.linuxPackages_latest;
     loader.systemd-boot.enable = true;
