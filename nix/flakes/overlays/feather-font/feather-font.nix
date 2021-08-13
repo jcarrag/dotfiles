@@ -11,7 +11,7 @@ let
 
       owner = "adi1090x";
       repo = "polybar-themes";
-      rev = "master";
+      rev = "46154c5283861a6f0a440363d82c4febead3c818";
 
       sha256 = "w1EqvFvQH0+CqzuJRBxUJLnG5joQVFlcSxyw9TvW4VI=";
     };
