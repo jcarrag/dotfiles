@@ -293,6 +293,7 @@ in
           enable = true;
           noDesktop = true;
           enableXfwm = false;
+          thunarPlugins = [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
         };
       };
       displayManager = {

@@ -31,6 +31,7 @@ Plug 'tpope/vim-commentary'
 Plug 'guns/vim-slamhound'
 Plug 'direnv/direnv.vim'
 Plug 'zhimsel/vim-stay'
+Plug 'airblade/vim-rooter'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -116,6 +117,9 @@ colorscheme material
 
 " Opaque Background (Comment out to use terminal's profile)
 "set termguicolors
+
+""" rooter
+let g:rooter_patterns = ['.git']
 
 """ Vim config
 set updatetime=100
