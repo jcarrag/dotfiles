@@ -28,7 +28,7 @@ in
         owner = oldAttrs.pname;
         repo = oldAttrs.pname;
         rev = "bfa9b5d53e72ea0ba4153cf171875ad7811cee21";
-        sha256 = "sha256-t4D5ZmRchYkEk6cwlxMniCa34ACAwlaMjKKPHATixN8=";
+        sha256 = "sha256-yxUgaP02wt/2Qo26MUH3Cg5FBCHRjdXorDbdZQ1qS4Q=";
       };
       nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ self.pkgs.makeWrapper ];
       postInstall = ''
