@@ -231,6 +231,7 @@ in
     };
     blueman.enable = true;
     dbus.enable = true;
+    fwupd.enable = true;
     gnome.gnome-keyring.enable = true;
 
     printing = {
