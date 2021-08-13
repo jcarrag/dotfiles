@@ -138,8 +138,6 @@ in
     };
   };
 
-  location.provider = "geoclue2";
-
   networking = {
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
     networkmanager = {
@@ -234,7 +232,7 @@ in
     blueman.enable = true;
     dbus.enable = true;
     gnome.gnome-keyring.enable = true;
-    localtime.enable = true;
+
     printing = {
       enable = true;
       browsing = true;
@@ -336,6 +334,8 @@ in
   };
 
   systemd.services.upower.enable = true;
+
+  time.timeZone = "Europe/London";
 
   users.extraUsers.james = {
     createHome = true;
