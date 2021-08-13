@@ -3,13 +3,19 @@
     "colours": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-T5SdzeN31JB5PjjtrvZhKtnIt7e0i+22TVt5c3qeFHY=",
-        "path": "/home/james/dotfiles/nix/flakes/nixos/colours",
-        "type": "path"
+        "dir": "nix/flakes/nixos/colours",
+        "lastModified": 1628863402,
+        "narHash": "sha256-XJrBK7JHyLr/GKMLQgEBJmdhAjBa7FXB+ewMQLHz7MI=",
+        "owner": "jcarrag",
+        "repo": "dotfiles",
+        "rev": "d3498c1dacc971df72de84ff8d204d9bc70e7617",
+        "type": "github"
       },
       "original": {
-        "path": "/home/james/dotfiles/nix/flakes/nixos/colours",
-        "type": "path"
+        "dir": "nix/flakes/nixos/colours",
+        "owner": "jcarrag",
+        "repo": "dotfiles",
+        "type": "github"
       }
     },
     "nixpkgs": {
