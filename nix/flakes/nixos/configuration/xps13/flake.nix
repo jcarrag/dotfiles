@@ -1,6 +1,5 @@
 {
-
-  description = "A flake for my system";
+  description = "A flake for my XPS 13 9310 2-in-1";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
   inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,9 +12,9 @@
     let
       system = "x86_64-linux";
 
-      laptopConfig = import ./configuration/xps13/configuration.nix;
+      laptopConfig = import ./configuration.nix;
 
-      packageOverlays = import ../overlays;
+      packageOverlays = import ../../../overlays;
 
       extrasOverlay = _: _: {
         unstable = import unstable {
