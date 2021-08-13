@@ -8,7 +8,7 @@ self: super:
     src = fetchFromGitHub {
       owner = "kroitor";
       repo = "asciichart";
-      rev = "master";
+      rev = "ef1141b210b55fbb7742846ff2fe87d158e76fd2";
       sha256 = "x9wx0rEYYDTbF4TAuVlMwOHEOE9hKlH1TxJpcZO9qXw=";
     };
 
