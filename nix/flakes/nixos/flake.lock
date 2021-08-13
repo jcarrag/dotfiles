@@ -4,11 +4,11 @@
       "flake": false,
       "locked": {
         "dir": "nix/flakes/nixos/colours",
-        "lastModified": 1628863402,
-        "narHash": "sha256-XJrBK7JHyLr/GKMLQgEBJmdhAjBa7FXB+ewMQLHz7MI=",
+        "lastModified": 1628870368,
+        "narHash": "sha256-+VFwRwrNW097/1xx5t4SNRJa8wRO4M1da83B/F2JcxA=",
         "owner": "jcarrag",
         "repo": "dotfiles",
-        "rev": "d3498c1dacc971df72de84ff8d204d9bc70e7617",
+        "rev": "d22a4b0ae3641459a9e6bb2a2b0128e29401630e",
         "type": "github"
       },
       "original": {

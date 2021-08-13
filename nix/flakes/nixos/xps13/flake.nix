@@ -4,7 +4,7 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
   inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.colours = {
-    url = "/home/james/dotfiles/nix/flakes/nixos/colours";
+    url = "github:jcarrag/dotfiles?dir=nix/flakes/nixos/colours";
     flake = false;
   };
 
