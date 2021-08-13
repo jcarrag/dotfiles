@@ -6,7 +6,7 @@ in
 {
 
   imports = [
-    ../../modules/anki.nix
+    ../modules/anki.nix
   ];
 
   boot = {
@@ -247,7 +247,14 @@ in
           KEYBOARD_KEY_700e3=leftalt
           KEYBOARD_KEY_700e2=leftmeta
       '';
+      # ATTRS{idVendor}=="239a", ATTRS{idProduct}=="800b", TAG+="uaccess"
       extraRules = ''
+        ATTRS{idVendor}=="239a", ATTRS{idProduct}=="8087", TAG+="uaccess"
+
+        ATTRS{idVendor}=="239a", ENV{ID_MM_DEVICE_IGNORE}="1"
+        SUBSYSTEM=="usb", ATTRS{idVendor}=="239a", MODE="0666"
+        SUBSYSTEM=="tty", ATTRS{idVendor}=="239a", MODE="0666"
+
         # PS4 compat
         # This rule is needed for basic functionality of the controller in Steam and keyboard/mouse emulation
         SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
@@ -340,7 +347,7 @@ in
 
   users.extraUsers.james = {
     createHome = true;
-    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "docker" ];
+    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "docker" "dialout" ];
     group = "users";
     home = "/home/james";
     isNormalUser = true;

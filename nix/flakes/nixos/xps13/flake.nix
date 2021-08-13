@@ -1,5 +1,5 @@
 {
-  description = "A flake for my 2014 MBP";
+  description = "A flake for my XPS 13 9310 2-in-1";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
   inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -14,7 +14,7 @@
 
       laptopConfig = import ./configuration.nix;
 
-      packageOverlays = import ../../../overlays;
+      packageOverlays = import ../../overlays;
 
       extrasOverlay = _: _: {
         unstable = import unstable {
