@@ -26,7 +26,7 @@
       };
     in
       {
-        nixosConfigurations.james = nixpkgs.lib.nixosSystem {
+        nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
           system = system;
           modules =
             [

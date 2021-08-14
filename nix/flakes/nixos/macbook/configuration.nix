@@ -11,8 +11,6 @@
     facetimehd.enable = true;
   };
 
-  networking.hostName = "james";
-
   services.xserver = {
     xrandrHeads = [
       {

@@ -8,8 +8,6 @@
       ../base-configuration.nix
     ];
 
-  networking.hostName = "james";
-
   services = {
     udev = {
       # swap left alt with meta on keyboard
