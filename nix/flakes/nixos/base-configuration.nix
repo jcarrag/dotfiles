@@ -58,7 +58,7 @@ in
       gnupg
       hicolor-icon-theme
       libsecret
-      mypolybar
+      # mypolybar
       nix-prefetch-scripts
       openvpn
       paprefs # pulseaudio preferences
@@ -320,8 +320,8 @@ in
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
           ${pkgs.redshift}/bin/redshift-gtk &
-          ${pkgs.mypolybar}/bin/polybar &
         '';
+          # ${pkgs.mypolybar}/bin/polybar &
       };
       windowManager.xmonad = {
         enable = true;
