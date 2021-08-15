@@ -1,23 +1,5 @@
 {
   "nodes": {
-    "colours": {
-      "flake": false,
-      "locked": {
-        "dir": "nix/flakes/nixos/colours",
-        "lastModified": 1628870368,
-        "narHash": "sha256-+VFwRwrNW097/1xx5t4SNRJa8wRO4M1da83B/F2JcxA=",
-        "owner": "jcarrag",
-        "repo": "dotfiles",
-        "rev": "d22a4b0ae3641459a9e6bb2a2b0128e29401630e",
-        "type": "github"
-      },
-      "original": {
-        "dir": "nix/flakes/nixos/colours",
-        "owner": "jcarrag",
-        "repo": "dotfiles",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1628776130,
@@ -36,7 +18,6 @@
     },
     "root": {
       "inputs": {
-        "colours": "colours",
         "nixpkgs": "nixpkgs",
         "unstable": "unstable"
       }
