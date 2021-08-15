@@ -64,6 +64,7 @@ in
       pasystray # pulseaudio systray
       pavucontrol # pulseaudio volume control
       rofi
+      unstable.taffybar
       termite
       update-resolv-conf
       xclip
@@ -319,6 +320,7 @@ in
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
           ${pkgs.redshift}/bin/redshift-gtk &
+          ${unstable.taffybar}/bin/taffybar &
         '';
       };
       windowManager.xmonad = {
