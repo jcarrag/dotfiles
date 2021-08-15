@@ -10,7 +10,6 @@ let
     ./nix-npm-install.nix
     ./scripts.nix
     ./polar-bookshelf.nix
-    ./polybar/polybar.nix
     ./virtualbox.nix
   ];
 in
