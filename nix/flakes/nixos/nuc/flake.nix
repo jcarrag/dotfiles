@@ -3,12 +3,8 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
   inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-  inputs.colours = {
-    url = "github:jcarrag/dotfiles?dir=nix/flakes/nixos/colours";
-    flake = false;
-  };
 
-  outputs = { self, nixpkgs, unstable, colours }:
+  outputs = { self, nixpkgs, unstable }:
     let
       system = "x86_64-linux";
 
@@ -22,7 +18,7 @@
           config.allowUnfree = true;
           nixpkgs.overlays = [ packageOverlays ];
         };
-        colour = "${colours}/0f111a.png";
+        colour = "${self}/nix/flakes/nixos/colours/0f111a.png";
       };
     in
       {
