@@ -81,6 +81,7 @@ in
       htop
       fd
       libnotify
+      lshw
       lsof
       ncdu
       usbutils
