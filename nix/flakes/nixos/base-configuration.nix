@@ -65,7 +65,7 @@ in
       pavucontrol # pulseaudio volume control
       rofi
       unstable.taffybar
-      termite
+      alacritty
       update-resolv-conf
       xclip
       xfce.xfce4-power-manager
