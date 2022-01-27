@@ -20,8 +20,11 @@
         };
         colour = "${self}/nix/flakes/nixos/colours/0f111a.png";
       };
+
+      pkgs = import nixpkgs { inherit system; };
     in
       {
+        packages.x86_64-linux.vim = pkgs.neovim;
         nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
           system = system;
           modules =
