@@ -4,7 +4,9 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
   inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  outputs = { self, nixpkgs, unstable }:
+  inputs.parsec.url = "github:DarthPJB/parsec-gaming-nix";
+
+  outputs = { self, nixpkgs, unstable, parsec }:
     let
       system = "x86_64-linux";
 
@@ -40,6 +42,7 @@
                 };
               }
               laptopConfig
+              ({ ... }: { environment.systemPackages = [ parsec.packages.${system}.parsecgaming ]; })
             ];
         };
       };

@@ -124,6 +124,7 @@ in
     opengl = {
       driSupport = true;
       driSupport32Bit = true;
+      extraPackages = [ pkgs.intel-media-driver ];
     };
     pulseaudio = {
       enable = true;
