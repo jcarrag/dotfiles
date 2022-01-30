@@ -7,6 +7,7 @@ let
     ./asciichart.nix
     ./feather-font/feather-font.nix
     ./ferdi.nix
+    ./neovim.nix
     ./nix-npm-install.nix
     ./scripts.nix
     ./polar-bookshelf.nix
