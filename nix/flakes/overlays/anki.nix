@@ -45,6 +45,76 @@ self: super:
        
            def ensureOpen(self):
                if not self.kakasi:
+      diff --git a/bulkreading.py b/bulkreading.py
+      index 76e8af4..16e6866 100755
+      --- a/bulkreading.py
+      +++ b/bulkreading.py
+      @@ -11,6 +11,9 @@ from .reading import mecab, srcFields, dstFields
+       from .notetypes import isJapaneseNoteType
+       from aqt import mw
+      
+      +config = mw.addonManager.getConfig(__name__)
+      +furiganaFieldSuffix = config['furiganaSuffix']
+      +
+       # Bulk updates
+       ##########################################################################
+      
+      @@ -20,40 +23,26 @@ def regenerateReadings(nids):
+           mw.progress.start()
+           for nid in nids:
+               note = mw.col.getNote(nid)
+      +        fields = mw.col.models.fieldNames(note.model())
+               # Amend notetypes.py to add your note types
+               _noteName = note.model()['name'].lower()
+               if not isJapaneseNoteType(_noteName):
+                   continue
+      -
+      -        src = None
+      -        for field in srcFields:
+      -            if field in note:
+      -                src = field
+      -                break
+      -        if not src:
+      -            # no src field
+      -            continue
+      -        # dst is the destination field for the Readings
+      -        dst = None
+      -        for field in dstFields:
+      -            if field in note:
+      -                dst = field
+      -                break
+      -        if not dst:
+      -            # no dst field
+      -            continue
+      -        if note[dst]:
+      -            # already contains data, skip
+      -            continue
+      -        srcTxt = mw.col.media.strip(note[src])
+      -        if not srcTxt.strip():
+      -            continue
+      -        try:
+      -            note[dst] = mecab.reading(srcTxt)
+      -        except Exception as e:
+      -            mecab = None
+      -            raise
+      -        note.flush()
+      +        for src in fields:
+      +            # dst is the destination field for the Readings
+      +            dst = src + furiganaFieldSuffix
+      +            if dst not in note:
+      +                # no dst field
+      +                continue
+      +            srcTxt = mw.col.media.strip(note[src])
+      +            if not srcTxt.strip():
+      +                continue
+      +            try:
+      +                note[dst] = mecab.reading(srcTxt)
+      +            except Exception as e:
+      +                mecab = None
+      +                raise
+      +            note.flush()
+           mw.progress.finish()
+           mw.reset()
     '';
   };
   ankiJapaneseExampleSentencesPatch = super.pkgs.writeTextFile {
@@ -63,6 +133,15 @@ self: super:
        f = open(fname, 'r', encoding='utf8')
        content = f.readlines()
        f.close()
+      @@ -122,7 +122,7 @@ def weighted_sample(somelist, n):
+       
+       def find_examples(expression, maxitems):
+           examples = []
+      -
+      +    expression = re.sub('する$', ''', expression)
+           for dictionary in dictionaries:
+               if expression in dictionary:
+                   index = dictionary[expression]
       @@ -135,8 +135,6 @@ def find_examples(expression, maxitems):
                    maxitems -= len(index)
                    for j in index:
