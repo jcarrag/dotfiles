@@ -26,10 +26,8 @@
       pkgs = import nixpkgs {
         inherit system; overlays = [ packageOverlays ];
       };
-    in
-      {
-        packages.x86_64-linux.vim = pkgs.my-neovim;
-        nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+
+      nixos = nixpkgs.lib.nixosSystem {
           system = system;
           modules =
             [
@@ -45,5 +43,9 @@
               ({ ... }: { environment.systemPackages = [ parsec.packages.${system}.parsecgaming ]; })
             ];
         };
+    in
+      {
+        packages.x86_64-linux.neovim = nixpkgs.lib.findFirst ({ name, ... }: nixpkgs.lib.hasPrefix "neovim" name) (pkgs.hello) nixos.options.environment.systemPackages.value;
+        nixosConfigurations.nixos = nixos;
       };
 }
