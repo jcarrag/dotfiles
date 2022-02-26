@@ -4,7 +4,7 @@
   programs.neovim = {
     enable = true;
     configure = {
-      customRC = builtins.readFile "${pkgs._self}/nix/flakes/modules/vimrc---";
+      customRC = builtins.readFile "${pkgs._self}/nix/flakes/modules/vimrc";
       packages.myPlugins = with pkgs.vimPlugins; {
         start = [
           vim-abolish
