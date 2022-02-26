@@ -21,6 +21,7 @@
           nixpkgs.overlays = [ packageOverlays ];
         };
         colour = "${self}/nix/flakes/nixos/colours/0f111a.png";
+	_self = self;
       };
 
       pkgs = import nixpkgs {
@@ -45,7 +46,7 @@
         };
     in
       {
-        packages.x86_64-linux.neovim = nixpkgs.lib.findFirst ({ name, ... }: nixpkgs.lib.hasPrefix "neovim" name) (pkgs.hello) nixos.options.environment.systemPackages.value;
+        packages.x86_64-linux.neovim = nixos.options.programs.neovim.finalPackage.value;
         nixosConfigurations.nixos = nixos;
       };
 }

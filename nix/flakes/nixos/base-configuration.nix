@@ -217,7 +217,7 @@ in
     neovim = {
       enable = true;
       configure = {
-        customRC = builtins.readFile "${pkgs.self}/vim/.vimrc_no_plugins";
+        customRC = builtins.readFile "${pkgs._self}/nix/flakes/nixos/vimrc";
         packages.myPlugins = with pkgs.vimPlugins; {
           start = [
             vim-abolish
