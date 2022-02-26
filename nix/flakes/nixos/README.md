@@ -6,3 +6,16 @@ You can build each system with:
 ```
 nixos-rebuild build --flake github:jcarrag/dotfiles?dir=nix/flakes/nixos/xps13
 ```
+
+### Pairing
+1. Install [tmate](http://tmate.io) on client
+2. Start tmate server:
+```
+// the config disables the default Esc delay
+tmate -f <(echo set -s escape-time 0)
+```
+3. Start neovim:
+```
+// add `--refresh` to force redownload
+nix run github:jcarrag/dotfiles#neovim
+```
