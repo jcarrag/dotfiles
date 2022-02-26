@@ -46,9 +46,10 @@
         };
     in
       {
-        packages.x86_64-linux.neovim = nixos.options.programs.neovim.finalPackage.value.overrideAttrs (_: {
-          supportedSystems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+        packages.x86_64-darwin.neovim = nixos.options.programs.neovim.finalPackage.value.overrideAttrs (_: {
+          system = "x86_64-darwin";
         });
+        packages.x86_64-linux.neovim = nixos.options.programs.neovim.finalPackage;
         nixosConfigurations.nixos = nixos;
       };
 }
