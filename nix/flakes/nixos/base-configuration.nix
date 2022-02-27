@@ -28,7 +28,9 @@ in
       ### Misc
       unstable.brave
       calibre
+      entr
       spotify
+      unstable.starship
       unstable.syncplay
       vlc
       zotero
@@ -42,11 +44,11 @@ in
       ## Javascript
       nix-npm-install
       nodejs
+      nodePackages.node2nix
       ## Nix
       unstable.cachix
       unstable.rnix-lsp
       ## Scala
-      openjdk
       sbt
       scala
       ### Services
@@ -54,12 +56,14 @@ in
       ### System
       alock
       arandr
+      dunst
       gnome2.gnome_icon_theme
       gnome3.adwaita-icon-theme
       gnome3.zenity
       gnupg
       hicolor-icon-theme
       libsecret
+      nix-index
       nix-prefetch-scripts
       openvpn
       paprefs # pulseaudio preferences
@@ -75,7 +79,8 @@ in
       asciicharts
       bat
       cntr
-      direnv
+      dig
+      unstable.direnv
       jq
       gitAndTools.gitFull
       git-crypt
@@ -174,7 +179,7 @@ in
   };
 
   powerManagement.resumeCommands = ''
-    ${pkgs.killall}/bin/killall -SIGUSR1 dunst
+    ${pkgs.dunst}/bin/dunstctl set-paused true
     ${pkgs.alock}/bin/alock
   '';
 
@@ -193,6 +198,7 @@ in
           patches = [ pkgs.ankiJapaneseExampleSentencesPatch ];
           addonConfig = {
             maxPermanent = 2;
+            maxShow = 2;
             noteTypes = [ "Japanese (recognition&recall)" ];
           };
           sha256 = "V3R/diLJCIgZRmz35/5QBTztf10hqhryvTp69UrWfj4=";
@@ -240,7 +246,7 @@ in
     printing = {
       enable = true;
       browsing = true;
-      drivers = [];
+      drivers = [ ];
     };
     upower.enable = true;
     udev = {
