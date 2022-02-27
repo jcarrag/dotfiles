@@ -14,7 +14,7 @@
 
       packageOverlays = import ../../overlays;
 
-      mkNixos = system: 
+      mkNixos = system:
         let
           extrasOverlay = _: _: {
             unstable = import unstable {
@@ -26,7 +26,7 @@
             _self = self;
           };
         in
-          nixpkgs.lib.nixosSystem {
+        nixpkgs.lib.nixosSystem {
           system = system;
           modules =
             [
@@ -43,13 +43,14 @@
             ];
         };
     in
-    flake-utils.lib.eachDefaultSystem (system:
-      {
-        packages = flake-utils.lib.flattenTree {
-          neovim = (mkNixos system).options.programs.neovim.finalPackage.value;
-        };
-      }
+    flake-utils.lib.eachDefaultSystem
+      (system:
+        {
+          packages = flake-utils.lib.flattenTree {
+            neovim = (mkNixos system).options.programs.neovim.finalPackage.value;
+          };
+        }
       ) // {
-        nixosConfigurations.nixos = mkNixos "x86_64-linux";
-      };
+      nixosConfigurations.nixos = mkNixos "x86_64-linux";
+    };
 }
