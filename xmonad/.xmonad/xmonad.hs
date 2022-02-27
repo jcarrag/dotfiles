@@ -350,7 +350,7 @@ myKeys config
     , key "Rebuild & Restart XMonad" "M-C-q" $
       spawn "xmonad --recompile && xmonad --restart"
     , key "Lock Screen" "M-S-=" $
-      spawn "pkill -x -SIGUSR1 dunst" >> spawn "alock"
+      spawn "dunstctl set-paused true" >> spawn "alock && dunstctl set-paused false"
     ] ^++^
     ---------------------------------------------------------------------------
     -- | Workspaces and Projects
