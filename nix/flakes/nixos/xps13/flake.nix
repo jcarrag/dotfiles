@@ -28,6 +28,36 @@
         inherit system; overlays = [ packageOverlays ];
       };
 
+      # darwinPkgs = import nixpkgs {
+      #   system = "x86_64-darwin";
+      #   overlays = [ extrasOverlay ];
+      # };
+
+      # neovimConfig = import "${self}/nix/flakes/modules/neovim.nix" { pkgs = darwinPkgs; };
+
+      # neovimModuleSrc = import "${nixpkgs}/nixos/modules/programs/neovim.nix" {
+      #   config = neovimConfig;
+      #   lib = darwinPkgs.lib;
+      #   pkgs = darwinPkgs;
+      # };
+
+      # darwinNeovim = (pkgs.lib.debug.traceVal neovimModuleSrc.config.content).programs.neovim.finalPackage;
+      osx = nixpkgs.lib.nixosSystem {
+          system = "x86_64-darwin";
+          modules =
+            [
+              {
+                nixpkgs.overlays = [ extrasOverlay packageOverlays ];
+                nix.registry = {
+                  self.flake = self;
+                  nixpkgs.flake = nixpkgs;
+                  unstable.flake = unstable;
+                };
+              }
+              laptopConfig
+            ];
+        };
+
       nixos = nixpkgs.lib.nixosSystem {
           system = system;
           modules =
@@ -46,10 +76,8 @@
         };
     in
       {
-        packages.x86_64-darwin.neovim = nixos.options.programs.neovim.finalPackage.value.overrideAttrs (_: {
-          system = "x86_64-darwin";
-        });
-        packages.x86_64-linux.neovim = nixos.options.programs.neovim.finalPackage;
+        packages.x86_64-darwin.neovim = osx.options.programs.neovim.finalPackage.value;
+        packages.x86_64-linux.neovim = nixos.options.programs.neovim.finalPackage.value;
         nixosConfigurations.nixos = nixos;
       };
 }
