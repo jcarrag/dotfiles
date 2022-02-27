@@ -10,7 +10,7 @@
 
   services = {
     udev = {
-      # swap left alt with meta on keyboard
+      # swap left alt with meta on magic keyboard
       extraHwdb = ''
         evdev:input:b0011v0001p0001*
           KEYBOARD_KEY_db=leftalt
@@ -18,7 +18,6 @@
       '';
     };
     xserver.videoDrivers = [
-      "amdgpu"
       "modesetting"
     ];
   };
