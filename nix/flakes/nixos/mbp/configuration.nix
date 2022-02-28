@@ -1,3 +1,4 @@
+# MacBook Pro (Retina, 13-inch, Mid 2014)
 { config, pkgs, ... }:
 
 {
