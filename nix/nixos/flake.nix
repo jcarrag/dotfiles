@@ -23,7 +23,7 @@
               config.allowUnfree = true;
               nixpkgs.overlays = [ packageOverlays ];
             };
-            colour = "${self}/nix/flakes/nixos/colours/0f111a.png";
+            colour = "${self}/nix/nixos/colours/0f111a.png";
             _self = self;
           };
         in

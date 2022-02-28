@@ -3,10 +3,9 @@ Build the initial system using the github hosted flake, i.e.:
 ```
 sudo nixos-rebuild build --flake github:jcarrag/dotfiles#xps
 ```
-After cloning this repo, link the system flake:
+(From this repo) link the system flake:
 ```
-cd /etc/nixos
-for ext in {nix,lock}; do echo ln -s "$(realpath flake.$ext)" "flake.$ext"; done
+for ext in {nix,lock}; do sudo ln -s "$(realpath flake.$ext)" "/etc/nixos/flake.$ext"; done
 ```
 The system will point to the appropriate system from then on:
 ```

@@ -1,1 +1,1 @@
-nix/flakes/nixos/flake.nix
+nix/nixos/flake.nix
