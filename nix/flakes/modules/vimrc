@@ -49,6 +49,11 @@ let g:rooter_patterns = ['.git']
 """ Vim config
 set updatetime=100
 
+" :ter[minal]
+autocmd TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
+autocmd FileType fzf tunmap <buffer> <Esc>
+nnoremap <Leader>t :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>icd $VIM_DIR<CR>
+
 " use undo file
 set undofile
 set undodir=$HOME/.vim/undo

@@ -13,7 +13,6 @@
           vim-obsession
           vim-surround # Shortcuts for setting () {} etc.
           vim-visualstar
-          vim-rooter
           direnv-vim
           coc-nvim
           coc-git
