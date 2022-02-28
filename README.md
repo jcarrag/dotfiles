@@ -3,7 +3,7 @@ Build the initial system using the github hosted flake, i.e.:
 ```
 sudo nixos-rebuild build --flake github:jcarrag/dotfiles#xps
 ```
-(From this repo) link the system flake:
+(From this cloned repo) link the system flake:
 ```
 for ext in {nix,lock}; do sudo ln -s "$(realpath flake.$ext)" "/etc/nixos/flake.$ext"; done
 ```
@@ -16,7 +16,7 @@ sudo nixos-rebuild build
 1. Start tmate server:
 ```
 // the config disables the default Esc delay
-tmate -f <(echo set -s escape-time 0)
+nix run nixpkgs#tmate -- -f <(echo set -s escape-time 0)
 
 // or without 'nix-command' & 'flakes' as default
 nix run --extra-experimental-features 'flakes nix-command' tmate -- -f <(echo set -s escape-time 0)
