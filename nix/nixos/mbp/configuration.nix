@@ -2,12 +2,6 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ../base-configuration.nix
-    ];
-
   hardware = {
     facetimehd.enable = true;
   };

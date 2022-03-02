@@ -2,12 +2,6 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ../base-configuration.nix
-    ];
-
   services = {
     udev = {
       # swap left alt with meta on keyboard

@@ -8,7 +8,6 @@ in
   imports = [
     ../modules/neovim.nix
     ../modules/anki.nix
-    ../modules/moixa.nix
   ];
 
   boot = {

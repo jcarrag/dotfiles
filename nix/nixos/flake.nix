@@ -13,10 +13,8 @@
     let
       packageOverlays = import ../overlays;
 
-      mkNixos = hostname: system:
+      mkNixos = hostname: system: extraModules:
         let
-          laptopConfig = import ./${hostname}/configuration.nix;
-
           extrasOverlay = _: _: {
             unstable = import unstable {
               system = system;
@@ -31,7 +29,10 @@
           system = system;
           modules =
             [
+              (import ./base-configuration.nix)
               {
+                environment.systemPackages = [ parsec.packages.${system}.parsecgaming ];
+                networking.hostName = hostname;
                 nixpkgs.overlays = [ extrasOverlay packageOverlays ];
                 nix.registry = {
                   self.flake = self;
@@ -39,26 +40,34 @@
                   unstable.flake = unstable;
                 };
               }
-              laptopConfig
-              ({ ... }: {
-                networking.hostName = hostname;
-                environment.systemPackages = [ parsec.packages.${system}.parsecgaming ];
-              })
-            ];
+            ] ++ extraModules;
         };
     in
     flake-utils.lib.eachDefaultSystem
       (system:
         {
           packages = flake-utils.lib.flattenTree {
-            neovim = (mkNixos "xps" system).options.programs.neovim.finalPackage.value;
+            neovim = (mkNixos "nixos" system [ ]).options.programs.neovim.finalPackage.value;
           };
         }
       ) // {
       nixosConfigurations = {
-        xps = mkNixos "xps" "x86_64-linux";
-        mbp = mkNixos "mbp" "x86_64-linux";
-        nuc = mkNixos "nuc" "x86_64-linux";
+        xps = mkNixos "xps" "x86_64-linux"
+          (map import [
+            ./xps/hardware-configuration.nix
+            ./xps/configuration.nix
+            ../modules/moixa.nix
+          ]);
+        mbp = mkNixos "mbp" "x86_64-linux"
+          (map import [
+            ./mbp/hardware-configuration.nix
+            ./mbp/configuration.nix
+          ]);
+        nuc = mkNixos "nuc" "x86_64-linux"
+          (map import [
+            ./nuc/hardware-configuration.nix
+            ./nuc/configuration.nix
+          ]);
       };
     };
 }
