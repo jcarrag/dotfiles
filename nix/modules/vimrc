@@ -224,17 +224,6 @@ command! -bang -nargs=* Rg
   \   <bang>0)
 nnoremap <leader><C-g> :Rg<Cr>
 
-let g:coc_global_extensions = [
-  \'coc-json',
-  \'coc-metals',
-  \'coc-tsserver',
-  \'coc-prettier',
-  \'coc-pyright',
-  \'coc-rls',
-  \'coc-yaml',
-  \]
-  " \'coc-jedi',
-
 " Toggle panel with Tree Views
 nnoremap <silent> <space>t :<C-u>CocCommand metals.tvp<CR>
 " Toggle Tree View 'metalsBuild'

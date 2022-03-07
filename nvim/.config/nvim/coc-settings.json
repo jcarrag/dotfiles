@@ -1,6 +1,6 @@
 {
   "diagnostic.messageTarget": "echo",
-  "coc.preferences.formatOnSaveFiletypes": [ "rust", "typescript" ],
+  "coc.preferences.formatOnSaveFiletypes": [ "rust", "typescript", "typescriptreact", "nix" ],
   "languageserver": {
     "ccls": {
       "command": "ccls",
