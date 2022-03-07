@@ -166,7 +166,7 @@ in
       "https://jcarrag.cachix.org"
     ];
     trustedUsers = [ "root" "james" ];
-    package = pkgs.nixUnstable;
+    package = pkgs.unstable.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
