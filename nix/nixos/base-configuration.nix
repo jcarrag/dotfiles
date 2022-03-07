@@ -168,7 +168,7 @@ in
     trustedUsers = [ "root" "james" ];
     package = pkgs.nixUnstable;
     extraOptions = ''
-      experimental-features = nix-command flakes ca-references
+      experimental-features = nix-command flakes
     '';
   };
 
