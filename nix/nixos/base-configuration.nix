@@ -222,6 +222,7 @@ in
     };
     light.enable = true;
     nm-applet.enable = true;
+    noisetorch.enable = true;
     steam.enable = true;
   };
 
