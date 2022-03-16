@@ -1,21 +1,21 @@
 {
   "nodes": {
-    "nixpkgs": {
+    "root": {
+      "inputs": {
+        "unstable": "unstable"
+      }
+    },
+    "unstable": {
       "locked": {
-        "lastModified": 1605456368,
-        "narHash": "sha256-diRkanMtpGV9NgQY2SJsA2HWehNVLM9Jz0jchtZrcKY=",
-        "path": "/nix/store/blr1dh8j6d51s0qpnzbqbi3jrfc5prkz-source",
-        "rev": "98e46cec92fb877abaee7ed8f78cee722fd58a7e",
+        "lastModified": 1646497237,
+        "narHash": "sha256-Ccpot1h/rV8MgcngDp5OrdmLTMaUTbStZTR5/sI7zW0=",
+        "path": "/nix/store/n04lw5nrskzmz7rv17p09qrnjanfkg5d-source",
+        "rev": "062a0c5437b68f950b081bbfc8a699d57a4ee026",
         "type": "path"
       },
       "original": {
-        "id": "nixpkgs",
+        "id": "unstable",
         "type": "indirect"
-      }
-    },
-    "root": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
       }
     }
   },

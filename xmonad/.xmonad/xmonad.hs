@@ -275,7 +275,7 @@ myKeys config
     , key "Terminal" "M-<Return>" $ spawnApp myTerminal
     , key "Browser" "M-/" $ spawnApp myBrowser
     , key "Spotify" "M-=" $ namedScratchpadAction myScratchpads "spotify"
-    , key "Spotify" "M-<Space>" $ spawn "dunstctl close"
+    , key "Close notification" "M-<Space>" $ spawn "dunstctl close"
     , key "Mixer" "M--" $ namedScratchpadAction myScratchpads "alsamixer"
     , key "Console" "M-<Esc>" $ namedScratchpadAction myScratchpads "console"
     , key "VLC" "M-x v" $ namedScratchpadAction myScratchpads "vlc"
