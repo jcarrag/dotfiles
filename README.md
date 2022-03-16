@@ -1,16 +1,20 @@
 ### System Installation
-Build the initial system using the github hosted flake, i.e.:
+1. Run the NixOS installer to get `hardware-configuration.nix`
+2. Clone this repository
+3. Move `hardware-configuration.nix` to `./nix/nixos/$SYSTEM/hardware-configuration` (+ link in `./nix/nixos/flake.nix`)
+4. (From `./nix/nixos`) Build the initial system using the updated flake, i.e.:
 ```
-sudo nixos-rebuild build --flake github:jcarrag/dotfiles#xps
+sudo nixos-rebuild build --flake .#$SYSTEM
 ```
-(From this cloned repo) link the system flake:
+5. (From `./nix/nixos`) link the system flake:
 ```
 for ext in {nix,lock}; do sudo ln -s "$(realpath flake.$ext)" "/etc/nixos/flake.$ext"; done
 ```
-The system will point to the appropriate system from then on:
+6. The system will point to the appropriate system from then on:
 ```
-sudo nixos-rebuild build
+sudo nixos-rebuild rebuild
 ```
+7. Push the local changes upstream
 
 ### Pairing
 1. Start tmate server:
