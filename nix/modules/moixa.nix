@@ -3,7 +3,7 @@
 {
 
   # https://alexbakker.me/post/nixos-pci-passthrough-qemu-vfio.html
-  # boot.initrd.availableKernelModules = [ "vfio-pci" ];
+  boot.initrd.availableKernelModules = [ "vfio-pci" ];
   # boot.initrd.preDeviceCommands = ''
   #   # 00:14.0 USB controller: Intel Corporation Tiger Lake-LP USB 3.2 Gen 2x1 xHCI Host Controller (rev 20)
   #   DEVS="0000:00:14.0"
