@@ -14,4 +14,4 @@ let
     ./virtualbox.nix
   ];
 in
-foldr (x: y: composeExtensions x y) (self: super: {}) overlays self super
+foldr (x: y: composeExtensions x y) (self: super: { }) overlays self super

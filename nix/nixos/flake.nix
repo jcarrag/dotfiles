@@ -13,7 +13,7 @@
     let
       packageOverlays = import ../overlays;
 
-      mkNixos = hostname: system: extraModules:
+      mkNixos = hostname: system: modules:
         let
           extrasOverlay = _: _: {
             unstable = import unstable {
@@ -40,7 +40,7 @@
                   unstable.flake = unstable;
                 };
               }
-            ] ++ extraModules;
+            ] ++ modules;
         };
     in
     flake-utils.lib.eachDefaultSystem
