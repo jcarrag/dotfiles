@@ -17,19 +17,15 @@ sudo nixos-rebuild rebuild
 7. Push the local changes upstream
 
 ### Pairing
-1. Start tmate server:
+1. (From host) Start tmate server:
 ```
-// the config disables the default Esc delay
-nix run nixpkgs#tmate -- -f <(echo set -s escape-time 0)
+nix run github:jcarrag/dotfiles#tmate
 
 // or without 'nix-command' & 'flakes' as default
-nix run --extra-experimental-features 'flakes nix-command' tmate -- -f <(echo set -s escape-time 0)
+nix run --extra-experimental-features 'nix-command flakes' github:jcarrag/dotfiles#tmate
 ```
-2. Start neovim:
+2. (From host) Enter tmate session password
+3. (From client) Connect to tmate server:
 ```
-nix run github:jcarrag/dotfiles#neovim
-
-// or without 'nix-command' & 'flakes' as default
-// `--refresh` force re-downloads the flake
-nix run --extra-experimental-features 'flakes nix-command' run --refresh github:jcarrag/dotfiles#neovim
+tmate_connect
 ```
