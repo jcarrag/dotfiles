@@ -4,7 +4,7 @@
 3. Move `hardware-configuration.nix` to `./nix/nixos/$SYSTEM/hardware-configuration` (+ link in `./nix/nixos/flake.nix`)
 4. (From `./nix/nixos`) Build the initial system using the updated flake, i.e.:
 ```
-sudo nixos-rebuild build --flake .#$SYSTEM
+sudo nixos-rebuild switch --flake .#$SYSTEM
 ```
 5. (From `./nix/nixos`) link the system flake:
 ```
@@ -12,7 +12,7 @@ for ext in {nix,lock}; do sudo ln -s "$(realpath flake.$ext)" "/etc/nixos/flake.
 ```
 6. The system will point to the appropriate system from then on:
 ```
-sudo nixos-rebuild rebuild
+sudo nixos-rebuild switch
 ```
 7. Push the local changes upstream
 
