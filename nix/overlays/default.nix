@@ -10,6 +10,7 @@ let
     ./nix-npm-install.nix
     ./scripts.nix
     ./polar-bookshelf.nix
+    ./tmate.nix
     ./virtualbox.nix
   ];
 in

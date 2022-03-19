@@ -48,6 +48,7 @@
         {
           packages = flake-utils.lib.flattenTree {
             neovim = (mkNixos "nixos" system [ ]).options.programs.neovim.finalPackage.value;
+            tmate = (import nixpkgs { inherit system; overlays = [ packageOverlays ]; }).tmate-my;
           };
         }
       ) // {

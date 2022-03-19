@@ -52,6 +52,7 @@ in
       scala
       ### Services
       unstable.awscli
+      tmate-connect
       ### System
       alock
       arandr
