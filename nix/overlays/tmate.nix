@@ -23,7 +23,7 @@ self: super:
         '';
       tmateConfig = super.writeText "tmate.conf" ''
         set -s escape-time 0
-        setw -g mouse on
+        set -g mouse on
 
         set tmate-authorized-keys "${authorizedKeys}"
 
