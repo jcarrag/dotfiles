@@ -77,7 +77,10 @@ set splitbelow
 set splitright
 
 " system clipboard
-set clipboard=unnamedplus
+set clipboard=unnamed
+if has("unnamedplus") " X11 support
+    set clipboard+=unnamedplus
+endif
 nnoremap yL :let @+=join([expand('%:p'),  line(".")], ':')<CR>
 
 " open links to files in the previous window (relies on 'bogado/file-line')
