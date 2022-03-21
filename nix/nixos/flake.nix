@@ -40,7 +40,7 @@
                   unstable.flake = unstable;
                 };
               }
-            ] ++ modules;
+            ] ++ (map import modules);
         };
     in
     flake-utils.lib.eachDefaultSystem
@@ -54,21 +54,21 @@
       ) // {
       nixosConfigurations = {
         xps = mkNixos "xps" "x86_64-linux"
-          (map import [
+          [
             ./xps/hardware-configuration.nix
             ./xps/configuration.nix
             ../modules/moixa.nix
-          ]);
+          ];
         mbp = mkNixos "mbp" "x86_64-linux"
-          (map import [
+          [
             ./mbp/hardware-configuration.nix
             ./mbp/configuration.nix
-          ]);
+          ];
         nuc = mkNixos "nuc" "x86_64-linux"
-          (map import [
+          [
             ./nuc/hardware-configuration.nix
             ./nuc/configuration.nix
-          ]);
+          ];
       };
     };
 }
