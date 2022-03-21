@@ -23,7 +23,12 @@ self: super:
         '';
       tmateConfig = super.writeText "tmate.conf" ''
         set -s escape-time 0
+
+        # https://stackoverflow.com/a/33461197
         set -g mouse on
+        # make scrolling with wheels work
+        bind -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'select-pane -t=; copy-mode -e; send-keys -M'"
+        bind -n WheelDownPane select-pane -t= \; send-keys -M
 
         set tmate-authorized-keys "${authorizedKeys}"
 
