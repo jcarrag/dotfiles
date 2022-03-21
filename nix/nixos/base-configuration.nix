@@ -91,7 +91,6 @@ in
       lshw
       lsof
       ncdu
-      usbutils
       yarn # needed for coc.nvim's post-install step
       p7zip
       pciutils
