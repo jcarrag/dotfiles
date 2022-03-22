@@ -13,7 +13,12 @@
   #   modprobe -i vfio-pci
   # '';
 
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu.ovmf.enable = true;
+    onBoot = "ignore";
+    onShutdown = "shutdown";
+  };
 
   programs = {
     dconf.enable = true;
