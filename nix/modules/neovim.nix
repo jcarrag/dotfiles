@@ -45,6 +45,7 @@
           vim-abolish
           vim-commentary
           vim-sensible
+          vim-fugitive
           vim-obsession
           vim-surround # Shortcuts for setting () {} etc.
           vim-visualstar
@@ -72,6 +73,7 @@
           vim-github-link
           vim-file-line
           vim-material_kaicataldo
+          vim-css-color
         ];
     };
   };
