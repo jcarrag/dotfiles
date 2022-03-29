@@ -25,6 +25,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    foreman
     virt-manager
     unstable.quickemu
     unstable.drawio
