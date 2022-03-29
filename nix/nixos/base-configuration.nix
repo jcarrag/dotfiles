@@ -147,6 +147,7 @@ in
 
   networking = {
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
+    firewall.allowedTCPPorts = [ 8000 ]; # python -m SimpleHTTPServer
     networkmanager = {
       enable = true;
       packages = [
