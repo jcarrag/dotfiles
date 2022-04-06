@@ -233,7 +233,17 @@ in
   '';
 
   services = {
-    actkbd.enable = true;
+    actkbd = {
+      enable = true;
+      bindings = [
+        {
+          # ctrl+space
+          keys = [ 29 57 ];
+          events = [ "key" ];
+          command = "/run/current-system/sw/bin/runuser -l james -c 'DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus ${pkgs.dunst}/bin/dunstctl close'";
+        }
+      ];
+    };
     avahi = {
       enable = true;
       nssmdns = true;
