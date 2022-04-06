@@ -89,6 +89,7 @@ in
       fd
       libnotify
       lshw
+      input-utils
       lsof
       ncdu
       yarn # needed for coc.nvim's post-install step
