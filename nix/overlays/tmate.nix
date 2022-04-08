@@ -53,6 +53,8 @@ self: super:
       -f ${tmateConfig} \
       -k $apiKey \
       new-session \
-      'nix shell --experimental-features "nix-command flakes" --refresh github:jcarrag/dotfiles#neovim'
+      'nix run --experimental-features "nix-command flakes" --refresh github:jcarrag/dotfiles#neovim .; \
+      echo nix run --experimental-features \"nix-command flakes\" --refresh github:jcarrag/dotfiles#neovim .; \
+      exec $SHELL'
     '';
 }
