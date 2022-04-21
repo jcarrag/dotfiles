@@ -235,13 +235,15 @@ in
   services = {
     actkbd = {
       enable = true;
-      bindings = [
-        {
-          # ctrl+space
-          keys = [ 29 57 ];
+      bindings = map
+        (keys: {
+          inherit keys;
           events = [ "key" ];
           command = "/run/current-system/sw/bin/runuser -l james -c 'DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus ${pkgs.dunst}/bin/dunstctl close'";
-        }
+        }) [
+        [ 29 57 ] # left_ctrl+space
+        [ 97 57 ] # right_ctrl+space
+        [ 58 57 ] # caps_lock+space
       ];
     };
     avahi = {
