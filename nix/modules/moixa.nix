@@ -30,7 +30,6 @@
     unstable.quickemu
     unstable.drawio
     unstable.tmate
-    unstable.nodePackages.typescript
     unstable.libimobiledevice
     unstable.ifuse
     ntfs3g
