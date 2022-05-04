@@ -24,16 +24,28 @@
     dconf.enable = true;
   };
 
-  environment.systemPackages = with pkgs; [
-    foreman
-    virt-manager
-    unstable.quickemu
-    unstable.drawio
-    unstable.tmate
-    unstable.libimobiledevice
-    unstable.ifuse
-    ntfs3g
-  ];
+  environment.systemPackages = with pkgs;
+    let
+      hc-ssh = pkgs.writeShellScriptBin "hc_ssh" ''
+        ssh-keygen -f "/home/james/.ssh/known_hosts" -R "192.168.0.35"
+        ssh -oStrictHostKeyChecking=no root@192.168.0.35
+      '';
+      hc-serial = pkgs.writeShellScriptBin "hc_serial" ''
+        ${pkgs.minicom}/bin/minicom --device /dev/ttyUSB0
+      '';
+    in
+    [
+      foreman
+      virt-manager
+      unstable.quickemu
+      unstable.drawio
+      unstable.tmate
+      unstable.libimobiledevice
+      unstable.ifuse
+      ntfs3g
+      hc-serial
+      hc-ssh
+    ];
 
   networking = {
     firewall.allowedTCPPorts = [ 8080 8081 9001 9002 ];
