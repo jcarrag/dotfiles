@@ -22,7 +22,7 @@ self: super:
            def setup(self):
                self.mecabCmd = mungeForPlatform(
       -            [os.path.join(supportDir, "mecab")] + mecabArgs + [
-      +            ["mecab"] + mecabArgs + [
+      +            ["${self.pkgs.mecab}/bin/mecab"] + mecabArgs + [
                        '-d', supportDir, '-r', os.path.join(supportDir, "mecabrc"),
                        '-u', os.path.join(supportDir, "user_dic.dic")])
                os.environ['DYLD_LIBRARY_PATH'] = supportDir
@@ -37,7 +37,7 @@ self: super:
            def setup(self):
                self.kakasiCmd = mungeForPlatform(
       -            [os.path.join(supportDir, "kakasi")] + kakasiArgs)
-      +            ["kakasi"] + kakasiArgs)
+      +            ["${self.pkgs.kakasi}/bin/kakasi"] + kakasiArgs)
                os.environ['ITAIJIDICT'] = os.path.join(supportDir, "itaijidict")
                os.environ['KANWADICT'] = os.path.join(supportDir, "kanwadict")
       -        if not isWin:
