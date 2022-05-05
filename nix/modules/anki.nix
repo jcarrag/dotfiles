@@ -104,41 +104,20 @@ in
         ];
       };
 
-      ankiPatch = pkgs.writeTextFile {
-        name = "anki_addon_dir.patch";
-        text = ''
-          diff --git a/aqt/profiles.py b/aqt/profiles.py
-          index f12b31138..c31dfa47c 100644
-          --- a/aqt/profiles.py
-          +++ b/aqt/profiles.py
-          @@ -258,7 +258,7 @@ and no other programs are accessing your profile folders, then try again."""))
-                   return path
-           
-               def addonFolder(self):
-          -        return self._ensureExists(os.path.join(self.base, "addons21"))
-          +        return "${addons}"
-           
-               def backupFolder(self):
-                   return self._ensureExists(
-        '';
-      };
+      anki-bin = pkgs.callPackage ./anki-bin.nix { };
 
-      anki = pkgs.anki.overrideAttrs (
-        old: {
-          patches = old.patches ++ [ ankiPatch ];
+      anki = pkgs.writeShellScriptBin "anki" ''
+        cp -r ${addons}/* /home/james/.local/share/Anki2/addons21/
 
-          preFixup = old.preFixup + ''
-            makeWrapperArgs+=(
-              --prefix PATH ':' ${makeBinPath buildInputs}
-            )
-          '';
-        }
-      );
+        chmod -R +w /home/james/.local/share/Anki2/addons21/
+
+        ${anki-bin}/bin/anki
+      '';
     in
-      {
-        environment.systemPackages = [
-          anki
-        ];
-      }
+    {
+      environment.systemPackages = [
+        anki
+      ];
+    }
   );
 }
