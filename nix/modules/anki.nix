@@ -4,7 +4,7 @@ with lib; with lib.types;
 let
   cfg = config.programs.anki;
 
-  addonConfigFormat = pkgs.formats.json {};
+  addonConfigFormat = pkgs.formats.json { };
 in
 {
   options.programs.anki = {
@@ -12,7 +12,7 @@ in
 
     addons = mkOption {
       description = "Addons for Anki";
-      default = [];
+      default = [ ];
       type = listOf (
         submodule {
           options = {
@@ -26,17 +26,17 @@ in
             };
             patches = mkOption {
               description = "Patches to be applied";
-              default = [];
+              default = [ ];
               type = listOf path;
             };
             buildInputs = mkOption {
               description = "Runtime dependencies for the addon";
-              default = [];
+              default = [ ];
               type = listOf package;
             };
             addonConfig = mkOption {
               type = addonConfigFormat.type;
-              default = {};
+              default = { };
               description = "Addon configuration";
             };
           };
@@ -48,7 +48,7 @@ in
   config = mkIf cfg.enable (
     let
       ids = map (addon: addon.ankiWebId) cfg.addons;
-      addonById = (foldr (a: acc: acc // { ${a.ankiWebId} = a; }) {} cfg.addons);
+      addonById = (foldr (a: acc: acc // { ${a.ankiWebId} = a; }) { } cfg.addons);
       buildInputs = concatMap (addon: addon.buildInputs) cfg.addons;
 
       addons = pkgs.stdenv.mkDerivation {
@@ -56,14 +56,16 @@ in
 
         version = "2.1";
 
-        srcs = map (
-          { ankiWebId, sha256, ... }:
+        srcs = map
+          (
+            { ankiWebId, sha256, ... }:
             pkgs.fetchurl {
               name = "${ankiWebId}.zip";
               url = "https://ankiweb.net/shared/download/${ankiWebId}?v=2.1";
               sha256 = sha256;
             }
-        ) cfg.addons;
+          )
+          cfg.addons;
 
         nativeBuildInputs = [ pkgs.unzip ];
 
@@ -75,19 +77,24 @@ in
           done
         '';
 
-        patchPhase = concatMap (
-          id:
-            map (
-              patches: ''
-                cd ${id}
-                patch < "${patches}"
-                cd ..
-              ''
-            ) addonById.${id}.patches
-        ) ids;
+        patchPhase = concatMap
+          (
+            id:
+            map
+              (
+                patches: ''
+                  cd ${id}
+                  patch < "${patches}"
+                  cd ..
+                ''
+              )
+              addonById.${id}.patches
+          )
+          ids;
 
-        installPhase = map (
-          id:
+        installPhase = map
+          (
+            id:
             ''
               cd ${id}
               cat <<EOF > meta.json
@@ -95,7 +102,8 @@ in
               EOF
               cd ..
             ''
-        ) ids ++ [
+          )
+          ids ++ [
           ''
             mkdir $out/
 
