@@ -29,11 +29,6 @@ in
               default = [ ];
               type = listOf path;
             };
-            buildInputs = mkOption {
-              description = "Runtime dependencies for the addon";
-              default = [ ];
-              type = listOf package;
-            };
             addonConfig = mkOption {
               type = addonConfigFormat.type;
               default = { };
@@ -49,7 +44,6 @@ in
     let
       ids = map (addon: addon.ankiWebId) cfg.addons;
       addonById = (foldr (a: acc: acc // { ${a.ankiWebId} = a; }) { } cfg.addons);
-      buildInputs = concatMap (addon: addon.buildInputs) cfg.addons;
 
       addons = pkgs.stdenv.mkDerivation {
         pname = "AnkiWebAddons";

@@ -191,7 +191,6 @@ in
         {
           ankiWebId = "3918629684";
           patches = [ pkgs.ankiJapanesePatch ];
-          buildInputs = with pkgs; [ mecab kakasi ];
           sha256 = "yvhTyuu3FPM6P2rjWeV87jujnke8tBi+Pj1hGUDeOa8=";
         }
         {
