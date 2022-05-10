@@ -143,23 +143,28 @@ nnoremap gJ :call JoinSpaceless()<CR>
 " vim-scala
 au BufRead,BufNewFile *.sbt set filetype=scala
 
-" NERDTree
-let NERDTreeShowHidden=1
-let g:NERDTreeDirArrowExpandable = '↠'
-let g:NERDTreeDirArrowCollapsible = '↡'
-let g:NERDTreeIgnore = ['^node_modules$[[dir]]']
-map <silent> <C-b> :NERDTreeToggle<CR>
-map <silent> <C-f> :NERDTreeFind<CR>
+" CHADTree
+let g:chadtree_settings = {
+      \ 'xdg': v:true,
+      \ 'keymap.primary': ["o"],
+      \ 'keymap.v_split': ["s"],
+      \ 'keymap.h_split': ["i"],
+      \ 'keymap.tertiary': ["t"],
+      \ 'keymap.open_sys': ["<M-o>"],
+      \ 'keymap.trash': ["T"],
+      \ }
+nnoremap <C-f> :CHADopen --version-ctl<CR>
+nnoremap <C-b> :CHADopen<CR>
 
-" Only close other windows other than this one and NERDTree
-function! OnlyAndNerdtree()
+" Only close other windows other than this one and CHADTree
+function! OnlyAndChadtree()
     let currentWindowID = win_getid()
 
-    windo if win_getid() != currentWindowID && &filetype != 'nerdtree' | close | endif
+    windo if win_getid() != currentWindowID && &filetype != 'CHADTree' | close | endif
 endfunction
-command! Only call OnlyAndNerdtree()
+command! Only call OnlyAndChadtree()
 " Map it to a key
-nnoremap <C-w>o :call OnlyAndNerdtree()<CR>
+nnoremap <C-w>o :call OnlyAndChadtree()<CR>
 
 " Airline
 let g:airline_powerline_fonts = 1
@@ -190,8 +195,6 @@ let g:airline_mode_map = {
 let g:airline_stl_path_style = 'short'
 let g:airline#extensions#fugitiveline#enabled = 0 " https://github.com/vim-airline/vim-airline/issues/2338#issuecomment-782227550
 let g:airline#extensions#coc#enabled = 0
-let g:airline#extensions#nerdtree_statusline = 0
-" let g:airline#extensions#ale#enabled = 1
 
 " fzf-vim
 let g:fzf_action = {
