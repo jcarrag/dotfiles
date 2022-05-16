@@ -63,7 +63,7 @@
           coc-tsserver
           vim-nix # nix highlight
           fzf-vim # fuzzy finder through vim
-          chadtree # file structure inside nvim
+          pkgs.vimPlugins.chadtree # file structure inside nvim
           rainbow # Color parenthesis
           vim-airline
           vim-airline-themes
