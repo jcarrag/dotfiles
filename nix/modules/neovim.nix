@@ -9,12 +9,12 @@
         let
           vim-github-link = pkgs.vimUtils.buildVimPluginFrom2Nix {
             pname = "github-link";
-            version = "2022-02-26";
+            version = "2022-05-16";
             src = pkgs.fetchFromGitHub {
               owner = "knsh14";
               repo = "vim-github-link";
               rev = "master";
-              sha256 = "sha256-zi2OEZXOLwM7by36RdPB66nmfEPHF9gY0vgJGBVBKxM=";
+              sha256 = "sha256-138OelnjN92Y4jXSJhvOV9TM7vYWGHjW9gXKRhwygYA=";
             };
             meta.homepage = "https://github.com/knsh14/vim-github-link";
           };
