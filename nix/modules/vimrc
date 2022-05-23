@@ -229,6 +229,7 @@ command! -bang -nargs=* Rg
   \           : fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}, 'right:50%:hidden', '?'),
   \   <bang>0)
 nnoremap <leader><C-g> :Rg<Cr>
+nnoremap <leader><C-b> :Buffers<Cr>
 
 " Toggle panel with Tree Views
 nnoremap <silent> <space>t :<C-u>CocCommand metals.tvp<CR>
