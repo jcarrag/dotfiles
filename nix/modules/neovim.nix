@@ -44,6 +44,7 @@
         [
           vim-abolish
           vim-commentary
+          vim-devicons
           vim-sensible
           vim-fugitive
           vim-obsession
