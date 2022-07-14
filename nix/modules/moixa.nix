@@ -33,6 +33,9 @@
       hc-serial = pkgs.writeShellScriptBin "hc_serial" ''
         ${pkgs.minicom}/bin/minicom --device /dev/ttyUSB0
       '';
+      airplay = pkgs.writeShellScriptBin "airplay" ''
+        ${pkgs.unstable.uxplay}/bin/uxplay -p -reset 0
+      '';
     in
     [
       foreman
@@ -43,13 +46,36 @@
       unstable.libimobiledevice
       unstable.ifuse
       ntfs3g
+      airplay
       hc-serial
       hc-ssh
     ];
 
   networking = {
-    firewall.allowedTCPPorts = [ 8080 8081 9001 9002 ];
-    firewall.allowedUDPPorts = [ 8080 8081 9001 9002 ];
+    firewall = {
+      allowedTCPPorts = [
+        # metro
+        8080
+        8081
+        9001
+        9002
+        # uxplay
+        7100
+        7000
+        7001
+      ];
+      allowedUDPPorts = [
+        # metro
+        8080
+        8081
+        9001
+        9002
+        # uxplay
+        6000
+        6001
+        7011
+      ];
+    };
   };
 
   services = {
