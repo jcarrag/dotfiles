@@ -205,7 +205,7 @@ in
         {
           ankiWebId = "3918629684";
           patches = [ pkgs.ankiJapanesePatch ];
-          sha256 = "yvhTyuu3FPM6P2rjWeV87jujnke8tBi+Pj1hGUDeOa8=";
+          sha256 = "sha256-yvhTyuu3FPM6P2rjWeV87jujnke8tBi+Pj1hGUDeOa8=";
         }
         {
           ankiWebId = "2413435972";
@@ -215,17 +215,17 @@ in
             maxShow = 2;
             noteTypes = [ "Japanese (recognition&recall)" ];
           };
-          sha256 = "V3R/diLJCIgZRmz35/5QBTztf10hqhryvTp69UrWfj4=";
+          sha256 = "sha256-V3R/diLJCIgZRmz35/5QBTztf10hqhryvTp69UrWfj4=";
         }
         {
           # True retention
           ankiWebId = "613684242";
-          sha256 = "MDDscb6XoJDkXyx7puY9y7EbOxZVGZXcmD1R1g2207g=";
+          sha256 = "sha256-MDDscb6XoJDkXyx7puY9y7EbOxZVGZXcmD1R1g2207g=";
         }
         {
           # Edit field during review
           ankiWebId = "385888438";
-          sha256 = "o/6kUXPU7TyMRRne43tJD4DQmhakjm1hyoKUorb+thU=";
+          sha256 = "sha256-o/6kUXPU7TyMRRne43tJD4DQmhakjm1hyoKUorb+thU=";
         }
       ];
     };
