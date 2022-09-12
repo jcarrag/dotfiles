@@ -56,7 +56,7 @@
           coc-highlight
           coc-metals
           coc-python
-          coc-rls
+          coc-rust-analyzer
           coc-vimtex
           coc-yaml
           coc-html
