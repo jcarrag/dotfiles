@@ -150,6 +150,9 @@ let g:NERDTreeDirArrowCollapsible = '↡'
 let g:NERDTreeIgnore = ['^node_modules$[[dir]]']
 map <silent> <C-b> :NERDTreeToggle<CR>
 map <silent> <C-f> :NERDTreeFind<CR>
+" close NERDTree if it's the last window open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree")
+      \ && b:NERDTree.isTabTree()) | q | endif
 
 " Only close other windows other than this one and NERDTree
 function! OnlyAndNerdtree()
