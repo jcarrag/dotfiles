@@ -36,7 +36,7 @@
               owner = "kaicataldo";
               repo = "material.vim";
               rev = "main";
-              sha256 = "sha256-0QwN8tbCv27qxlGYVXnwhOJ9FA3KRDPrr6oFqaDJlNM=";
+              sha256 = "sha256-yBMa/zwNS6h+d08oBQskiExgmN69lZkBuwAWCEHkQ8g=";
             };
             meta.homepage = "https://github.com/kaicataldo/material.vim/";
           };
