@@ -14,7 +14,7 @@
               owner = "knsh14";
               repo = "vim-github-link";
               rev = "master";
-              sha256 = "sha256-138OelnjN92Y4jXSJhvOV9TM7vYWGHjW9gXKRhwygYA=";
+              sha256 = "sha256-OwYbtVQttkOUibOb8vcnf8FUGScGL9jg33oe+WyVRJQ=";
             };
             meta.homepage = "https://github.com/knsh14/vim-github-link";
           };
