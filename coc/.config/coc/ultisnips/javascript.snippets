@@ -1,0 +1,10 @@
+snippet steamlog "Logs stream$ events" b
+RX.tap({
+  next: (next) => console.log("$1 next", { next }),
+  error: (error) => console.log("$1 error", { error }),
+  complete: () => console.log("$1 complete"),
+  subscribe: () => console.log("$1 subscribe"),
+  unsubscribe: () => console.log("$1 unsubscribe"),
+  finalize: () => console.log("$1 finalize"),
+}),
+endsnippet
