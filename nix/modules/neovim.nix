@@ -57,6 +57,7 @@
           coc-metals
           coc-python
           coc-rust-analyzer
+          coc-snippets
           coc-vimtex
           coc-yaml
           coc-html

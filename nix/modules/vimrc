@@ -164,6 +164,9 @@ command! Only call OnlyAndNerdtree()
 " Map it to a key
 nnoremap <C-w>o :call OnlyAndNerdtree()<CR>
 
+" coc-snippets
+imap <C-l> <Plug>(coc-snippets-expand)
+
 " Airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'material'
