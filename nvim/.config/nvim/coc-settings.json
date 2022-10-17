@@ -90,6 +90,12 @@
     }
   },
   "rust-client.disableRustup": true,
+  "rust-analyzer.server.path": "/run/current-system/sw/bin/rust-analyzer",
+  "snippets.extends": {
+    "javascriptreact": ["javascript"],
+    "typescriptreact": ["javascript"],
+    "typescript": ["javascript"]
+  },
   "tsserver.maxTsServerMemory": 32768,
   "tsserver.log": "verbose"
 }
