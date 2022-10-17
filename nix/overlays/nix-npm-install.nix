@@ -8,7 +8,7 @@ self: super:
         mkdir -p $tempdir
         pushd $tempdir
       # note the differences here:
-        ${nodePackages.node2nix}/bin/node2nix --input <( echo "[\"$1\"]")
+        ${nodePackages.node2nix}/bin/node2nix --nodejs-18 --input <( echo "[\"$1\"]")
         nix-env --install --file .
         popd
     '';
