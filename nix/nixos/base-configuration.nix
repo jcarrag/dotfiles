@@ -21,7 +21,7 @@ in
       ### Communication
       unstable.discord
       unstable.signal-desktop
-      skype
+      skypeforlinux
       unstable.slack
       zoom-us
       ### Misc
@@ -36,23 +36,32 @@ in
       ### Programming
       ## C++
       unstable.ccls
+      ## Rust
+      unstable.rust-analyzer
+      unstable.cargo
+      unstable.rustc
       ## Haskell
       unstable.cabal-install
       unstable.ghc
       unstable.haskellPackages.haskell-language-server
       ## Javascript
       nix-npm-install
-      nodejs
+      nodejs-18_x
       nodePackages.node2nix
       ## Nix
       unstable.cachix
       unstable.rnix-lsp
+      ## Python
+      python3Minimal
       ## Scala
       sbt
       scala
       ### Services
       unstable.awscli
+      unstable.overmind
       tmate-connect
+      unstable.tmux
+      unstable.wireguard-tools
       ### System
       alock
       arandr
@@ -70,7 +79,7 @@ in
       pasystray # pulseaudio systray
       pavucontrol # pulseaudio volume control
       rofi
-      unstable.taffybar
+      taffybar
       alacritty
       update-resolv-conf
       xclip
@@ -78,6 +87,7 @@ in
       ### Util
       asciicharts
       bat
+      binutils-unwrapped
       cntr
       dig
       unstable.direnv
@@ -91,11 +101,13 @@ in
       lshw
       input-utils
       lsof
+      mitmproxy
       ncdu
       yarn # needed for coc.nvim's post-install step
       p7zip
       pciutils
       powertop
+      remmina
       ripgrep
       stow
       tldr
@@ -148,12 +160,14 @@ in
 
   networking = {
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
-    firewall.allowedTCPPorts = [ 8000 ]; # python -m SimpleHTTPServer
+    firewall.allowedTCPPorts = [
+      8000 # python -m SimpleHTTPServer
+    ];
+    nameservers = [ "8.8.8.8" ];
     networkmanager = {
       enable = true;
-      packages = [
+      plugins = [
         pkgs.networkmanager-openvpn
-        pkgs.networkmanagerapplet
       ];
     };
     wireguard = {
@@ -165,7 +179,7 @@ in
             publicKey = "Sjk/qE9e4d4dGQ8c9oY1a4VLam6Rwuwqp3Vme6JsHGk=";
             presharedKeyFile = "/home/james/vpn/raspberry_pi_wireguard/wg0_psk";
             endpoint = "flat13hallelujah.duckdns.org:6667";
-            allowedIPs = [ "192.168.0.38/32" ];
+            allowedIPs = [ "192.168.0.42/32" "192.168.0.38/32" ];
           }
         ];
       };
@@ -248,16 +262,27 @@ in
   services = {
     actkbd = {
       enable = true;
-      bindings = map
-        (keys: {
-          inherit keys;
-          events = [ "key" ];
-          command = "/run/current-system/sw/bin/runuser -l james -c 'DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus ${pkgs.dunst}/bin/dunstctl close'";
-        }) [
-        [ 29 57 ] # left_ctrl+space
-        [ 97 57 ] # right_ctrl+space
-        [ 58 57 ] # caps_lock+space
-      ];
+      bindings =
+        [
+          {
+            # enter+left_ctrl
+            keys = [ 28 29 ];
+            events = [ "key" ];
+            # command = "DISPLAY=:0 XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.alacritty}/bin/alacritty --class console --title console &>> /home/james/wut";
+            command = "/run/current-system/sw/bin/runuser -l james -c 'XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.alacritty}/bin/alacritty --class console --title console' &>> /home/james/wut";
+            # command = "echo wut >> /home/james/wut";
+          }
+
+        ] ++ (map
+          (keys: {
+            inherit keys;
+            events = [ "key" ];
+            command = "/run/current-system/sw/bin/runuser -l james -c 'DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus ${pkgs.dunst}/bin/dunstctl close'";
+          }) [
+          [ 29 57 ] # left_ctrl+space
+          [ 97 57 ] # right_ctrl+space
+          [ 58 57 ] # caps_lock+space
+        ]);
     };
     avahi = {
       enable = true;
@@ -283,7 +308,6 @@ in
           KEYBOARD_KEY_700e3=leftalt
           KEYBOARD_KEY_700e2=leftmeta
       '';
-      # ATTRS{idVendor}=="239a", ATTRS{idProduct}=="800b", TAG+="uaccess"
       extraRules = ''
         ATTRS{idVendor}=="239a", ATTRS{idProduct}=="8087", TAG+="uaccess"
 
@@ -310,6 +334,20 @@ in
         KERNEL=="hidraw*", KERNELS=="*054C:05C4*", MODE="0666"
         # DualShock 4 Slim over bluetooth hidraw
         KERNEL=="hidraw*", KERNELS=="*054C:09CC*", MODE="0666"
+
+        # This rules are based on the udev rules from the OpenOCD project, with unsupported probes removed.
+        # See http://openocd.org/ for more details.
+
+        ACTION!="add|change", GOTO="probe_rs_rules_end"
+
+        SUBSYSTEM=="gpio", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+
+        SUBSYSTEM!="usb|tty|hidraw", GOTO="probe_rs_rules_end"
+
+        # SEGGER J-Link mini
+        ATTRS{idVendor}=="1366", ATTRS{idProduct}=="0101", MODE="660", GROUP="plugdev", TAG+="uaccess"
+
+        LABEL="probe_rs_rules_end"
       '';
     };
     xserver = {
@@ -356,7 +394,7 @@ in
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
           ${pkgs.redshift}/bin/redshift-gtk &
-          ${unstable.taffybar}/bin/taffybar &
+          ${pkgs.taffybar}/bin/taffybar &
         '';
       };
       windowManager.xmonad = {
