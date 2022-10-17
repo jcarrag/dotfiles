@@ -1,9 +1,10 @@
 # This is Git's per-user configuration file.
 [user]
        name = James Carragher
-       email = james@carragher.org
+       email = james@carragher.dev
 [push]
        default = simple
+	autoSetupRemote = true
 [core]
        editor = nvim
        excludesfile = ~/.gitignore
@@ -14,6 +15,7 @@
 	br = branch
 	ci = commit
 	st = status
+        logs = "!git log --oneline | fzf --multi --preview 'git show {+1}'"
 	last = log -1 HEAD
         tree = log --graph --decorate --pretty=oneline --abbrev-commit
         changelog = "!git log --reverse --pretty=format:'* %s' \"$1\"..\"$2\" #"
