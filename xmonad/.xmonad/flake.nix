@@ -1,10 +1,10 @@
 {
-  outputs = { self, unstable }: {
+  outputs = { self, nixpkgs }: {
 
     devShell.x86_64-linux =
       let
         system = "x86_64-linux";
-        pkgs = import unstable {
+        pkgs = import nixpkgs {
           system = system;
           config = {
             allowUnfree = true;
