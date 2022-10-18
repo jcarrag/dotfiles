@@ -172,8 +172,5 @@
       '';
     };
     usbmuxd.enable = true;
-    xserver.videoDrivers = [
-      "modesetting"
-    ];
   };
 }
