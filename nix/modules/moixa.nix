@@ -37,12 +37,12 @@
       '';
 
       hc-ssh = pkgs.writeShellScriptBin "hc_ssh" ''
-        ssh-keygen -f "/home/james/.ssh/known_hosts" -R "192.168.0.35"
-        ssh -oStrictHostKeyChecking=no root@192.168.0.35
+        ssh-keygen -f "/home/james/.ssh/known_hosts" -R "192.168.5.1"
+        ssh -oStrictHostKeyChecking=no root@192.168.5.1
       '';
       hc-ssh-installer-api = pkgs.writeShellScriptBin "hc_ssh_installer_api" ''
-        ssh-keygen -f "/home/james/.ssh/known_hosts" -R "192.168.0.35"
-        ssh -oStrictHostKeyChecking=no root@192.168.0.35 'journalctl -fu installer-api'
+        ssh-keygen -f "/home/james/.ssh/known_hosts" -R "192.168.5.1"
+        ssh -oStrictHostKeyChecking=no root@192.168.5.1 'journalctl -fu installer-api'
       '';
       hc-serial = pkgs.writeShellScriptBin "hc_serial" ''
         ${pkgs.minicom}/bin/minicom --device /dev/ttyUSB0
