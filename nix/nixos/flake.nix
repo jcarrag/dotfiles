@@ -1,7 +1,7 @@
 {
   description = "A flake for my systems";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
 
   inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 

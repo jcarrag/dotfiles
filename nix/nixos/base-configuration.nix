@@ -187,19 +187,21 @@ in
   };
 
   nix = {
-    autoOptimiseStore = true;
-    binaryCaches = [
-      "https://cache.nixos.org/"
-    ];
-    trustedBinaryCaches = [
-      "https://cache.iog.io"
-      "https://jcarrag.cachix.org"
-    ];
-    trustedUsers = [ "root" "james" ];
     package = pkgs.unstable.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
+    settings = {
+      auto-optimise-store = true;
+      substituters = [
+        "https://cache.nixos.org/"
+      ];
+      trusted-substituters = [
+        "https://cache.iog.io"
+        "https://jcarrag.cachix.org"
+      ];
+      trusted-users = [ "root" "james" ];
+    };
   };
 
   nixpkgs.config = {
@@ -253,6 +255,7 @@ in
     nm-applet.enable = true;
     noisetorch.enable = true;
     steam.enable = true;
+    thunar.plugins = [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
   };
 
   security.sudo.extraConfig = ''
@@ -373,7 +376,6 @@ in
           enable = true;
           noDesktop = true;
           enableXfwm = false;
-          thunarPlugins = [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
         };
       };
       displayManager = {
