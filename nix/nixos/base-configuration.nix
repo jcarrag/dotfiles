@@ -192,7 +192,7 @@ in
       "https://cache.nixos.org/"
     ];
     trustedBinaryCaches = [
-      "https://hydra.iohk.io"
+      "https://cache.iog.io"
       "https://jcarrag.cachix.org"
     ];
     trustedUsers = [ "root" "james" ];
