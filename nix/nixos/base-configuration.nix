@@ -36,6 +36,7 @@ in
       ### Programming
       ## C++
       unstable.ccls
+      unstable.gcc
       ## Rust
       unstable.rust-analyzer
       unstable.cargo
