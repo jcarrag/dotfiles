@@ -41,6 +41,7 @@ in
       unstable.rust-analyzer
       unstable.cargo
       unstable.rustc
+      unstable.rustfmt
       ## Haskell
       unstable.cabal-install
       unstable.ghc
