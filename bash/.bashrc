@@ -6,6 +6,8 @@ TERM=xterm
 
 EDITOR=nvim
 
+alias cls='printf "\033c"'
+
 # emulatate pbcopy and paste on linux
 # depends on xclip package
 if [[ $(uname) == Linux ]]; then
