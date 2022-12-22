@@ -9,7 +9,7 @@
         let
           vim-github-link = pkgs.vimUtils.buildVimPluginFrom2Nix {
             pname = "github-link";
-            version = "2022-05-16";
+            version = "2022-12-22";
             src = pkgs.fetchFromGitHub {
               owner = "knsh14";
               repo = "vim-github-link";
@@ -20,7 +20,7 @@
           };
           vim-file-line = pkgs.vimUtils.buildVimPluginFrom2Nix {
             pname = "file-line";
-            version = "2022-02-26";
+            version = "2022-12-22";
             src = pkgs.fetchFromGitHub {
               owner = "bogado";
               repo = "file-line";
@@ -31,7 +31,7 @@
           };
           vim-material_kaicataldo = pkgs.vimUtils.buildVimPluginFrom2Nix {
             pname = "material.vim";
-            version = "2022-02-26";
+            version = "2022-12-22";
             src = pkgs.fetchFromGitHub {
               owner = "kaicataldo";
               repo = "material.vim";
