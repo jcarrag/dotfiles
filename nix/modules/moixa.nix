@@ -24,12 +24,6 @@
     dconf.enable = true;
   };
 
-  nixpkgs.config.android_sdk.accept_license = true;
-
-  environment.variables = {
-    ANDROID_SDK_ROOT = "${pkgs.androidenv.androidPkgs_9_0.androidsdk}/libexec/android-sdk";
-  };
-
   environment.systemPackages = with pkgs;
     let
       copy = pkgs.writeShellScriptBin "copy" ''
@@ -112,7 +106,6 @@
       foreman
       virt-manager
       adoptopenjdk-bin
-      androidenv.androidPkgs_9_0.androidsdk
       unstable.ngrok
       unstable.quickemu
       unstable.drawio
