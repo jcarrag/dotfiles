@@ -388,8 +388,8 @@ in
         };
         sessionCommands = ''
           ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
-          ${pkgs.xorg.xmodmap}/bin/xmodmap -e 'Caps_Lock=Escape'
-          ${pkgs.xcape}/bin/xcape -e 'Caps_Lock=Escape'
+          ${pkgs.xorg.setxkbmap}/bin/setxkbmap -option ctrl:nocaps
+          ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape' -t 175
           ${pkgs.xorg.xinput}/bin/xinput disable 12 # Disable touchscreen
           ${pkgs.xorg.xset}/bin/xset s 10800 10800
           ${pkgs.picom}/bin/picom &
