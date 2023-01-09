@@ -358,6 +358,16 @@ in
     xserver = {
       enable = true;
       exportConfiguration = true;
+      # attempt this after xorg-server 1.20.15 is released
+      # https://www.phoronix.com/news/X.Org-Server-HotplugDriver
+      extraConfig = ''
+        Section "OutputClass"
+                Identifier "AMDgpu"
+                MatchDriver "amdgpu"
+                Driver "amdgpu"
+                HotplugDriver "amdgpu"
+        EndSection
+      '';
       libinput = {
         enable = true;
         touchpad = {
