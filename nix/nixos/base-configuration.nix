@@ -384,8 +384,10 @@ in
       displayManager = {
         defaultSession = "xfce+xmonad";
         lightdm = {
-          background = pkgs.colour;
           enable = true;
+          greeters.gtk.extraConfig = ''
+            background = #0F111A
+          '';
         };
         sessionCommands = ''
           ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
