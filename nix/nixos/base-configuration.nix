@@ -371,7 +371,8 @@ in
         Option "OffTime"     "0"
       '';
       layout = "us";
-      xkbOptions = "shift:both_capslock, caps:ctrl_modifier";
+      # xkbOptions list: https://gist.github.com/jcarrag/aa6c72c76d8664ff3f1c752bbf543af7
+      xkbOptions = "shift:both_capslock,ctrl:nocaps";
       desktopManager = {
         xterm.enable = true;
         xfce = {
@@ -388,7 +389,6 @@ in
         };
         sessionCommands = ''
           ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
-          ${pkgs.xorg.setxkbmap}/bin/setxkbmap -option ctrl:nocaps
           ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape' -t 175
           ${pkgs.xorg.xinput}/bin/xinput disable 12 # Disable touchscreen
           ${pkgs.xorg.xset}/bin/xset s 10800 10800
