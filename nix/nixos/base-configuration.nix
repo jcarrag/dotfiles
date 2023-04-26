@@ -61,6 +61,7 @@ in
       ### Services
       unstable.awscli
       unstable.overmind
+      tailscale
       tmate-connect
       unstable._1password-gui
       unstable.tmux
@@ -163,9 +164,12 @@ in
 
   networking = {
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
-    firewall.allowedTCPPorts = [
-      8000 # python -m SimpleHTTPServer
-    ];
+    firewall = {
+      allowedTCPPorts = [
+        8000 # python -m SimpleHTTPServer
+      ];
+      checkReversePath = "loose";
+    };
     nameservers = [ "8.8.8.8" ];
     networkmanager = {
       enable = true;
@@ -300,12 +304,12 @@ in
     dbus.enable = true;
     fwupd.enable = true;
     gnome.gnome-keyring.enable = true;
-
     printing = {
       enable = true;
       browsing = true;
       drivers = [ ];
     };
+    tailscale.enable = true;
     upower.enable = true;
     udev = {
       # swap left alt with meta on magicforce keyboard
