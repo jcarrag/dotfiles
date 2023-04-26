@@ -48,7 +48,7 @@ in
       unstable.haskellPackages.haskell-language-server
       ## Javascript
       nix-npm-install
-      nodejs-18_x
+      nodejs-16_x
       nodePackages.node2nix
       ## Nix
       unstable.cachix
@@ -62,6 +62,7 @@ in
       unstable.awscli
       unstable.overmind
       tmate-connect
+      unstable._1password-gui
       unstable.tmux
       unstable.wireguard-tools
       ### System
