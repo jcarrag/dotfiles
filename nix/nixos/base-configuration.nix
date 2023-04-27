@@ -23,7 +23,7 @@ in
       unstable.signal-desktop
       skypeforlinux
       unstable.slack
-      zoom-us
+      unstable.zoom-us
       ### Misc
       unstable.brave
       calibre
