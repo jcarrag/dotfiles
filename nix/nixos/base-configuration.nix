@@ -310,6 +310,7 @@ in
       browsing = true;
       drivers = [ ];
     };
+    resolved.enable = true;
     tailscale.enable = true;
     upower.enable = true;
     udev = {
