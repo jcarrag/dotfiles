@@ -89,7 +89,6 @@
       }
     }
   },
-  "rust-client.disableRustup": true,
   "rust-analyzer.server.path": "/run/current-system/sw/bin/rust-analyzer",
   "snippets.extends": {
     "javascriptreact": ["javascript"],
