@@ -304,6 +304,7 @@ in
     dbus.enable = true;
     fwupd.enable = true;
     gnome.gnome-keyring.enable = true;
+    openssh.enable = true;
     printing = {
       enable = true;
       browsing = true;
