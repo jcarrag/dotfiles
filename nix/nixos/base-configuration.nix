@@ -65,6 +65,8 @@ in
       tmate-connect
       unstable._1password-gui
       unstable.tmux
+      ### Networking
+      unstable.expressvpn
       unstable.wireguard-tools
       ### System
       alock
@@ -302,6 +304,7 @@ in
     };
     blueman.enable = true;
     dbus.enable = true;
+    expressvpn.enable = true;
     fwupd.enable = true;
     gnome.gnome-keyring.enable = true;
     openssh.enable = true;
