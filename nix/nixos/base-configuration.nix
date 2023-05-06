@@ -66,6 +66,7 @@ in
       unstable._1password-gui
       unstable.tmux
       ### Networking
+      tcpdump
       unstable.wireguard-tools
       ### System
       alock
