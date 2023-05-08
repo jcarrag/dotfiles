@@ -67,6 +67,7 @@ in
       unstable.tmux
       ### Networking
       tcpdump
+      traceroute
       ### System
       alock
       arandr
@@ -75,6 +76,9 @@ in
       gnome3.adwaita-icon-theme
       gnome3.zenity
       gnupg
+      gparted
+      hfsprogs # gparted dep
+      ntfsprogs # gparted dep
       hicolor-icon-theme
       libsecret
       nix-index
