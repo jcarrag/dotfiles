@@ -296,6 +296,27 @@ in
     fwupd.enable = true;
     gnome.gnome-keyring.enable = true;
     openssh.enable = true;
+    openvpn = {
+      servers = {
+        express-vpn-us = {
+          autoStart = false;
+          config =
+            let credentials = "";
+            in
+            ''
+              config /home/james/vpn/my_expressvpn_usa_-_new_jersey_-_3_udp.ovpn
+
+              auth-user-pass /home/james/vpn/my_expressvpn_usa_-_new_jersey_-_3_udp.conf
+
+              script-security 2
+              up ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
+              up-restart
+              down ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
+              down-pre
+            '';
+        };
+      };
+    };
     printing = {
       enable = true;
       browsing = true;
