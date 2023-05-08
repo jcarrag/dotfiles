@@ -67,7 +67,6 @@ in
       unstable.tmux
       ### Networking
       tcpdump
-      unstable.wireguard-tools
       ### System
       alock
       arandr
@@ -178,20 +177,6 @@ in
       plugins = [
         pkgs.networkmanager-openvpn
       ];
-    };
-    wireguard = {
-      interfaces."wg0" = {
-        privateKeyFile = "/home/james/vpn/raspberry_pi_wireguard/wg0_priv";
-        ips = [ "10.236.139.2/24" "fd11:5ee:bad:c0de::2/64" ];
-        peers = [
-          {
-            publicKey = "Sjk/qE9e4d4dGQ8c9oY1a4VLam6Rwuwqp3Vme6JsHGk=";
-            presharedKeyFile = "/home/james/vpn/raspberry_pi_wireguard/wg0_psk";
-            endpoint = "flat13hallelujah.duckdns.org:6667";
-            allowedIPs = [ "192.168.0.42/32" "192.168.0.38/32" ];
-          }
-        ];
-      };
     };
   };
 
