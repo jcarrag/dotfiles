@@ -322,7 +322,13 @@ in
       browsing = true;
       drivers = [ ];
     };
-    resolved.enable = true;
+    resolved = {
+      enable = true;
+      domains = [
+        "8.8.8.8"
+        "2001:4860:4860::8844"
+      ];
+    };
     tailscale.enable = true;
     upower.enable = true;
     udev = {
