@@ -7,10 +7,9 @@
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  # commented until this fix is merged: https://github.com/DarthPJB/parsec-gaming-nix/pull/3
-  # inputs.parsec.url = "github:DarthPJB/parsec-gaming-nix";
+  inputs.parsec.url = "github:DarthPJB/parsec-gaming-nix";
 
-  outputs = { self, nixpkgs, unstable, flake-utils }:
+  outputs = { self, nixpkgs, unstable, flake-utils, parsec }:
     let
       packageOverlays = import ../overlays;
 
@@ -31,7 +30,7 @@
             [
               (import ./base-configuration.nix)
               {
-                # environment.systemPackages = [ parsec.packages.${system}.parsecgaming ];
+                environment.systemPackages = [ parsec.packages.${system}.parsecgaming ];
                 networking.hostName = hostname;
                 nixpkgs.overlays = [ extrasOverlay packageOverlays ];
                 nix.registry = {
