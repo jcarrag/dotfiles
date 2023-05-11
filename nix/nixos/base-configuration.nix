@@ -28,6 +28,7 @@ in
       unstable.brave
       calibre
       entr
+      unstable.fzf
       spotify
       unstable.starship
       unstable.syncplay
