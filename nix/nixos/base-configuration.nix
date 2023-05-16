@@ -74,6 +74,7 @@ in
       unstable._1password-gui
       unstable.tmux
       ### Networking
+      socat
       tcpdump
       traceroute
       ### System
