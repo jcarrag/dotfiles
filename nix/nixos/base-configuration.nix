@@ -31,6 +31,7 @@ in
       unstable.switcheroo-control
       unstable.vulkan-tools
       ### Misc
+      aoe-2-de
       unstable.brave
       calibre
       entr

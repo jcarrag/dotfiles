@@ -3,6 +3,7 @@ self: super:
 with super.lib;
 let
   overlays = map import [
+    ./aoe2de.nix
     ./anki.nix
     ./asciichart.nix
     ./feather-font/feather-font.nix
