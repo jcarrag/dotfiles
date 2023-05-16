@@ -21,7 +21,7 @@
               config.allowUnfree = true;
               nixpkgs.overlays = [ packageOverlays ];
             };
-            _self = "${self}/../..";
+            _self = self;
           };
         in
         nixpkgs.lib.nixosSystem {
