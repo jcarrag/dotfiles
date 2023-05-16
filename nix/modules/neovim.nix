@@ -4,7 +4,6 @@
   programs.neovim = {
     enable = true;
     configure = {
-      # customRC = builtins.readFile "${pkgs._self}/../../nix/modules/vimrc";
       customRC = builtins.readFile "${pkgs._self}/nix/modules/vimrc";
       packages.myPlugins.start = with pkgs.unstable.vimPlugins;
         let
