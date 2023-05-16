@@ -24,6 +24,12 @@ in
       skypeforlinux
       unstable.slack
       unstable.zoom-us
+      ### eGPU
+      unstable.intel-gpu-tools
+      unstable.glxinfo
+      unstable.radeontop
+      unstable.switcheroo-control
+      unstable.vulkan-tools
       ### Misc
       unstable.brave
       calibre
@@ -330,6 +336,7 @@ in
         "2001:4860:4860::8844"
       ];
     };
+    switcherooControl.enable = true;
     tailscale.enable = true;
     upower.enable = true;
     udev = {
