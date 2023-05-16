@@ -6,6 +6,7 @@
   # https://forum.level1techs.com/t/nixos-vfio-pcie-passthrough/130916
   # boot.kernelParams = [ "intel_iommu=on" ];
 
+  # AMD RX 5700 XT
   boot.initrd.kernelModules = [ "amdgpu" ];
 
   services = {
