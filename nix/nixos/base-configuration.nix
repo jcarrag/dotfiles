@@ -35,6 +35,7 @@ in
       unstable.brave
       calibre
       entr
+      evince
       unstable.fzf
       spotify
       unstable.starship
