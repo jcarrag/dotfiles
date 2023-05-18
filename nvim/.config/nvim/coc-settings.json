@@ -61,10 +61,9 @@
       ]
     },
     "nix": {
-      "command": "rnix-lsp",
-      "filetypes": [
-        "nix"
-      ]
+      "command": "nil",
+      "filetypes": ["nix"],
+      "rootPatterns":  ["flake.nix"]
     },
     "purescript": {
       "command": "purescript-language-server",

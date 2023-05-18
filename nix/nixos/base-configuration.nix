@@ -60,7 +60,7 @@ in
       nodePackages.node2nix
       ## Nix
       unstable.cachix
-      unstable.rnix-lsp
+      unstable.nil
       ## Python
       python3Minimal
       ## Scala
