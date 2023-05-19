@@ -445,6 +445,7 @@ in
         enableContribAndExtras = true;
         enableConfiguredRecompile = true;
         extraPackages = hpkgs: [
+          hpkgs.data-default
           hpkgs.dbus
           hpkgs.xmonad-extras
           hpkgs.xmonad-contrib
