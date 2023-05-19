@@ -68,6 +68,10 @@
             ./nuc/hardware-configuration.nix
             ./nuc/configuration.nix
           ];
+        hm90 = mkNixos "hm90" "x86_64-linux"
+          [
+            ./hm90/hardware-configuration.nix
+          ];
       };
     };
 }
