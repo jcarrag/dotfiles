@@ -10,6 +10,7 @@ let
     ./ferdi.nix
     ./nix-npm-install.nix
     ./scripts.nix
+    ./taffybar
     ./tmate.nix
     ./virtualbox.nix
     ./xmonad

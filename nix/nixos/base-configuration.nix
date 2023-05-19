@@ -98,7 +98,7 @@ in
       pasystray # pulseaudio systray
       pavucontrol # pulseaudio volume control
       rofi
-      taffybar
+      taffybar-my
       alacritty
       update-resolv-conf
       xclip
@@ -436,7 +436,7 @@ in
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
           ${pkgs.redshift}/bin/redshift-gtk &
-          ${pkgs.taffybar}/bin/taffybar &
+          ${pkgs.taffybar-my}/bin/taffybar-my &
         '';
       };
       windowManager.xmonad = {
