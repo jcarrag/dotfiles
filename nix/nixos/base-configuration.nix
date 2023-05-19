@@ -425,7 +425,7 @@ in
             background = #0F111A
           '';
         };
-          # ${pkgs.taffybar-my}/bin/taffybar-my &
+        # ${pkgs.taffybar-my}/bin/taffybar-my &
         sessionCommands = ''
           ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
           ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape' -t 175
