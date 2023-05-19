@@ -9,5 +9,8 @@ self: super:
       ghc = self.unstable.haskell.compiler.ghc94;
       iproute = self.haskell.lib.dontCheck _super.iproute;
     };
+    source-overrides = {
+      xml-conduit = "1.9.0.0";
+    };
   };
 }
