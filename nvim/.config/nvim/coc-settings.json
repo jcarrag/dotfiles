@@ -1,6 +1,6 @@
 {
   "diagnostic.messageTarget": "echo",
-  "coc.preferences.formatOnSaveFiletypes": [ "rust", "typescript", "typescriptreact", "nix" ],
+  "coc.preferences.formatOnSave": true,
   "languageserver": {
     "ccls": {
       "command": "ccls",
@@ -63,7 +63,12 @@
     "nix": {
       "command": "nil",
       "filetypes": ["nix"],
-      "rootPatterns":  ["flake.nix"]
+      "rootPatterns":  ["flake.nix"],
+       "settings": {
+         "nil": {
+           "formatting": { "command": ["nixpkgs-fmt"] }
+         }
+       }
     },
     "purescript": {
       "command": "purescript-language-server",

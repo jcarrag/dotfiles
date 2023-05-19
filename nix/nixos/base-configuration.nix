@@ -62,6 +62,7 @@ in
       ## Nix
       unstable.cachix
       unstable.nil
+      unstable.nixpkgs-fmt
       ## Python
       python3Minimal
       ## Scala
