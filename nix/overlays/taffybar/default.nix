@@ -10,6 +10,7 @@ self: super:
       iproute = self.haskell.lib.dontCheck _super.iproute;
     };
     source-overrides = {
+      gtk3 = "0.14.8";
       xml-conduit = "1.9.0.0";
     };
   };

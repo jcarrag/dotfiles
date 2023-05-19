@@ -98,7 +98,8 @@ in
       pasystray # pulseaudio systray
       pavucontrol # pulseaudio volume control
       rofi
-      taffybar-my
+      # taffybar-my
+      taffybar
       alacritty
       update-resolv-conf
       xclip
@@ -425,6 +426,7 @@ in
             background = #0F111A
           '';
         };
+          # ${pkgs.taffybar-my}/bin/taffybar-my &
         sessionCommands = ''
           ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
           ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape' -t 175
@@ -436,7 +438,7 @@ in
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
           ${pkgs.redshift}/bin/redshift-gtk &
-          ${pkgs.taffybar-my}/bin/taffybar-my &
+          ${pkgs.taffybar}/bin/taffybar &
         '';
       };
       windowManager.xmonad = {

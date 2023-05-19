@@ -101,9 +101,10 @@ main = do
       notifySystemD = void $ runCommandFromPath ["systemd-notify", "--ready"]
       myWorkspacesConfig =
         defaultWorkspacesConfig
-        { underlineHeight = 3
-        , underlinePadding = 2
-        , minIcons = 1
+        {
+        -- , underlineHeight = 3
+        -- , underlinePadding = 2
+        minIcons = 1
         , getWindowIconPixbuf = myIcons
         , widgetGap = 0
         , showWorkspaceFn = hideEmpty
@@ -135,8 +136,8 @@ main = do
         , endWidgets = longLaptopEndWidgets
         , barPosition = Top
         , barPadding = 0
-        , barHeight = 30
-        , cssPath = return cssFilePath
+        -- , barHeight = 30
+        , cssPaths = return cssFilePath
         }
       simpleTaffyConfig = selectedConfig
         { centerWidgets = []
@@ -145,7 +146,7 @@ main = do
         }
   dyreTaffybar $
     appendHook notifySystemD $
-    appendHook (void $ getHost False) $
+    appendHook (void $ getTrayHost False) $
     withLogServer $
     withToggleServer $
     toTaffyConfig simpleTaffyConfig
