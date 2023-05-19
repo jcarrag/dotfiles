@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   unstable = pkgs.unstable;
@@ -312,8 +312,6 @@ in
         express-vpn-us = {
           autoStart = false;
           config =
-            let credentials = "";
-            in
             ''
               config /home/james/vpn/my_expressvpn_usa_-_new_jersey_-_3_udp.ovpn
 
