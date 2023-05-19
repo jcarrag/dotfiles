@@ -12,6 +12,7 @@ let
     ./scripts.nix
     ./tmate.nix
     ./virtualbox.nix
+    ./xmonad
   ];
 in
 foldr (x: y: composeExtensions x y) (self: super: { }) overlays self super

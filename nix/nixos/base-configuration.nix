@@ -441,7 +441,9 @@ in
       };
       windowManager.xmonad = {
         enable = true;
+        config = pkgs.xmonad-config;
         enableContribAndExtras = true;
+        enableConfiguredRecompile = true;
         extraPackages = hpkgs: [
           hpkgs.dbus
           hpkgs.xmonad-extras
