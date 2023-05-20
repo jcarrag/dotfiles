@@ -21,7 +21,7 @@ in
     };
     group = mkOption {
       type = types.str;
-      default = "emby-server";
+      default = "users";
       description = lib.mdDoc "Group account under which Emby server runs.";
     };
   };
