@@ -470,6 +470,8 @@ in
     extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "docker" "dialout" ];
     group = "users";
     home = "/home/james";
+    # allow emby-server access to ~/emby-library
+    homeMode = "770";
     isNormalUser = true;
     uid = 1000;
   };
