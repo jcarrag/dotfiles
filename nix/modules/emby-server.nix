@@ -32,6 +32,19 @@ in
         cfg.package
       ];
 
+      networking = {
+        firewall = {
+          allowedTCPPorts = [
+            8096
+            8920
+          ];
+          allowedUDPPorts = [
+            1900
+            7359
+          ];
+        };
+      };
+
       users.users = optionalAttrs (cfg.user == "emby-server") ({
         emby-server = {
           group = cfg.group;
