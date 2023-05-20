@@ -1,8 +1,8 @@
 self: super:
-
 let
   mkEmbyServer =
-    { lib
+    { EMBY_DATA ? ""
+    , lib
     , stdenv
     , fetchurl
     , autoPatchelfHook
@@ -31,9 +31,14 @@ let
         nativeBuildInputs = [
           autoPatchelfHook
           dpkg
+          makeWrapper
         ];
 
         unpackPhase = "true";
+
+        preFixup = ''
+          wrapProgram $out/bin/emby-server --set EMBY_DATA ${EMBY_DATA}
+        '';
 
         installPhase = ''
           mkdir -p $out/bin
