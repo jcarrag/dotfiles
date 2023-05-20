@@ -1,15 +1,8 @@
 self: super:
+
 let
-  # version = "4.8.0.37";
-  # name = "emby-${version}";
-  # system = "x86_64-linux";
-  # pkgs = import nixpkgs { inherit system; };
-
-
   mkEmbyServer =
-    {
-      #EMBY_DATA ? ""
-      lib
+    { lib
     , stdenv
     , fetchurl
     , autoPatchelfHook
@@ -21,7 +14,6 @@ let
     let
       version = "4.8.0.37";
       name = "emby-${version}";
-      system = "x86_64-linux";
     in
     stdenv.mkDerivation
       {
@@ -39,14 +31,9 @@ let
         nativeBuildInputs = [
           autoPatchelfHook
           dpkg
-          # makeWrapper
         ];
 
         unpackPhase = "true";
-
-        # preFixup = ''
-        #   wrapProgram $out/bin/emby-server --set EMBY_DATA ${EMBY_DATA}
-        # '';
 
         installPhase = ''
           mkdir -p $out/bin
@@ -57,7 +44,5 @@ let
       };
 in
 {
-  emby-server = self.callPackage mkEmbyServer {
-    # EMBY_DATA = (self.lib.debug.traceVal self).programs.emby-server.dataDir;
-  };
+  emby-server = self.callPackage mkEmbyServer { };
 }

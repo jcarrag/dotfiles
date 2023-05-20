@@ -46,11 +46,6 @@ in
         emby-server = { };
       });
 
-      # system.activationScripts.emby-server = ''
-      #   mkdir -p ${dataDir}
-      #   chown ${cfg.user}:${cfg.group} ${dataDir}
-      # '';
-
       systemd.services.emby-server = {
         description = "Emby server";
         after = [ "network.target" ];
