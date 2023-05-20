@@ -71,6 +71,7 @@
         hm90 = mkNixos "hm90" "x86_64-linux"
           [
             ./hm90/hardware-configuration.nix
+            ./hm90/configuration.nix
           ];
       };
     };

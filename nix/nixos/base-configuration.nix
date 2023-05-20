@@ -8,7 +8,6 @@ in
   imports = [
     ../modules/neovim.nix
     ../modules/anki.nix
-    ../modules/emby-server.nix
   ];
 
   boot = {
@@ -258,7 +257,6 @@ in
     };
     autojump.enable = true;
     bash.enableCompletion = true;
-    emby-server.enable = true;
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
