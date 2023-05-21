@@ -23,6 +23,10 @@
             };
             _self = self;
           };
+          rebuild = (import nixpkgs { system = system; }).writeShellScriptBin "rebuild" ''
+            set -x
+            sudo nixos-rebuild switch --flake ~/dotfiles/#${hostname}
+          '';
         in
         nixpkgs.lib.nixosSystem {
           system = system;
@@ -30,7 +34,10 @@
             [
               (import ./base-configuration.nix)
               {
-                environment.systemPackages = [ parsec.packages.${system}.parsecgaming ];
+                environment.systemPackages = [
+                  parsec.packages.${system}.parsecgaming
+                  rebuild
+                ];
                 networking.hostName = hostname;
                 nixpkgs.overlays = [ extrasOverlay packageOverlays ];
                 nix.registry = {
