@@ -129,6 +129,7 @@ in
       pciutils
       powertop
       remmina
+      rename
       ripgrep
       stow
       tldr
