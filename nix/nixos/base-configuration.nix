@@ -8,6 +8,7 @@ in
   imports = [
     ../modules/neovim.nix
     ../modules/anki.nix
+    ../modules/taffybar-my.nix
   ];
 
   boot = {
@@ -99,8 +100,8 @@ in
       pasystray # pulseaudio systray
       pavucontrol # pulseaudio volume control
       rofi
-      # taffybar-my
-      taffybar
+      taffybar-my
+      # taffybar
       alacritty
       update-resolv-conf
       xclip
@@ -266,6 +267,7 @@ in
     nm-applet.enable = true;
     noisetorch.enable = true;
     steam.enable = true;
+    taffybar-my.enable = true;
     thunar.plugins = [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
   };
 
@@ -427,6 +429,7 @@ in
           '';
         };
         # ${pkgs.taffybar-my}/bin/taffybar-my &
+          # ${pkgs.taffybar}/bin/taffybar &
         sessionCommands = ''
           ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
           ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape' -t 175
@@ -438,7 +441,6 @@ in
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
           ${pkgs.redshift}/bin/redshift-gtk &
-          ${pkgs.taffybar}/bin/taffybar &
         '';
       };
       windowManager.xmonad = {
