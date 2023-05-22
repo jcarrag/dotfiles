@@ -101,10 +101,7 @@ main = do
       notifySystemD = void $ runCommandFromPath ["systemd-notify", "--ready"]
       myWorkspacesConfig =
         defaultWorkspacesConfig
-        {
-        -- , underlineHeight = 3
-        -- , underlinePadding = 2
-        minIcons = 1
+        { minIcons = 1
         , getWindowIconPixbuf = myIcons
         , widgetGap = 0
         , showWorkspaceFn = hideEmpty
@@ -136,7 +133,7 @@ main = do
         , endWidgets = longLaptopEndWidgets
         , barPosition = Top
         , barPadding = 0
-        -- , barHeight = 30
+        , barHeight = ScreenRatio 0.02
         , cssPaths = return cssFilePath
         }
       simpleTaffyConfig = selectedConfig
