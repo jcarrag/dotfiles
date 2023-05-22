@@ -429,7 +429,7 @@ in
           '';
         };
         # ${pkgs.taffybar-my}/bin/taffybar-my &
-          # ${pkgs.taffybar}/bin/taffybar &
+        # ${pkgs.taffybar}/bin/taffybar &
         sessionCommands = ''
           ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
           ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape' -t 175

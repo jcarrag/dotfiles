@@ -28,8 +28,8 @@ in
 
       systemd.user.services.taffybar-my = {
         description = "Taffybar(-my)";
-        after = [ "display-manager.target" ];
-        wantedBy = [ "display-manager.target" ];
+        after = [ "graphical-session.target" ];
+        wantedBy = [ "graphical-session.target" ];
         startLimitIntervalSec = 30;
         startLimitBurst = 2;
 
