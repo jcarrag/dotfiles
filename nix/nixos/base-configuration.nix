@@ -344,7 +344,6 @@ in
     };
     switcherooControl.enable = true;
     tailscale.enable = true;
-    upower.enable = true;
     udev = {
       # swap left alt with meta on magicforce keyboard
       extraHwdb = ''
