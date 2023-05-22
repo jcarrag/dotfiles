@@ -427,6 +427,10 @@ in
             background = #0F111A
           '';
         };
+        autoLogin = {
+          enable = true;
+          user = "james";
+        };
         # ${pkgs.taffybar-my}/bin/taffybar-my &
         # ${pkgs.taffybar}/bin/taffybar &
         sessionCommands = ''
