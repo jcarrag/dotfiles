@@ -30,12 +30,13 @@ in
         description = "Taffybar(-my)";
         after = [ "graphical-session.target" ];
         wantedBy = [ "graphical-session.target" ];
+        restartTriggers = [ pkgs.taffybar-my ];
         startLimitIntervalSec = 30;
         startLimitBurst = 2;
 
         serviceConfig = {
           ExecStart = "${pkgs.taffybar-my}/bin/taffybar-my";
-          Restart = "on-failure";
+          Restart = "always";
         };
       };
     }
