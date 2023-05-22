@@ -4,20 +4,8 @@
   "languageserver": {
     "ccls": {
       "command": "ccls",
-      "filetypes": [
-        "c",
-        "cc",
-        "cpp",
-        "c++",
-        "objc",
-        "objcpp"
-      ],
-      "rootPatterns": [
-        ".ccls",
-        "compile_commands.json",
-        ".git/",
-        ".hg/"
-      ],
+      "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"],
+      "rootPatterns": [".ccls", "compile_commands.json", ".git/", ".hg/"],
       "initializationOptions": {
         "cache": {
           "directory": "/tmp/ccls"
@@ -26,28 +14,16 @@
     },
     "clojure-lsp": {
       "command": "bash",
-      "args": [
-        "-c",
-        "clojure-lsp"
-      ],
-      "filetypes": [
-        "clojure"
-      ],
-      "rootPatterns": [
-        "project.clj"
-      ],
-      "additionalSchemes": [
-        "jar",
-        "zipfile"
-      ],
+      "args": ["-c", "clojure-lsp"],
+      "filetypes": ["clojure"],
+      "rootPatterns": ["project.clj"],
+      "additionalSchemes": ["jar", "zipfile"],
       "trace.server": "verbose",
       "initializationOptions": {}
     },
     "haskell": {
       "command": "haskell-language-server-wrapper",
-      "args": [
-        "--lsp"
-      ],
+      "args": ["--lsp"],
       "rootPatterns": [
         "*.cabal",
         "stack.yaml",
@@ -55,44 +31,25 @@
         "package.yaml",
         "hie.yaml"
       ],
-      "filetypes": [
-        "haskell",
-        "lhaskell"
-      ]
+      "filetypes": ["haskell", "lhaskell"]
     },
     "nix": {
       "command": "nil",
-      "filetypes": [
-        "nix"
-      ],
-      "rootPatterns": [
-        "flake.nix"
-      ],
+      "filetypes": ["nix"],
+      "rootPatterns": ["flake.nix"],
       "settings": {
         "nil": {
           "formatting": {
-            "command": [
-              "nixpkgs-fmt"
-            ]
+            "command": ["nixpkgs-fmt"]
           }
         }
       }
     },
     "purescript": {
       "command": "purescript-language-server",
-      "args": [
-        "--log",
-        "/home/james/Downloads/purs-ide-server.log",
-        "--stdio"
-      ],
-      "filetypes": [
-        "purescript"
-      ],
-      "rootPatterns": [
-        "spago.dhall",
-        "bower.json",
-        "psc-package.json"
-      ],
+      "args": ["--log", "/home/james/Downloads/purs-ide-server.log", "--stdio"],
+      "filetypes": ["purescript"],
+      "rootPatterns": ["spago.dhall", "bower.json", "psc-package.json"],
       "trace.server": "verbose",
       "initializationOptions": {
         "purescript.addSpagoSources": true,
@@ -103,15 +60,9 @@
   },
   "rust-analyzer.server.path": "/run/current-system/sw/bin/rust-analyzer",
   "snippets.extends": {
-    "javascriptreact": [
-      "javascript"
-    ],
-    "typescriptreact": [
-      "javascript"
-    ],
-    "typescript": [
-      "javascript"
-    ]
+    "javascriptreact": ["javascript"],
+    "typescriptreact": ["javascript"],
+    "typescript": ["javascript"]
   },
   "tsserver.maxTsServerMemory": 32768,
   "tsserver.log": "verbose"
