@@ -25,7 +25,7 @@
           };
           rebuild = (import nixpkgs { system = system; }).writeShellScriptBin "rebuild" ''
             set -x
-            sudo nixos-rebuild switch --flake ~/dotfiles/#${hostname}
+            sudo nixos-rebuild switch --flake ~/dotfiles/#${hostname} "$@"
           '';
         in
         nixpkgs.lib.nixosSystem {
