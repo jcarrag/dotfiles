@@ -62,13 +62,21 @@
     },
     "nix": {
       "command": "nil",
-      "filetypes": ["nix"],
-      "rootPatterns":  ["flake.nix"],
-       "settings": {
-         "nil": {
-           "formatting": { "command": ["nixpkgs-fmt"] }
-         }
-       }
+      "filetypes": [
+        "nix"
+      ],
+      "rootPatterns": [
+        "flake.nix"
+      ],
+      "settings": {
+        "nil": {
+          "formatting": {
+            "command": [
+              "nixpkgs-fmt"
+            ]
+          }
+        }
+      }
     },
     "purescript": {
       "command": "purescript-language-server",
@@ -95,9 +103,15 @@
   },
   "rust-analyzer.server.path": "/run/current-system/sw/bin/rust-analyzer",
   "snippets.extends": {
-    "javascriptreact": ["javascript"],
-    "typescriptreact": ["javascript"],
-    "typescript": ["javascript"]
+    "javascriptreact": [
+      "javascript"
+    ],
+    "typescriptreact": [
+      "javascript"
+    ],
+    "typescript": [
+      "javascript"
+    ]
   },
   "tsserver.maxTsServerMemory": 32768,
   "tsserver.log": "verbose"
