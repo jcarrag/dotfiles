@@ -464,8 +464,6 @@ in
     mediaKeys.enable = true;
   };
 
-  systemd.services.upower.enable = true;
-
   time.timeZone = "Europe/London";
 
   users.extraUsers.james = {
