@@ -490,6 +490,5 @@ in
     "x-scheme-handler/unknown" = "brave-browser.desktop";
   };
 
-  system.autoUpgrade.enable = true;
   system.stateVersion = "20.09";
 }
