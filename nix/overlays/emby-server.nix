@@ -1,8 +1,7 @@
 self: super:
 let
   mkEmbyServer =
-    { EMBY_DATA ? ""
-    , lib
+    { lib
     , stdenv
     , fetchurl
     , autoPatchelfHook
@@ -36,9 +35,9 @@ let
 
         unpackPhase = "true";
 
-        preFixup = ''
-          wrapProgram $out/bin/emby-server --set EMBY_DATA ${EMBY_DATA}
-        '';
+        # preFixup = ''
+        #   wrapProgram $out/bin/emby-server --set EMBY_DATA ${EMBY_DATA}
+        # '';
 
         installPhase = ''
           mkdir -p $out/bin
@@ -46,6 +45,15 @@ let
           cp -r ./opt/emby-server/* $out/
           sed -i "s|APP_DIR=\/opt\/emby-server|APP_DIR=$out|g" $out/bin/*
         '';
+
+        meta = with lib; {
+          description = "Self-hosted web application that allows users the ability to stream content";
+          homepage = "https://emby.media/";
+          sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+          license = licenses.gpl3Only;
+          maintainers = with maintainers; [ jcarrag ];
+          platforms = [ "x86_64-linux" ];
+        };
       };
 in
 {
