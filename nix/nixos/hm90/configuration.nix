@@ -13,7 +13,7 @@
     openFirewall = true;
   };
 
-  autoLogin = {
+  services.xserver.displayManager.autoLogin = {
     enable = true;
     user = "james";
   };
