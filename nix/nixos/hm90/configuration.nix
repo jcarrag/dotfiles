@@ -6,10 +6,10 @@
     ../../modules/emby-server.nix
   ];
 
+  programs.emby-server.enable = true;
+
   autoLogin = {
     enable = true;
     user = "james";
   };
-
-  programs.emby-server.enable = true;
 }
