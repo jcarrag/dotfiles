@@ -34,43 +34,10 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1684242266,
-        "narHash": "sha256-uaCQ2k1bmojHKjWQngvnnnxQJMY8zi1zq527HdWgQf8=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "7e0743a5aea1dc755d4b761daf75b20aa486fdad",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
-      }
-    },
-    "parsec": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_2"
-      },
-      "locked": {
-        "lastModified": 1684352338,
-        "narHash": "sha256-Cabej3p8FlihNsTxsLCKeFIQSmT92A5qVZQZSKU7DMo=",
-        "owner": "DarthPJB",
-        "repo": "parsec-gaming-nix",
-        "rev": "0b96f4d9334c492e3be73193eea3acbddd50f81a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "DarthPJB",
-        "repo": "parsec-gaming-nix",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
-        "parsec": "parsec",
         "unstable": "unstable"
       }
     },

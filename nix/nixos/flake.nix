@@ -7,9 +7,7 @@
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  inputs.parsec.url = "github:DarthPJB/parsec-gaming-nix";
-
-  outputs = { self, nixpkgs, unstable, flake-utils, parsec }:
+  outputs = { self, nixpkgs, unstable, flake-utils }:
     let
       packageOverlays = import ../overlays;
 
@@ -35,25 +33,6 @@
               (import ./base-configuration.nix)
               {
                 environment.systemPackages = [
-                  (parsec.packages.${system}.parsecgaming.overrideAttrs (old:
-                    let
-                      pkgs = import nixpkgs { inherit system; overlays = [ packageOverlays ]; };
-                    in
-                    rec {
-                      parsecd_so = pkgs.runCommand "parsecd_so" { } ''
-                        cat ${old.latest_appdata} | ${pkgs.jq}/bin/jq --raw-output .so_name | tee $out
-                      '';
-
-                      latest_parsecd_so = pkgs.fetchurl {
-                        url = "https://builds.parsecgaming.com/channel/release/binary/linux/gz/${builtins.readFile parsecd_so}";
-                        sha256 = "sha256-GNyn+jaxSVM5noUxyTAdSK2DriwbtQeG3Qyg25760nU=";
-                      };
-
-                      postPatch = ''
-                        cp $latest_appdata usr/share/parsec/skel/appdata.json
-                        cp $latest_parsecd_so usr/share/parsec/skel/${builtins.readFile parsecd_so}
-                      '';
-                    }))
                   rebuild
                 ];
                 networking.hostName = hostname;
