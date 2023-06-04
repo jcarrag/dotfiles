@@ -8,7 +8,6 @@ in
   imports = [
     ../modules/neovim.nix
     ../modules/anki.nix
-    ../modules/taffybar-my.nix
   ];
 
   boot = {
@@ -101,7 +100,6 @@ in
       pavucontrol # pulseaudio volume control
       rofi
       taffybar-my
-      # taffybar
       alacritty
       update-resolv-conf
       xclip
@@ -267,7 +265,6 @@ in
     nm-applet.enable = true;
     noisetorch.enable = true;
     steam.enable = true;
-    taffybar-my.enable = true;
     thunar.plugins = [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
   };
 
