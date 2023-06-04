@@ -180,6 +180,7 @@ in
   };
 
   networking = {
+    enableIPv6 = false;
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
     firewall = {
       allowedTCPPorts = [
