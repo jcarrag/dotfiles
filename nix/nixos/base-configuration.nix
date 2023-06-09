@@ -308,6 +308,7 @@ in
     dbus.enable = true;
     fwupd.enable = true;
     gnome.gnome-keyring.enable = true;
+    hardware.bolt.enable = true;
     openssh.enable = true;
     openvpn = {
       servers = {
