@@ -21,7 +21,7 @@ in
         wantedBy = [ "graphical-session.target" ];
         restartTriggers = [ pkgs.taffybar-my ];
         # disable restart rate limiting until haskell mmap bug fixed
-        # startLimitIntervalSec = 30;
+        startLimitIntervalSec = 0;
         # startLimitBurst = 2;
 
         serviceConfig = {
