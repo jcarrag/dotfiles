@@ -57,7 +57,7 @@ in
       unstable.haskellPackages.haskell-language-server
       ## Javascript
       nix-npm-install
-      nodejs-16_x
+      nodejs-18_x
       nodePackages.node2nix
       ## Nix
       unstable.cachix
