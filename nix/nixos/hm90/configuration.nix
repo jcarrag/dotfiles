@@ -6,11 +6,17 @@
     ../../modules/emby-server.nix
   ];
 
-  programs.emby-server = {
-    enable = true;
-    user = "emby-server";
-    group = "users";
-    openFirewall = true;
+  programs = {
+    emby-server = {
+      enable = true;
+      user = "emby-server";
+      group = "users";
+      openFirewall = true;
+    };
+    ynab-updater = {
+      enable = true;
+      configDir = "/home/james/.config/ynab-updater/settings.toml";
+    };
   };
 
   services.xserver.displayManager.autoLogin = {

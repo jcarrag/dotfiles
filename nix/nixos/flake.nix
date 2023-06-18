@@ -9,7 +9,9 @@
 
   inputs.parsec.url = "github:DarthPJB/parsec-gaming-nix";
 
-  outputs = { self, nixpkgs, unstable, flake-utils, parsec }:
+  inputs.ynab-updater.url = "github:jcarrag/ynab-updater";
+
+  outputs = { self, nixpkgs, unstable, flake-utils, parsec, ynab-updater }:
     let
       packageOverlays = import ../overlays;
 
@@ -32,6 +34,7 @@
           system = system;
           modules =
             [
+              (ynab-updater.nixosModules.ynab-updater)
               (import ./base-configuration.nix)
               {
                 environment.systemPackages = [
