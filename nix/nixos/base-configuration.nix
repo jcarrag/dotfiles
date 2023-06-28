@@ -23,7 +23,7 @@ in
       unstable.signal-desktop
       skypeforlinux
       unstable.slack
-      unstable.zoom-us
+      # unstable.zoom-us
       ### eGPU
       unstable.intel-gpu-tools
       unstable.glxinfo
