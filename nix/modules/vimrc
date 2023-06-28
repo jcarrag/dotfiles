@@ -254,6 +254,8 @@ nnoremap <silent> <space>tf :<C-u>CocCommand metals.revealInTreeView metalsBuild
 nmap [g <Plug>(coc-git-prevchunk)
 nmap ]g <Plug>(coc-git-nextchunk)
 
+command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
+
 """ BEGIN COPIED FROM coc.nvim README
 " Some servers have issues with backup files, see #649.
 set nobackup
