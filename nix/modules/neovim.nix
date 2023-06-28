@@ -63,6 +63,7 @@
           coc-html
           coc-json # auto completion
           coc-tsserver
+          coc-prettier
           vim-nix # nix highlight
           fzf-vim # fuzzy finder through vim
           nerdtree # file structure inside nvim
