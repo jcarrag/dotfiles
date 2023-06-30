@@ -56,6 +56,8 @@
                         cp $latest_appdata usr/share/parsec/skel/appdata.json
                         cp $latest_parsecd_so usr/share/parsec/skel/${builtins.readFile parsecd_so}
                       '';
+
+                      runtimeDependencies = (old.runtimeDependencies or [ ]) ++ [ (pkgs.lib.getLib pkgs.ffmpeg_4) ];
                     }))
                   rebuild
                 ];
