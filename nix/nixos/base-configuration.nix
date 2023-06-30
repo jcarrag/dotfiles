@@ -71,6 +71,7 @@ in
       ### Services
       unstable.awscli
       unstable.overmind
+      sshfs
       tailscale
       tmate-connect
       unstable._1password-gui
