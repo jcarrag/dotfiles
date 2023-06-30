@@ -1,4 +1,4 @@
-# XPS 13 9310 2-in-1
+# XPS 13 9320
 { config, pkgs, ... }:
 
 {
@@ -14,6 +14,11 @@
   boot.initrd.kernelModules = [ "amdgpu" ];
 
   programs.taffybar-my.enable = true;
+
+  hardware.ipu6 = {
+    enable = true;
+    platform = "ipu6ep";
+  };
 
   services = {
     xserver = {
