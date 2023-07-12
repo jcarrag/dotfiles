@@ -4,6 +4,7 @@
 {
   imports = [
     ../../modules/taffybar-my.nix
+    ./hardware-fix.nix
   ];
 
   # https://alexbakker.me/post/nixos-pci-passthrough-qemu-vfio.html
@@ -14,11 +15,6 @@
   boot.initrd.kernelModules = [ "amdgpu" ];
 
   programs.taffybar-my.enable = true;
-
-  hardware.ipu6 = {
-    enable = true;
-    platform = "ipu6ep";
-  };
 
   services = {
     xserver = {
