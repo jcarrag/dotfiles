@@ -37,6 +37,8 @@ in
       entr
       evince
       unstable.fzf
+      google-chrome
+      unstable.obsidian
       spotify
       unstable.starship
       unstable.syncplay
@@ -84,6 +86,7 @@ in
       alock
       arandr
       dunst
+      file
       gnome2.gnome_icon_theme
       gnome3.adwaita-icon-theme
       gnome3.zenity
