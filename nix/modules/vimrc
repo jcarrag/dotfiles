@@ -233,6 +233,7 @@ command! -bang -nargs=* Rg
   \   <bang>0)
 nnoremap <leader><C-g> :Rg<Cr>
 nnoremap <leader><C-w> :Windows<Cr>
+nnoremap <expr> <leader><C-r> ":Rg \<CR>" . systemlist('git rev-parse --show-prefix')[0]
 
 " Toggle panel with Tree Views
 nnoremap <silent> <space>t :<C-u>CocCommand metals.tvp<CR>
