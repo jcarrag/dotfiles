@@ -4,7 +4,6 @@
 {
   imports = [
     ../../modules/taffybar-my.nix
-    ./hardware-fix.nix
   ];
 
   # https://alexbakker.me/post/nixos-pci-passthrough-qemu-vfio.html
