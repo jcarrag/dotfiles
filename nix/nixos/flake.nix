@@ -20,7 +20,10 @@
           extrasOverlay = _: _: {
             unstable = import unstable {
               system = system;
-              config.allowUnfree = true;
+              config = {
+                allowUnfree = true;
+                segger-jlink.acceptLicense = true;
+              };
               nixpkgs.overlays = [ packageOverlays ];
             };
             _self = self;

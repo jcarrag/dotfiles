@@ -45,6 +45,9 @@ in
       vlc
       zotero
       ### Programming
+      pkg-config
+      (openssl.dev)
+      unstable.segger-jlink
       ## C++
       unstable.ccls
       unstable.gcc
@@ -389,12 +392,12 @@ in
 
         ACTION!="add|change", GOTO="probe_rs_rules_end"
 
-        SUBSYSTEM=="gpio", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+        SUBSYSTEM=="gpio", MODE="0660", TAG+="uaccess"
 
         SUBSYSTEM!="usb|tty|hidraw", GOTO="probe_rs_rules_end"
 
         # SEGGER J-Link mini
-        ATTRS{idVendor}=="1366", ATTRS{idProduct}=="0101", MODE="660", GROUP="plugdev", TAG+="uaccess"
+        ATTRS{idVendor}=="1366", ATTRS{idProduct}=="0101", MODE="660", TAG+="uaccess"
 
         LABEL="probe_rs_rules_end"
       '';
