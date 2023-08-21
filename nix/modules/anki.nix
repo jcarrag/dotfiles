@@ -106,7 +106,7 @@ in
         ];
       };
 
-      anki-bin = pkgs.anki-bin;
+      anki-bin = pkgs.unstable.anki-bin;
 
       anki = pkgs.writeShellScriptBin "anki" ''
         cp -r ${addons}/* /home/james/.local/share/Anki2/addons21/
