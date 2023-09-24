@@ -1,5 +1,5 @@
 # XPS 13 9320
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -16,6 +16,7 @@
   programs.taffybar-my.enable = true;
 
   services = {
+    tailscale.enable = true;
     xserver = {
       xrandrHeads = [
         {

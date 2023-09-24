@@ -1,5 +1,5 @@
 # EliteMini HM90
-{ ... }:
+{ pkgs }:
 
 {
   imports = [
@@ -19,8 +19,19 @@
     };
   };
 
-  services.xserver.displayManager.autoLogin = {
-    enable = true;
-    user = "james";
+  services = {
+    tailscale = {
+      enable = true;
+      useRoutingFeatures = "server";
+      package = pkgs.unstable.tailscale.overrideAttrs (old: {
+        postInstall = old.postInstall + ''
+          wrapProgram $out/bin/tailscale --add-flags "--advertise-exit-node"
+        '';
+      });
+    };
+    xserver.displayManager.autoLogin = {
+      enable = true;
+      user = "james";
+    };
   };
 }

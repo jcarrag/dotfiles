@@ -76,7 +76,7 @@ in
       unstable.awscli
       unstable.overmind
       sshfs
-      tailscale
+      unstable.tailscale
       tmate-connect
       unstable._1password-gui
       unstable.tmux
@@ -351,7 +351,6 @@ in
       ];
     };
     switcherooControl.enable = true;
-    tailscale.enable = true;
     udev = {
       # swap left alt with meta on magicforce keyboard
       extraHwdb = ''
