@@ -47,7 +47,6 @@ in
       ### Programming
       pkg-config
       (openssl.dev)
-      unstable.segger-jlink
       ## C++
       unstable.ccls
       unstable.gcc
