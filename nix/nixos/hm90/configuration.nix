@@ -1,5 +1,5 @@
 # EliteMini HM90
-{ pkgs }:
+{ pkgs, ... }:
 
 {
   imports = [
