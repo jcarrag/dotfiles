@@ -16,7 +16,10 @@
   programs.taffybar-my.enable = true;
 
   services = {
-    tailscale.enable = true;
+    tailscale = {
+      enable = true;
+      package = pkgs.unstable.tailscale;
+    };
     xserver = {
       xrandrHeads = [
         {
