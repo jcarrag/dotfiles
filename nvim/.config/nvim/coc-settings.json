@@ -59,11 +59,16 @@
     }
   },
   "rust-analyzer.server.path": "/run/current-system/sw/bin/rust-analyzer",
+  "rust-analyzer.trace.server": "verbose",
+  "rust-analyzer.server.extraEnv": {
+    "RA_LOG": "project_model=debug"
+  },
   "snippets.extends": {
     "javascriptreact": ["javascript"],
     "typescriptreact": ["javascript"],
     "typescript": ["javascript"]
   },
+  "workspace.ignoredFolders": ["$HOME", "$HOME/.cargo/**", "$HOME/.rustup/**"],
   "tsserver.maxTsServerMemory": 32768,
   "tsserver.log": "verbose"
 }

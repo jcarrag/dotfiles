@@ -112,13 +112,8 @@
       virt-manager
       adoptopenjdk-bin
       unstable.ngrok
-      unstable.quickemu
-      unstable.drawio
-      unstable.tmate
       unstable.libimobiledevice
-      unstable.ifuse
       react-native-debugger-fixed
-      ntfs3g
       airplay
       copy
       hc-serial
