@@ -5,11 +5,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1689068808,
-        "narHash": "sha256-6ixXo3wt24N/melDWjq70UuHQLxGV8jZvooRanIHXw0=",
+        "lastModified": 1694529238,
+        "narHash": "sha256-zsNZZGTGnMOf9YpHKJqMSsa0dXbfmxeoJ7xHlrt+xmY=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "919d646de7be200f3bf08cb76ae1f09402b6f9b4",
+        "rev": "ff7b65b44d01cf9ba6a71320833626af21126384",
         "type": "github"
       },
       "original": {
@@ -38,11 +38,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1692525914,
-        "narHash": "sha256-MUgZ9/9mE/EbEQA6JPdcQHkjoR5fgvaKhpy6UO67uEc=",
+        "lastModified": 1698942558,
+        "narHash": "sha256-/UmnB+mEd6Eg3mJBrAgqRcyZX//RSjHphcCO7Ig9Bpk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "475d5ae2c4cb87b904545bdb547af05681198fcc",
+        "rev": "621f51253edffa1d6f08d5fce4f08614c852d17e",
         "type": "github"
       },
       "original": {
@@ -193,11 +193,11 @@
         "unstable": "unstable_2"
       },
       "locked": {
-        "lastModified": 1687093663,
-        "narHash": "sha256-s2QwN36i/aYn6K95iM1PuFgzlg399NL0o0H+rTvsSKc=",
+        "lastModified": 1698746946,
+        "narHash": "sha256-qmkLGLG0XHbojKq2hOnrWWpq+vmC2lvyn+wjHN9g2IE=",
         "owner": "jcarrag",
         "repo": "ynab-updater",
-        "rev": "e4d25ee6bb128a617249922b113e3554a581c4a7",
+        "rev": "f7a445f5a4a629ffee70192de055892375dc7292",
         "type": "github"
       },
       "original": {
