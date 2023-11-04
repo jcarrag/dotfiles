@@ -32,39 +32,42 @@ in
       unstable.vulkan-tools
       ### Misc
       aoe-2-de
-      unstable.brave
+      brave
       calibre
       entr
       evince
+      firefox
       unstable.fzf
       google-chrome
+      unstable.hypnotix
       unstable.obsidian
       spotify
       unstable.starship
       unstable.syncplay
+      unstable.telegram-desktop
       vlc
       zotero
       ### Programming
       pkg-config
       (openssl.dev)
+      unstable.saleae-logic-2
       ## C++
-      unstable.ccls
-      unstable.gcc
+      ccls
+      gcc
       ## Rust
       unstable.rust-analyzer
       unstable.cargo
       unstable.rustc
       unstable.rustfmt
       ## Haskell
-      unstable.cabal-install
-      unstable.ghc
-      unstable.haskellPackages.haskell-language-server
+      cabal-install
+      ghc
+      haskellPackages.haskell-language-server
       ## Javascript
       nix-npm-install
       nodejs-18_x
       nodePackages.node2nix
       ## Nix
-      unstable.cachix
       unstable.nil
       unstable.nixpkgs-fmt
       ## Python
@@ -74,20 +77,23 @@ in
       scala
       ### Services
       unstable.awscli
-      unstable.overmind
       sshfs
       unstable.tailscale
       tmate-connect
       unstable._1password-gui
-      unstable.tmux
+      tmux
       ### Networking
       socat
       tcpdump
       traceroute
+      wireshark
       ### System
       alock
       arandr
+      d-spy # d-bus monitor
+      bustle # d-bus monitor
       dunst
+      dnsmasq
       file
       gnome2.gnome_icon_theme
       gnome3.adwaita-icon-theme
@@ -95,9 +101,11 @@ in
       gnupg
       gparted
       hfsprogs # gparted dep
+      inotify-tools
       ntfsprogs # gparted dep
       hicolor-icon-theme
       libsecret
+      lm_sensors
       nix-index
       nix-prefetch-scripts
       openvpn
@@ -117,10 +125,14 @@ in
       cntr
       dig
       unstable.direnv
+      dhcpdump
+      fq
       jq
+      jqp
       gitAndTools.gitFull
       git-crypt
       glances
+      gnome-connections # vnc client
       htop
       fd
       libnotify
@@ -158,6 +170,7 @@ in
   };
 
   hardware = {
+    saleae-logic.enable = true;
     bluetooth = {
       enable = true;
       package = pkgs.bluezFull.overrideAttrs (
@@ -185,6 +198,8 @@ in
     };
   };
 
+  location.provider = "geoclue2";
+
   networking = {
     enableIPv6 = false;
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
@@ -197,10 +212,12 @@ in
     nameservers = [ "8.8.8.8" ];
     networkmanager = {
       enable = true;
+      dns = "dnsmasq";
       plugins = [
         pkgs.networkmanager-openvpn
       ];
     };
+    search = [ "tail7f031.ts.net" ];
   };
 
   nix = {
@@ -319,11 +336,28 @@ in
     blueman.enable = true;
     dbus.enable = true;
     fwupd.enable = true;
+    geoclue2.enableDemoAgent = true;
     gnome.gnome-keyring.enable = true;
     hardware.bolt.enable = true;
+    redshift.enable = true;
     openssh.enable = true;
     openvpn = {
       servers = {
+        express-vpn-uk = {
+          autoStart = false;
+          config =
+            ''
+              config /home/james/vpn/my_expressvpn_uk_-_east_london_udp.ovpn
+
+              auth-user-pass /home/james/vpn/my_expressvpn_uk_-_east_london_udp.conf
+
+              script-security 2
+              up ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
+              up-restart
+              down ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
+              down-pre
+            '';
+        };
         express-vpn-us = {
           autoStart = false;
           config =
@@ -394,16 +428,8 @@ in
         # This rules are based on the udev rules from the OpenOCD project, with unsupported probes removed.
         # See http://openocd.org/ for more details.
 
-        ACTION!="add|change", GOTO="probe_rs_rules_end"
-
-        SUBSYSTEM=="gpio", MODE="0660", TAG+="uaccess"
-
-        SUBSYSTEM!="usb|tty|hidraw", GOTO="probe_rs_rules_end"
-
         # SEGGER J-Link mini
-        ATTRS{idVendor}=="1366", ATTRS{idProduct}=="0101", MODE="660", TAG+="uaccess"
-
-        LABEL="probe_rs_rules_end"
+        ATTRS{idVendor}=="1366", ATTRS{idProduct}=="0101", MODE="0666", TAG+="uaccess", GROUP="users"
       '';
     };
     xserver = {
@@ -450,7 +476,6 @@ in
           ${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &
           ${pkgs.dunst}/bin/dunst &
           ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
-          ${pkgs.redshift}/bin/redshift-gtk &
         '';
       };
       windowManager.xmonad = {
@@ -487,7 +512,6 @@ in
     uid = 1000;
   };
 
-  virtualisation.docker.enable = true;
 
   xdg.mime.defaultApplications = {
     "text/html" = "brave-browser.desktop";
