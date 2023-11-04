@@ -212,7 +212,6 @@ in
     nameservers = [ "8.8.8.8" ];
     networkmanager = {
       enable = true;
-      dns = "dnsmasq";
       plugins = [
         pkgs.networkmanager-openvpn
       ];
