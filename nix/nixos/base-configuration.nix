@@ -46,7 +46,6 @@ in
       unstable.syncplay
       unstable.telegram-desktop
       vlc
-      zotero
       ### Programming
       pkg-config
       (openssl.dev)
