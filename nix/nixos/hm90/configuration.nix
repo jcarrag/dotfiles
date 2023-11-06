@@ -15,7 +15,7 @@
     };
     ynab-updater = {
       enable = true;
-      configDir = "/home/james/.config/ynab-updater/settings.toml";
+      configDir = "/home/james/.config/ynab-updater";
     };
   };
 
