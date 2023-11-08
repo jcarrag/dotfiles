@@ -309,9 +309,7 @@ in
             # enter+left_ctrl
             keys = [ 28 29 ];
             events = [ "key" ];
-            # command = "DISPLAY=:0 XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.alacritty}/bin/alacritty --class console --title console &>> /home/james/wut";
             command = "/run/current-system/sw/bin/runuser -l james -c 'XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.alacritty}/bin/alacritty --class console --title console' &>> /home/james/wut";
-            # command = "echo wut >> /home/james/wut";
           }
 
         ] ++ (map
