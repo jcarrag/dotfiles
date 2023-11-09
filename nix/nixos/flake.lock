@@ -87,15 +87,16 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1684352338,
-        "narHash": "sha256-Cabej3p8FlihNsTxsLCKeFIQSmT92A5qVZQZSKU7DMo=",
-        "owner": "DarthPJB",
+        "lastModified": 1688559034,
+        "narHash": "sha256-GYwJetm/13C7Mo2ElQWzNxWPnJ6T7I/2fYvN6eHaTSc=",
+        "owner": "jcarrag",
         "repo": "parsec-gaming-nix",
-        "rev": "0b96f4d9334c492e3be73193eea3acbddd50f81a",
+        "rev": "fb324a6dafa0845a9d13f6f9f31e14b0c9d91c04",
         "type": "github"
       },
       "original": {
-        "owner": "DarthPJB",
+        "owner": "jcarrag",
+        "ref": "bump_so_86e-87",
         "repo": "parsec-gaming-nix",
         "type": "github"
       }
