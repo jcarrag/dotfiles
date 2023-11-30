@@ -7,7 +7,7 @@
       customRC = builtins.readFile "${pkgs._self}/nix/modules/vimrc";
       packages.myPlugins.start = with pkgs.unstable.vimPlugins;
         let
-          vim-github-link = pkgs.vimUtils.buildVimPluginFrom2Nix {
+          vim-github-link = pkgs.vimUtils.buildVimPlugin {
             pname = "github-link";
             version = "2022-12-22";
             src = pkgs.fetchFromGitHub {
@@ -18,7 +18,7 @@
             };
             meta.homepage = "https://github.com/knsh14/vim-github-link";
           };
-          vim-file-line = pkgs.vimUtils.buildVimPluginFrom2Nix {
+          vim-file-line = pkgs.vimUtils.buildVimPlugin {
             pname = "file-line";
             version = "2022-12-22";
             src = pkgs.fetchFromGitHub {
@@ -29,7 +29,7 @@
             };
             meta.homepage = "https://github.com/bogado/file-line/";
           };
-          vim-material_kaicataldo = pkgs.vimUtils.buildVimPluginFrom2Nix {
+          vim-material_kaicataldo = pkgs.vimUtils.buildVimPlugin {
             pname = "material.vim";
             version = "2022-12-22";
             src = pkgs.fetchFromGitHub {
