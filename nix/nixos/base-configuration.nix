@@ -172,7 +172,7 @@ in
     saleae-logic.enable = true;
     bluetooth = {
       enable = true;
-      package = pkgs.bluezFull.overrideAttrs (
+      package = pkgs.bluez.overrideAttrs (
         oldAttrs: {
           configureFlags = oldAttrs.configureFlags ++ [ "--enable-sixaxis" ];
         }
