@@ -9,7 +9,7 @@
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  inputs.parsec.url = "github:jcarrag/parsec-gaming-nix/bump_so_86e-87";
+  inputs.parsec.url = "github:jcarrag/parsec-gaming-nix";
 
   inputs.ynab-updater.url = "github:jcarrag/ynab-updater";
 
