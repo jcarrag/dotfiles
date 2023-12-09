@@ -58,10 +58,6 @@ in
       unstable.cargo
       unstable.rustc
       unstable.rustfmt
-      ## Haskell
-      cabal-install
-      ghc
-      haskellPackages.haskell-language-server
       ## Javascript
       nix-npm-install
       nodejs-18_x
@@ -172,7 +168,7 @@ in
     saleae-logic.enable = true;
     bluetooth = {
       enable = true;
-      package = pkgs.bluezFull.overrideAttrs (
+      package = pkgs.bluez.overrideAttrs (
         oldAttrs: {
           configureFlags = oldAttrs.configureFlags ++ [ "--enable-sixaxis" ];
         }

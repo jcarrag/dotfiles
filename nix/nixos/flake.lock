@@ -52,6 +52,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-23_11": {
+      "locked": {
+        "lastModified": 1701952659,
+        "narHash": "sha256-TJv2srXt6fYPUjxgLAL0cy4nuf1OZD4KuA1TrCiQqg0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b4372c4924d9182034066c823df76d6eaf1f4ec4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-23.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1684242266,
@@ -87,24 +103,21 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1688559034,
-        "narHash": "sha256-GYwJetm/13C7Mo2ElQWzNxWPnJ6T7I/2fYvN6eHaTSc=",
-        "owner": "jcarrag",
-        "repo": "parsec-gaming-nix",
-        "rev": "fb324a6dafa0845a9d13f6f9f31e14b0c9d91c04",
-        "type": "github"
+        "lastModified": 1702065764,
+        "narHash": "sha256-abcwWX4QsvYTgw7AE51xhNyOtrjPOasgYe0oATOAil8=",
+        "path": "/home/james/dev/lib/parsec-gaming-nix",
+        "type": "path"
       },
       "original": {
-        "owner": "jcarrag",
-        "ref": "bump_so_86e-87",
-        "repo": "parsec-gaming-nix",
-        "type": "github"
+        "path": "/home/james/dev/lib/parsec-gaming-nix",
+        "type": "path"
       }
     },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-23_11": "nixpkgs-23_11",
         "parsec": "parsec",
         "unstable": "unstable",
         "ynab-updater": "ynab-updater"
