@@ -210,11 +210,11 @@
         "unstable": "unstable_2"
       },
       "locked": {
-        "lastModified": 1702468844,
-        "narHash": "sha256-ZeRopGMJiOZ0ch23Q80AQ8IGWWFgMMGZmhjwOq79t7E=",
+        "lastModified": 1702477744,
+        "narHash": "sha256-vWrd+D34erM7mxz8T3DlMXYoCvc3r7jVEOyVr8CE+bc=",
         "owner": "jcarrag",
         "repo": "ynab-updater",
-        "rev": "5e87d64594ccae48c793dcc68b4d6d2033473147",
+        "rev": "eb36107c37c488541dfed55bb67e1f71155ab34c",
         "type": "github"
       },
       "original": {
