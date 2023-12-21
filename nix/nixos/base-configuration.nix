@@ -97,6 +97,7 @@ in
       gparted
       hfsprogs # gparted dep
       inotify-tools
+      unstable.lurk
       ntfsprogs # gparted dep
       hicolor-icon-theme
       libsecret
@@ -123,6 +124,7 @@ in
       dig
       unstable.direnv
       dhcpdump
+      ffmpeg-full
       fq
       jq
       jqp
@@ -197,25 +199,20 @@ in
     enableIPv6 = false;
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
     firewall = {
-      enable = false;
-      # allowedTCPPorts = [
-      #   5000 # airplay
-      #   5001 # airplay
-      #   6001 # airplay
-      #   6002 # airplay
-      #   8000 # python -m SimpleHTTPServer
-      #   7000 # airplay
-      # ];
-      # allowedTCPPortRanges = {
-      #   from = 0;
-      #   to = 0;
-      # };
-      # allowedUDPPorts = [
-      #   6001 # airplay
-      #   6002 # airplay
-      #   7000 # airplay
-      # ];
-      # checkReversePath = "loose";
+      allowedTCPPorts = [
+        5000 # airplay
+        5001 # airplay
+        6001 # airplay
+        6002 # airplay
+        8000 # python -m SimpleHTTPServer
+        7000 # airplay
+      ];
+      allowedUDPPorts = [
+        6001 # airplay
+        6002 # airplay
+        7000 # airplay
+      ];
+      checkReversePath = "loose";
     };
     nameservers = [ "8.8.8.8" ];
     networkmanager = {
