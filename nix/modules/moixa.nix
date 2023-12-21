@@ -154,6 +154,7 @@
   };
 
   services = {
+    avahi.hostName = "hc";
     udev = {
       # work keyboards
       extraHwdb = ''

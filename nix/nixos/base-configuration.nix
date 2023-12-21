@@ -397,6 +397,10 @@ in
         "8.8.8.8"
         "2001:4860:4860::8844"
       ];
+      # mDNS is provided by avahi
+      extraConfig = ''
+        MulticastDNS=no
+      '';
     };
     switcherooControl.enable = true;
     udev = {
