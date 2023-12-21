@@ -103,11 +103,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1702115725,
-        "narHash": "sha256-tZLNxfs17YJ3WW/mp+H3qmKg7x6xrtNo8Fo98NsfN6Y=",
+        "lastModified": 1703163716,
+        "narHash": "sha256-kzIGzPxkcVMl9ATCr93shwzgiV3wESg6bRqFEP84wrg=",
         "owner": "jcarrag",
         "repo": "parsec-gaming-nix",
-        "rev": "9030b41df9c658f2ee265dd5866798cbb57f85ab",
+        "rev": "bed4cdff342e5c4a1af656eb2282c1cf37fc26a2",
         "type": "github"
       },
       "original": {
