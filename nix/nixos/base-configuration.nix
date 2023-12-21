@@ -104,9 +104,11 @@ in
       nix-index
       nix-prefetch-scripts
       openvpn
+      pulseaudioFull
       paprefs # pulseaudio preferences
       pasystray # pulseaudio systray
       pavucontrol # pulseaudio volume control
+      unstable.helvum # pipewire
       rofi
       taffybar-my
       alacritty
@@ -179,10 +181,6 @@ in
       driSupport32Bit = true;
       extraPackages = [ pkgs.intel-media-driver ];
     };
-    pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-    };
     xpadneo.enable = true;
   };
 
@@ -199,10 +197,25 @@ in
     enableIPv6 = false;
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
     firewall = {
-      allowedTCPPorts = [
-        8000 # python -m SimpleHTTPServer
-      ];
-      checkReversePath = "loose";
+      enable = false;
+      # allowedTCPPorts = [
+      #   5000 # airplay
+      #   5001 # airplay
+      #   6001 # airplay
+      #   6002 # airplay
+      #   8000 # python -m SimpleHTTPServer
+      #   7000 # airplay
+      # ];
+      # allowedTCPPortRanges = {
+      #   from = 0;
+      #   to = 0;
+      # };
+      # allowedUDPPorts = [
+      #   6001 # airplay
+      #   6002 # airplay
+      #   7000 # airplay
+      # ];
+      # checkReversePath = "loose";
     };
     nameservers = [ "8.8.8.8" ];
     networkmanager = {
@@ -292,9 +305,12 @@ in
     thunar.plugins = [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
   };
 
-  security.sudo.extraConfig = ''
-    Defaults timestamp_timeout=-1
-  '';
+  security = {
+    rtkit.enable = true;
+    sudo.extraConfig = ''
+      Defaults timestamp_timeout=-1
+    '';
+  };
 
   services = {
     actkbd = {
@@ -366,6 +382,12 @@ in
             '';
         };
       };
+    };
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
     };
     printing = {
       enable = true;
@@ -515,6 +537,20 @@ in
     "x-scheme-handler/about" = "brave-browser.desktop";
     "x-scheme-handler/unknown" = "brave-browser.desktop";
   };
+
+  environment.etc =
+    let
+      json = pkgs.formats.json { };
+    in
+    {
+      "pipewire/pipewire.conf.d/92-raop-discover.conf".source = json.generate "92-raop-discover.conf" {
+        "context.modules" = [
+          {
+            name = "libpipewire-module-raop-discover";
+          }
+        ];
+      };
+    };
 
   system.stateVersion = "20.09";
 }
