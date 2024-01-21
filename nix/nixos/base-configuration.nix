@@ -41,7 +41,6 @@ in
       unstable.fzf
       google-chrome
       unstable.hypnotix
-      unstable.obsidian
       spotify
       unstable.starship
       unstable.syncplay
