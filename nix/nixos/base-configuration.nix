@@ -34,6 +34,7 @@ in
       aoe-2-de
       brave
       calibre
+      unstable.chiaki
       entr
       evince
       firefox
