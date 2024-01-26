@@ -114,6 +114,11 @@ set shiftwidth=2
 """ Bindings
 
 " remap window navigation non-recursively in normal mode
+nnoremap <M-j> <C-W>+
+nnoremap <M-k> <C-W>-
+nnoremap <M-l> <C-W>>
+nnoremap <M-h> <C-W><
+
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
