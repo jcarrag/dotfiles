@@ -354,6 +354,7 @@ in
     geoclue2.enableDemoAgent = true;
     gnome.gnome-keyring.enable = true;
     hardware.bolt.enable = true;
+    localtime.enable = true;
     redshift.enable = true;
     openssh.enable = true;
     openvpn = {
@@ -526,8 +527,6 @@ in
 
   # https://github.com/NixOS/nixpkgs/issues/180175
   systemd.services.NetworkManager-wait-online.enable = false;
-
-  time.timeZone = "Europe/London";
 
   users.extraUsers.james = {
     createHome = true;
