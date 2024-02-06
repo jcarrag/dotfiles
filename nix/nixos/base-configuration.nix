@@ -41,6 +41,8 @@ in
       unstable.fzf
       google-chrome
       unstable.hypnotix
+      moonlight-qt
+      sunshine
       spotify
       unstable.starship
       unstable.syncplay
@@ -206,11 +208,20 @@ in
         6002 # airplay
         8000 # python -m SimpleHTTPServer
         7000 # airplay
+        # https://portforward.com/moonlight-game-streaming/
+        47984 # sunshine
+        47989 # sunshine
+        48010 # sunshine
       ];
       allowedUDPPorts = [
         6001 # airplay
         6002 # airplay
         7000 # airplay
+        47998 # sunshine
+        47999 # sunshine
+        48000 # sunshine
+        48002 # sunshine
+        48010 # sunshine
       ];
       checkReversePath = "loose";
     };
