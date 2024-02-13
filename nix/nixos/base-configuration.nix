@@ -354,7 +354,7 @@ in
     geoclue2.enableDemoAgent = true;
     gnome.gnome-keyring.enable = true;
     hardware.bolt.enable = true;
-    localtime.enable = true;
+    localtimed.enable = true;
     redshift.enable = true;
     openssh.enable = true;
     openvpn = {

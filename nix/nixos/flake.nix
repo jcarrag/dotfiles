@@ -1,9 +1,7 @@
 {
   description = "A flake for my systems";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
-
-  inputs.nixpkgs-23_11.url = "github:NixOS/nixpkgs/nixos-23.11";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
 
   inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -13,11 +11,16 @@
 
   inputs.ynab-updater.url = "github:jcarrag/ynab-updater";
 
-  outputs = { self, nixpkgs, nixpkgs-23_11, unstable, flake-utils, parsec, ynab-updater }:
+  inputs.ipu6-softisp = {
+    url = "git+https://code.tvl.fyi/depot.git:/users/flokli/ipu6-softisp.git";
+    flake = false;
+  };
+
+  outputs = { self, nixpkgs, unstable, flake-utils, parsec, ynab-updater, ipu6-softisp }:
     let
       packageOverlays = import ../overlays;
 
-      mkNixos = hostname: system: _nixpkgs: modules:
+      mkNixos = hostname: system: modules:
         let
           extrasOverlay = _: _: {
             unstable = import unstable {
@@ -30,12 +33,12 @@
             };
             _self = self;
           };
-          rebuild = (import _nixpkgs { inherit system; }).writeShellScriptBin "rebuild" ''
+          rebuild = (import nixpkgs { inherit system; }).writeShellScriptBin "rebuild" ''
             set -x
             sudo nixos-rebuild switch --flake ~/dotfiles/#${hostname} "$@"
           '';
         in
-        _nixpkgs.lib.nixosSystem {
+        nixpkgs.lib.nixosSystem {
           system = system;
           modules =
             [
@@ -50,7 +53,7 @@
                 nixpkgs.overlays = [ extrasOverlay packageOverlays ];
                 nix.registry = {
                   self.flake = self;
-                  nixpkgs.flake = _nixpkgs;
+                  nixpkgs.flake = nixpkgs;
                   unstable.flake = unstable;
                 };
               }
@@ -61,29 +64,30 @@
       (system:
         {
           packages = flake-utils.lib.flattenTree {
-            neovim = (mkNixos "nixos" system nixpkgs [ ]).options.programs.neovim.finalPackage.value;
+            neovim = (mkNixos "nixos" system [ ]).options.programs.neovim.finalPackage.value;
             tmate = (import nixpkgs { inherit system; overlays = [ packageOverlays ]; }).tmate-my;
           };
         }
       ) // {
       nixosConfigurations = {
-        xps = mkNixos "xps" "x86_64-linux" nixpkgs
+        xps = mkNixos "xps" "x86_64-linux"
           [
             ./xps/hardware-configuration.nix
             ./xps/configuration.nix
             ../modules/moixa.nix
+            "${ipu6-softisp}/config.nix"
           ];
-        mbp = mkNixos "mbp" "x86_64-linux" nixpkgs
+        mbp = mkNixos "mbp" "x86_64-linux"
           [
             ./mbp/hardware-configuration.nix
             ./mbp/configuration.nix
           ];
-        nuc = mkNixos "nuc" "x86_64-linux" nixpkgs
+        nuc = mkNixos "nuc" "x86_64-linux"
           [
             ./nuc/hardware-configuration.nix
             ./nuc/configuration.nix
           ];
-        hm90 = mkNixos "hm90" "x86_64-linux" nixpkgs-23_11
+        hm90 = mkNixos "hm90" "x86_64-linux"
           [
             ./hm90/hardware-configuration.nix
             ./hm90/configuration.nix

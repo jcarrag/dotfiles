@@ -36,29 +36,29 @@
         "type": "github"
       }
     },
-    "nixpkgs": {
+    "ipu6-softisp": {
+      "flake": false,
       "locked": {
-        "lastModified": 1704290814,
-        "narHash": "sha256-LWvKHp7kGxk/GEtlrGYV68qIvPHkU9iToomNFGagixU=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "70bdadeb94ffc8806c0570eb5c2695ad29f0e421",
-        "type": "github"
+        "lastModified": 1706608464,
+        "narHash": "sha256-WNuIPlZyX1geI71KiZsV25RqwTXQxYPaBDM41Rrotx4=",
+        "ref": "refs/heads/canon",
+        "rev": "821af6ba887be23caef5025506dc61b3cd513f26",
+        "revCount": 1,
+        "type": "git",
+        "url": "https://code.tvl.fyi/depot.git:/users/flokli/ipu6-softisp.git"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixos-23.05",
-        "repo": "nixpkgs",
-        "type": "github"
+        "type": "git",
+        "url": "https://code.tvl.fyi/depot.git:/users/flokli/ipu6-softisp.git"
       }
     },
-    "nixpkgs-23_11": {
+    "nixpkgs": {
       "locked": {
-        "lastModified": 1701952659,
-        "narHash": "sha256-TJv2srXt6fYPUjxgLAL0cy4nuf1OZD4KuA1TrCiQqg0=",
+        "lastModified": 1707650010,
+        "narHash": "sha256-dOhphIA4MGrH4ElNCy/OlwmN24MsnEqFjRR6+RY7jZw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "b4372c4924d9182034066c823df76d6eaf1f4ec4",
+        "rev": "809cca784b9f72a5ad4b991e0e7bcf8890f9c3a6",
         "type": "github"
       },
       "original": {
@@ -119,8 +119,8 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "ipu6-softisp": "ipu6-softisp",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-23_11": "nixpkgs-23_11",
         "parsec": "parsec",
         "unstable": "unstable",
         "ynab-updater": "ynab-updater"
