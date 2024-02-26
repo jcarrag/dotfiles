@@ -11,12 +11,7 @@
 
   inputs.ynab-updater.url = "github:jcarrag/ynab-updater";
 
-  inputs.ipu6-softisp = {
-    url = "git+https://code.tvl.fyi/depot.git:/users/flokli/ipu6-softisp.git";
-    flake = false;
-  };
-
-  outputs = { self, nixpkgs, unstable, flake-utils, parsec, ynab-updater, ipu6-softisp }:
+  outputs = { self, nixpkgs, unstable, flake-utils, parsec, ynab-updater }:
     let
       packageOverlays = import ../overlays;
 
@@ -75,7 +70,6 @@
             ./xps/hardware-configuration.nix
             ./xps/configuration.nix
             ../modules/moixa.nix
-            "${ipu6-softisp}/config.nix"
           ];
         mbp = mkNixos "mbp" "x86_64-linux"
           [

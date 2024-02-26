@@ -28,7 +28,6 @@ in
       unstable.intel-gpu-tools
       unstable.glxinfo
       unstable.radeontop
-      unstable.switcheroo-control
       unstable.vulkan-tools
       ### Misc
       aoe-2-de
