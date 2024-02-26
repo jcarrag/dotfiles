@@ -36,22 +36,6 @@
         "type": "github"
       }
     },
-    "ipu6-softisp": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1706608464,
-        "narHash": "sha256-WNuIPlZyX1geI71KiZsV25RqwTXQxYPaBDM41Rrotx4=",
-        "ref": "refs/heads/canon",
-        "rev": "821af6ba887be23caef5025506dc61b3cd513f26",
-        "revCount": 1,
-        "type": "git",
-        "url": "https://code.tvl.fyi/depot.git:/users/flokli/ipu6-softisp.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://code.tvl.fyi/depot.git:/users/flokli/ipu6-softisp.git"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1708831307,
@@ -119,7 +103,6 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "ipu6-softisp": "ipu6-softisp",
         "nixpkgs": "nixpkgs",
         "parsec": "parsec",
         "unstable": "unstable",
