@@ -183,7 +183,10 @@ in
     opengl = {
       driSupport = true;
       driSupport32Bit = true;
-      extraPackages = [ pkgs.intel-media-driver ];
+      extraPackages = [
+        pkgs.intel-media-driver
+        pkgs.vaapiIntel
+      ];
     };
     xpadneo.enable = true;
   };
@@ -306,9 +309,7 @@ in
     light.enable = true;
     nm-applet.enable = true;
     noisetorch.enable = true;
-    steam = {
-      enable = true;
-    };
+    steam.enable = true;
     thunar.plugins = [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
   };
 

@@ -13,6 +13,10 @@
   # AMD RX 5700 XT
   boot.initrd.kernelModules = [ "amdgpu" ];
 
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD";
+  };
+
   programs.taffybar-my.enable = true;
 
   services = {
