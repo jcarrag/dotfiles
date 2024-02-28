@@ -2,6 +2,13 @@ self: super:
 
 with self.pkgs;
 let
+  # as of 28/02/24 without this env var moonlight audio crashes:
+  # 00:00:09 - SDL Info (0): Audio packet queue overflow
+  # 00:00:09 - SDL Info (0): Audio packet queue overflow
+  # ...
+  moonlight-qt-pipewire = writeScriptBin "moonlight" ''
+    SDL_AUDIODRIVER=pipewire ${unstable.moonlight-qt}/bin/moonlight
+  '';
   toggleRotateScreen = with xorg; writeScriptBin "toggleRotateScreen" ''
     #!${stdenv.shell}
     #
@@ -61,10 +68,8 @@ let
   '';
 in
 {
-  scripts = {
-    inherit toggleRotateScreen;
-    all = [
-      toggleRotateScreen
-    ];
-  };
+  scripts = [
+    moonlight-qt-pipewire
+    toggleRotateScreen
+  ];
 }

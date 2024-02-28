@@ -40,7 +40,6 @@ in
       unstable.fzf
       google-chrome
       unstable.hypnotix
-      moonlight-qt
       sunshine
       spotify
       unstable.starship
@@ -157,7 +156,7 @@ in
       watchexec
       which
       zip
-    ] ++ scripts.all;
+    ] ++ scripts;
 
   fonts = {
     fonts = with pkgs; [
