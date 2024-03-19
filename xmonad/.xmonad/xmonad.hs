@@ -395,7 +395,7 @@ myKeys config
      , key "Kill All" "M-S-<Backspace" $
        confirmPrompt tHotPrompt "kill all" $ killAll
      , key "Promote" "M-b" $ promote
-     , key "Switch to window" "M-w" $ spawn "rofi -show window"
+     , key "Switch to window" "M-w" $ spawn "rofi -dpi 1 -show window"
      , key "Un-merge from Sublayout" "M-g" $ withFocused (sendMessage . UnMerge)
      , key "Merge all into Sublayout" "M-S-g" $
        withFocused (sendMessage . MergeAll)
@@ -514,7 +514,7 @@ console = ClassApp "alacritty --class console --title console" "console"
 
 glances = ClassApp "alacritty --class glances --title glances -e glances" "glances"
 
-myLauncher = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
+myLauncher = "rofi -dpi 1 -matching fuzzy -modi combi -show combi -combi-modi run,drun"
 
 mySudoLauncher = "SUDO_ASKPASS=/home/james/bin/askpass-rofi " ++ myLauncher ++ " -run-command 'sudo -A {cmd}'"
 
