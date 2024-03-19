@@ -308,7 +308,6 @@ in
     nm-applet.enable = true;
     noisetorch.enable = true;
     steam.enable = true;
-    thunar.plugins = [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
   };
 
   security = {
@@ -477,20 +476,13 @@ in
       xkbOptions = "shift:both_capslock,ctrl:nocaps";
       desktopManager = {
         xterm.enable = true;
-        xfce = {
+        plasma5 = {
           enable = true;
-          noDesktop = true;
-          enableXfwm = false;
+          useQtScaling = true;
         };
       };
       displayManager = {
-        defaultSession = "xfce+xmonad";
-        lightdm = {
-          enable = true;
-          greeters.gtk.extraConfig = ''
-            background = #0F111A
-          '';
-        };
+        defaultSession = "plasma";
         sessionCommands = ''
           ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
           ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape' -t 175
@@ -526,6 +518,38 @@ in
 
   # https://github.com/NixOS/nixpkgs/issues/180175
   systemd.services.NetworkManager-wait-online.enable = false;
+
+  # this disables the KDE window manager so xmonad can run instead
+  systemd.user.services.plasma-kwin_x11.wantedBy = pkgs.lib.mkForce [ ];
+  # this starts xmonad but uses the built xmonad package from "services.windowManager.xmonad"
+  # (which is configured via xmonad.hs)
+  systemd.user.services.xmonad-plasma =
+    let
+      ExecStart = pkgs.lib.pipe config.services.xserver.windowManager.session [
+        (builtins.filter (e: e.name == "xmonad"))
+        (e: builtins.elemAt e 0)
+        (e: e.start)
+        (builtins.match ".*(/nix/store/.*/bin/xmonad).*")
+        (e: builtins.elemAt e 0)
+      ];
+    in
+    {
+      description = "Plasma XMonad Window Manager";
+      before = [ "plasma-workspace.target" ];
+      wantedBy = [ "plasma-workspace.target" ];
+      environment = {
+        DISPLAY = ":0";
+        DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
+        PATH = pkgs.lib.mkForce "PATH:/run/current-system/sw/bin";
+      };
+
+      serviceConfig = {
+        inherit ExecStart;
+        Type = "simple";
+        Restart = "on-failure";
+        Slice = "session.slice";
+      };
+    };
 
   users.extraUsers.james = {
     createHome = true;
