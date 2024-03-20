@@ -86,6 +86,10 @@
             ./hm90/hardware-configuration.nix
             ./hm90/configuration.nix
           ];
+        fwk = mkNixos "fwk" "x86_64-linux"
+          [
+            ./fwk/hardware-configuration.nix
+          ];
       };
     };
 }
