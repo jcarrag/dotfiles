@@ -490,7 +490,6 @@ in
         sessionCommands = ''
           ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
           ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape' -t 175
-          ${pkgs.xorg.xinput}/bin/xinput disable 12 # Disable touchscreen
           ${pkgs.xorg.xset}/bin/xset s 10800 10800
           ${pkgs.picom}/bin/picom &
           ${pkgs.xbanish}/bin/xbanish &
