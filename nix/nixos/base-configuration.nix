@@ -40,6 +40,7 @@ in
       unstable.fzf
       google-chrome
       unstable.hypnotix
+      mpv # needed for anki
       sunshine
       spotify
       unstable.starship
@@ -115,7 +116,6 @@ in
       alacritty
       update-resolv-conf
       xclip
-      xfce.xfce4-power-manager
       ### Util
       asciicharts
       bat
