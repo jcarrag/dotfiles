@@ -89,6 +89,7 @@
         fwk = mkNixos "fwk" "x86_64-linux"
           [
             ./fwk/hardware-configuration.nix
+            ./fwk/configuration.nix
           ];
       };
     };
