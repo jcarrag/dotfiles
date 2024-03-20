@@ -37,7 +37,6 @@ in
       entr
       evince
       firefox
-      unstable.fzf
       google-chrome
       unstable.hypnotix
       mpv # needed for anki
@@ -301,6 +300,10 @@ in
     };
     autojump.enable = true;
     bash.enableCompletion = true;
+    fzf = {
+      keybindings = true;
+      fuzzyCompletion = true;
+    };
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
