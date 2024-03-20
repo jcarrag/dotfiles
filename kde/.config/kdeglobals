@@ -136,11 +136,34 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [General]
+AccentColor=0,0,0,0
+ColorScheme=BreezeDark
 ColorSchemeHash=01662607e36cd33eacc7d7d7189f69c26b9a2cc8
-accentColorFromWallpaper=true
+LastUsedCustomAccentColor=233,58,154
+accentColorFromWallpaper=false
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop
+
+[KFileDialog Settings]
+Allow Expansion=false
+Automatically select filename extension=true
+Breadcrumb Navigation=true
+Decoration position=2
+LocationCombo Completionmode=5
+PathCombo Completionmode=5
+Show Bookmarks=false
+Show Full Path=false
+Show Inline Previews=true
+Show Preview=false
+Show Speedbar=true
+Show hidden files=false
+Sort by=Date
+Sort directories first=false
+Sort hidden files last=false
+Sort reversed=true
+Speedbar Width=152
+View Style=DetailTree
 
 [KScreen]
 ScaleFactor=2
