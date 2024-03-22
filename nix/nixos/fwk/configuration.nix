@@ -2,6 +2,9 @@
 { pkgs, ... }:
 
 {
+  # AMD iGPU
+  boot.initrd.kernelModules = [ "amdgpu" ];
+
   services = {
     tailscale = {
       enable = true;
@@ -15,5 +18,6 @@
           KEYBOARD_KEY_38=leftmeta
       '';
     };
+    xserver.videoDrivers = [ "amdgpu" ];
   };
 }
