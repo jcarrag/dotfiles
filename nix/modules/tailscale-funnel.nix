@@ -60,7 +60,7 @@ in
                   RemainAfterExit = true;
                   ExecStart = start;
                   ExecStop = stop;
-                  ExecStopPost = "${pkgs.systemd}/bin/systemctl restart tailscaled.service";
+                  # ExecStopPost = "${pkgs.systemd}/bin/systemctl restart tailscaled.service";
                   Restart = "on-failure";
                 };
               }
