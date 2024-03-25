@@ -37,30 +37,41 @@ in
   config =
     let
       enabled = lib.attrsets.filterAttrs (n: v: v.enable) cfg.services;
+      enabledNames = builtins.map (name: "tailscale-funnel-${name}.service") (builtins.attrNames enabled);
+      anyEnabled = enabled != [ ];
     in
-    {
-      systemd.services = lib.attrsets.mapAttrs'
-        (name: { enable, port, path }:
-          let
-            start = "${pkgs.unstable.tailscale}/bin/tailscale funnel --bg --https ${builtins.toString cfg.port} --set-path=${path} localhost:${builtins.toString port}";
-            stop = "${start} off";
-          in
-          lib.attrsets.nameValuePair
-            "tailscale-funnel-${name}"
-            {
-              description = "Tailscale Funnel forwarding for ${name}";
-              after = [ "network.target" ];
-              wantedBy = [ "multi-user.target" ];
+    lib.attrsets.recursiveUpdate
+      {
+        systemd.services = lib.attrsets.mapAttrs'
+          (name: { enable, port, path }:
+            let
+              start = "${pkgs.unstable.tailscale}/bin/tailscale funnel --bg --https ${builtins.toString cfg.port} --set-path=${path} localhost:${builtins.toString port}";
+              stop = "${start} off";
+            in
+            lib.attrsets.nameValuePair
+              "tailscale-funnel-${name}"
+              {
+                description = "Tailscale Funnel forwarding for ${name}";
+                after = [ "network.target" ];
+                wantedBy = [ "multi-user.target" ];
 
-              serviceConfig = {
-                Type = "oneshot";
-                RemainAfterExit = true;
-                ExecStart = start;
-                ExecStop = stop;
-                Restart = "on-failure";
-              };
-            }
-        )
-        enabled;
-    };
+                serviceConfig = {
+                  Type = "oneshot";
+                  RemainAfterExit = true;
+                  ExecStart = start;
+                  ExecStop = stop;
+                  ExecStopPost = "${pkgs.systemd}/bin/systemctl restart tailscaled.service";
+                  Restart = "on-failure";
+                };
+              }
+          )
+          enabled;
+      }
+      # (if anyEnabled then
+      {
+        # systemd.services.tailscaled.serviceConfig.PartOf = lib.debug.traceValSeq enabledNames;
+      };
+  # else
+  #   { }
+  # );
 }
