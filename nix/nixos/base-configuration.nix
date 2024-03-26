@@ -119,6 +119,8 @@ in
       asciicharts
       bat
       binutils-unwrapped
+      briss # pdf crop
+      # k2pdfopt # pdf crop for kindle [broken]
       cntr
       dig
       unstable.direnv
@@ -260,6 +262,9 @@ in
   nixpkgs.config = {
     allowUnfree = true;
     allowBroken = true;
+    permittedInsecurePackages = [
+      "mupdf-1.17.0" # k2pdfopt dep
+    ];
   };
 
   powerManagement.resumeCommands = ''
