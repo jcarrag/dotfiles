@@ -55,4 +55,16 @@
       user = "james";
     };
   };
+
+  systemd.user.services.sunshine = {
+    description = "Sunshine server";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type = "exec";
+      ExecStart = "${pkgs.unstable.sunshine}/bin/sunshine";
+      Restart = "on-failure";
+    };
+  };
 }
