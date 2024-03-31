@@ -7,7 +7,7 @@ let
   # 00:00:09 - SDL Info (0): Audio packet queue overflow
   # ...
   moonlight-qt-pipewire = writeScriptBin "moonlight" ''
-    SDL_AUDIODRIVER=pipewire ${unstable.moonlight-qt}/bin/moonlight
+    SDL_AUDIODRIVER=pipewire sudo ${unstable.moonlight-qt}/bin/moonlight
   '';
   toggleRotateScreen = with xorg; writeScriptBin "toggleRotateScreen" ''
     #!${stdenv.shell}
