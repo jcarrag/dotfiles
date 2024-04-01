@@ -2,12 +2,32 @@ self: super:
 
 with self.pkgs;
 let
-  # as of 28/02/24 without this env var moonlight audio crashes:
-  # 00:00:09 - SDL Info (0): Audio packet queue overflow
-  # 00:00:09 - SDL Info (0): Audio packet queue overflow
-  # ...
   moonlight-qt-pipewire = writeScriptBin "moonlight" ''
-    sudo SDL_AUDIODRIVER=pipewire ${unstable.moonlight-qt}/bin/moonlight
+    # moonlight crashes when run as regular user, but works when run as sudo
+    # debugged by comparing the difference in runtime env vars, recorded via:
+    # for sudo: sudo /nix/store/fg7gdbmxrijkc2g93dx55b4s4bqg200z-moonlight-qt-5.0.1/bin/moonlight & sudo cat /proc/$(pgrep moonlight)/environ --show-nonprinting | tr '^@' '\n' | tr : '\n' > moonlight_sudo_env_vars.txt
+    # for user: /nix/store/fg7gdbmxrijkc2g93dx55b4s4bqg200z-moonlight-qt-5.0.1/bin/moonlight & sudo cat /proc/$(pgrep moonlight)/environ --show-nonprinting | tr '^@' '\n' | tr : '\n' > moonlight_james_env_vars.txt
+    # there were many QT related env vardifferences, but $QML2_IMPORT_PATH was set for user, but not sudo.
+    # unsetting is "fixed" moonlight launching without sudo
+    #
+    # this has only been an issue since switching to kde, but there seem to be other issues too:
+    # https://discourse.nixos.org/t/appimage-run-fails-loading-qt-platform-plugin-xcb/29293/2
+    #
+    # for reference, these are the log lines when crashing as user:
+    #   > /nix/store/fg7gdbmxrijkc2g93dx55b4s4bqg200z-moonlight-qt-5.0.1/bin/moonlight
+    #   > 00:00:00 - SDL Info (0): Compiled with SDL 2.30.0
+    #   > 00:00:00 - SDL Info (0): Running with SDL 2.30.0
+    #   > 00:00:00 - Qt Info: No translation available for "en_GB"
+    #   > 00:00:00 - Qt Warning: QQmlApplicationEngine failed to load component
+    #   > 00:00:00 - Qt Warning: qrc:/gui/main.qml:47:5: Type ToolTip unavailable
+    #   > 00:00:00 - Qt Warning: file:///nix/store/89v0isbf00114gdsp8b25mkx9r7x3z4d-qtquickcontrols2-5.15.12-bin/lib/qt-5.15.12/qml/QtQuick/Controls.2/Material/qmldir: plugin cannot be loaded for module "QtQuick.Controls.Material": Cannot install element 'Material' into protected module 'QtQuick.Controls.Material' version '2'
+    unset QML2_IMPORT_PATH
+
+    # as of 28/02/24 without this env var moonlight audio crashes:
+    # 00:00:09 - SDL Info (0): Audio packet queue overflow
+    # 00:00:09 - SDL Info (0): Audio packet queue overflow
+    # ...
+    SDL_AUDIODRIVER=pipewire ${unstable.moonlight-qt}/bin/moonlight
   '';
   toggleRotateScreen = with xorg; writeScriptBin "toggleRotateScreen" ''
     #!${stdenv.shell}
