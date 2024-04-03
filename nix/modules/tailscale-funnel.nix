@@ -52,7 +52,8 @@ in
               "tailscale-funnel-${name}"
               {
                 description = "Tailscale Funnel forwarding for ${name}";
-                after = [ "network.target" ];
+                # https://old.reddit.com/r/Tailscale/comments/ubk9mo/systemd_how_do_get_something_to_run_if_tailscale/jia3pwn/
+                after = [ "sys-subsystem-net-devices-tailscale0.device" "tailscaled.service" ];
                 wantedBy = [ "multi-user.target" ];
 
                 serviceConfig = {
