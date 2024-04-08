@@ -45,10 +45,6 @@
     tailscale = {
       enable = true;
       package = pkgs.unstable.tailscale;
-      useRoutingFeatures = "server";
-      extraUpFlags = [
-        "--advertise-exit-node"
-      ];
     };
     xserver.displayManager.autoLogin = {
       enable = true;
