@@ -509,6 +509,28 @@ in
             };
           };
         }
+        {
+          name = "swap alt_l / meta_l";
+          application.not = [
+            ".gamescope-wrapped"
+            "com.moonlight_stream.Moonlight"
+            # "brave-browser"
+          ];
+          remap = {
+            "KEY_LEFTMETA" = "KEY_LEFTALT";
+          };
+        }
+        {
+          name = "swap meta_l / alt_l";
+          application.not = [
+            ".gamescope-wrapped"
+            "com.moonlight_stream.Moonlight"
+            # "brave-browser"
+          ];
+          remap = {
+            "KEY_LEFTALT" = "KEY_LEFTMETA";
+          };
+        }
       ];
     };
   };
