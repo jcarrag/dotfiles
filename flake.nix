@@ -16,7 +16,7 @@
 
   outputs = { self, nixpkgs, unstable, flake-utils, xremap, parsec, ynab-updater }:
     let
-      packageOverlays = import ../overlays;
+      packageOverlays = import ./nix/overlays;
 
       mkNixos = hostname: system: modules:
         let
@@ -33,7 +33,7 @@
           };
           rebuild = (import nixpkgs { inherit system; }).writeShellScriptBin "rebuild" ''
             set -x
-            sudo nixos-rebuild switch --flake ~/dotfiles/nix/nixos/#${hostname} "$@"
+            sudo nixos-rebuild switch --flake ~/dotfiles/nix#${hostname} "$@"
           '';
         in
         nixpkgs.lib.nixosSystem {
@@ -42,7 +42,7 @@
             [
               (xremap.nixosModules.default)
               (ynab-updater.nixosModules.ynab-updater)
-              (import ./base-configuration.nix)
+              (import ./nix/nixos/base-configuration.nix)
               {
                 environment.systemPackages = [
                   parsec.packages.${system}.parsecgaming
@@ -71,29 +71,29 @@
       nixosConfigurations = {
         xps = mkNixos "xps" "x86_64-linux"
           [
-            ./xps/hardware-configuration.nix
-            ./xps/configuration.nix
+            ./nix/nixos/xps/hardware-configuration.nix
+            ./nix/nixos/xps/configuration.nix
             ../modules/moixa.nix
           ];
         mbp = mkNixos "mbp" "x86_64-linux"
           [
-            ./mbp/hardware-configuration.nix
-            ./mbp/configuration.nix
+            ./nix/nixos/mbp/hardware-configuration.nix
+            ./nix/nixos/mbp/configuration.nix
           ];
         nuc = mkNixos "nuc" "x86_64-linux"
           [
-            ./nuc/hardware-configuration.nix
-            ./nuc/configuration.nix
+            ./nix/nixos/nuc/hardware-configuration.nix
+            ./nix/nixos/nuc/configuration.nix
           ];
         hm90 = mkNixos "hm90" "x86_64-linux"
           [
-            ./hm90/hardware-configuration.nix
-            ./hm90/configuration.nix
+            ./nix/nixos/hm90/hardware-configuration.nix
+            ./nix/nixos/hm90/configuration.nix
           ];
         fwk = mkNixos "fwk" "x86_64-linux"
           [
-            ./fwk/hardware-configuration.nix
-            ./fwk/configuration.nix
+            ./nix/nixos/fwk/hardware-configuration.nix
+            ./nix/nixos/fwk/configuration.nix
           ];
       };
     };
