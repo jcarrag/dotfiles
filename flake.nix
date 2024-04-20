@@ -11,6 +11,7 @@
 
   inputs.parsec.url = "github:jcarrag/parsec-gaming-nix";
 
+  # inputs.ynab-updater.url = "git+file:///home/james/dev/my/ynab_updater";
   inputs.ynab-updater.url = "github:jcarrag/ynab-updater";
 
   outputs = { self, nixpkgs, unstable, flake-utils, xremap, parsec, ynab-updater }:
@@ -32,7 +33,7 @@
           };
           rebuild = (import nixpkgs { inherit system; }).writeShellScriptBin "rebuild" ''
             set -x
-            sudo nixos-rebuild switch --flake ~/dotfiles/#${hostname} "$@"
+            sudo nixos-rebuild switch --flake ~/dotfiles/nix/nixos/#${hostname} "$@"
           '';
         in
         nixpkgs.lib.nixosSystem {
