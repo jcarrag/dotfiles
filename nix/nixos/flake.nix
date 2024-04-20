@@ -7,11 +7,13 @@
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
+  inputs.xremap.url = "github:xremap/nix-flake";
+
   inputs.parsec.url = "github:jcarrag/parsec-gaming-nix";
 
   inputs.ynab-updater.url = "github:jcarrag/ynab-updater";
 
-  outputs = { self, nixpkgs, unstable, flake-utils, parsec, ynab-updater }:
+  outputs = { self, nixpkgs, unstable, flake-utils, xremap, parsec, ynab-updater }:
     let
       packageOverlays = import ../overlays;
 
@@ -37,6 +39,7 @@
           system = system;
           modules =
             [
+              (xremap.nixosModules.default)
               (ynab-updater.nixosModules.ynab-updater)
               (import ./base-configuration.nix)
               {

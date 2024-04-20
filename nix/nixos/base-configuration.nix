@@ -95,6 +95,7 @@ in
       gnome3.zenity
       gnupg
       gparted
+      grim # wayland screenshots
       hfsprogs # gparted dep
       inotify-tools
       unstable.lurk
@@ -111,6 +112,7 @@ in
       pavucontrol # pulseaudio volume control
       unstable.helvum # pipewire
       rofi
+      slurp # wayland paste to stdout
       taffybar-my
       alacritty
       update-resolv-conf
@@ -156,6 +158,7 @@ in
       usbutils
       watchexec
       which
+      wl-clipboard # wayland clipboard
       zip
     ] ++ scripts;
 
@@ -179,7 +182,9 @@ in
         }
       );
     };
+    brillo.enable = true;
     opengl = {
+      enable = true;
       driSupport = true;
       driSupport32Bit = true;
       extraPackages = [
@@ -265,6 +270,25 @@ in
     permittedInsecurePackages = [
       "mupdf-1.17.0" # k2pdfopt dep
     ];
+    # necessary for wayland
+    # https://github.com/NixOS/nixpkgs/issues/162562#issuecomment-1229444338
+    packageOverrides = pkgs: {
+      steam = pkgs.steam.override {
+        extraPkgs = pkgs: with pkgs; [
+          xorg.libXcursor
+          xorg.libXi
+          xorg.libXinerama
+          xorg.libXScrnSaver
+          libpng
+          libpulseaudio
+          libvorbis
+          stdenv.cc.cc.lib
+          libkrb5
+          keyutils
+        ];
+      };
+    };
+
   };
 
   powerManagement.resumeCommands = ''
@@ -313,10 +337,18 @@ in
       enable = true;
       enableSSHSupport = true;
     };
+    hyprland = {
+      enable = true;
+      xwayland.enable = true;
+    };
     light.enable = true;
     nm-applet.enable = true;
     noisetorch.enable = true;
-    steam.enable = true;
+    steam = {
+      enable = true;
+      gamescopeSession.enable = true;
+    };
+    waybar.enable = true;
   };
 
   security = {
@@ -327,28 +359,6 @@ in
   };
 
   services = {
-    actkbd = {
-      enable = true;
-      bindings =
-        [
-          {
-            # enter+left_ctrl
-            keys = [ 28 29 ];
-            events = [ "key" ];
-            command = "/run/current-system/sw/bin/runuser -l james -c 'XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.alacritty}/bin/alacritty --class console --title console' &>> /home/james/wut";
-          }
-
-        ] ++ (map
-          (keys: {
-            inherit keys;
-            events = [ "key" ];
-            command = "/run/current-system/sw/bin/runuser -l james -c 'DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus ${pkgs.dunst}/bin/dunstctl close'";
-          }) [
-          [ 29 57 ] # left_ctrl+space
-          [ 97 57 ] # right_ctrl+space
-          [ 58 57 ] # caps_lock+space
-        ]);
-    };
     avahi = {
       enable = true;
       nssmdns = true;
@@ -480,42 +490,23 @@ in
         Option "SuspendTime" "0"
         Option "OffTime"     "0"
       '';
-      layout = "us";
-      # xkbOptions list: https://gist.github.com/jcarrag/aa6c72c76d8664ff3f1c752bbf543af7
-      xkbOptions = "shift:both_capslock,ctrl:nocaps";
-      desktopManager = {
-        xterm.enable = true;
-        plasma5 = {
-          enable = true;
-          useQtScaling = true;
-        };
-      };
-      displayManager = {
-        defaultSession = "plasma";
-        sessionCommands = ''
-          ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
-          ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape' -t 175
-          ${pkgs.xorg.xset}/bin/xset s 10800 10800
-          ${pkgs.picom}/bin/picom &
-          ${pkgs.xbanish}/bin/xbanish &
-          ${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &
-          ${pkgs.dunst}/bin/dunst &
-          ${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
-        '';
-      };
-      windowManager.xmonad = {
-        enable = true;
-        config = pkgs.xmonad-config;
-        enableContribAndExtras = true;
-        enableConfiguredRecompile = true;
-        extraPackages = hpkgs: [
-          hpkgs.data-default
-          hpkgs.dbus
-          hpkgs.xmonad-extras
-          hpkgs.xmonad-contrib
-          hpkgs.xmonad
-        ];
-      };
+    };
+    xremap = {
+      serviceMode = "user";
+      userName = "james";
+      withHypr = true;
+      config.modmap = [
+        {
+          name = "ctrl=caps_lock";
+          remap = {
+            "CapsLock" = {
+              held = "Ctrl_R";
+              alone = "Esc";
+              aloneTimeout = 500;
+            };
+          };
+        }
+      ];
     };
   };
 
@@ -526,40 +517,6 @@ in
 
   # https://github.com/NixOS/nixpkgs/issues/180175
   systemd.services.NetworkManager-wait-online.enable = false;
-
-  # this disables the KDE window manager so xmonad can run instead
-  systemd.user.services.plasma-kwin_x11.wantedBy = pkgs.lib.mkForce [ ];
-  # this starts xmonad but uses the built xmonad package from "services.windowManager.xmonad"
-  # (which is configured via xmonad.hs)
-  systemd.user.services.xmonad-plasma =
-    let
-      ExecStart = pkgs.lib.pipe config.services.xserver.windowManager.session [
-        (builtins.filter (e: e.name == "xmonad"))
-        (e: builtins.elemAt e 0)
-        (e: e.start)
-        (builtins.match ".*(/nix/store/.*/bin/xmonad).*")
-        (e: builtins.elemAt e 0)
-      ];
-    in
-    {
-      description = "Plasma XMonad Window Manager";
-      before = [ "plasma-workspace.target" ];
-      wantedBy = [ "plasma-workspace.target" ];
-      environment = {
-        DISPLAY = ":0";
-        DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
-        # /run/wrappers/bin for sudo
-        # /run/current-system/sw/bin for rofi etc.
-        PATH = pkgs.lib.mkForce "PATH:/run/wrappers/bin:/run/current-system/sw/bin";
-      };
-
-      serviceConfig = {
-        inherit ExecStart;
-        Type = "simple";
-        Restart = "on-failure";
-        Slice = "session.slice";
-      };
-    };
 
   users.extraUsers.james = {
     createHome = true;
@@ -573,12 +530,25 @@ in
   };
 
 
-  xdg.mime.defaultApplications = {
-    "text/html" = "brave-browser.desktop";
-    "x-scheme-handler/http" = "brave-browser.desktop";
-    "x-scheme-handler/https" = "brave-browser.desktop";
-    "x-scheme-handler/about" = "brave-browser.desktop";
-    "x-scheme-handler/unknown" = "brave-browser.desktop";
+  xdg =
+    {
+      mime.defaultApplications = {
+        "text/html" = "brave-browser.desktop";
+        "x-scheme-handler/http" = "brave-browser.desktop";
+        "x-scheme-handler/https" = "brave-browser.desktop";
+        "x-scheme-handler/about" = "brave-browser.desktop";
+        "x-scheme-handler/unknown" = "brave-browser.desktop";
+      };
+      portal = {
+        enable = true;
+        extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      };
+    };
+
+  environment.sessionVariables = {
+    # hyprland/wayland
+    WLR_NO_HARDWARE_CURSORS = "1";
+    NIXOS_OZONE_WL = "1";
   };
 
   environment.etc =
