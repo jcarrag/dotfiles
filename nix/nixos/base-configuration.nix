@@ -342,7 +342,10 @@ in
       xwayland.enable = true;
     };
     light.enable = true;
-    nm-applet.enable = true;
+    nm-applet = {
+      enable = true;
+      indicator = true;
+    };
     noisetorch.enable = true;
     steam = {
       enable = true;

@@ -1,0 +1,24 @@
+{
+  "layer": "top",
+  "modules-left": ["hyprland/workspaces", "hyprland/mode"],
+  "modules-center": ["hyprland/window"],
+  "modules-right": [
+    "network",
+    "cpu",
+    "memory",
+    "backlight",
+    "tray",
+    "battery",
+    "clock"
+  ],
+  "sway/window": {
+    "max-length": 50
+  },
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-icons": ["", "", "", "", ""]
+  },
+  "clock": {
+    "format-alt": "{:%a, %d. %b  %H:%M}"
+  }
+}
