@@ -111,7 +111,7 @@ in
       pasystray # pulseaudio systray
       pavucontrol # pulseaudio volume control
       unstable.helvum # pipewire
-      rofi
+      rofi-wayland
       slurp # wayland paste to stdout
       taffybar-my
       alacritty
@@ -339,6 +339,7 @@ in
     };
     hyprland = {
       enable = true;
+      package = unstable.hyprland;
       xwayland.enable = true;
     };
     light.enable = true;
