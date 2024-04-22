@@ -512,7 +512,6 @@ in
             "com.moonlight_stream.Moonlight"
             # "brave-browser"
           ];
-          device.not = [ "HOLDCHIP USB Gaming Keyboard" ];
           remap = {
             "KEY_LEFTMETA" = "KEY_LEFTALT";
           };
@@ -524,7 +523,6 @@ in
             "com.moonlight_stream.Moonlight"
             # "brave-browser"
           ];
-          device.not = [ "HOLDCHIP USB Gaming Keyboard" ];
           remap = {
             "KEY_LEFTALT" = "KEY_LEFTMETA";
           };
