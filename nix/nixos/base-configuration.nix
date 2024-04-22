@@ -97,6 +97,7 @@ in
       gparted
       grim # wayland screenshots
       hfsprogs # gparted dep
+      unstable.hyprshade # hyprland blue light filter
       inotify-tools
       unstable.lurk
       ntfsprogs # gparted dep
@@ -376,7 +377,6 @@ in
     gnome.gnome-keyring.enable = true;
     hardware.bolt.enable = true;
     localtimed.enable = true;
-    redshift.enable = true;
     openssh.enable = true;
     openvpn = {
       servers = {

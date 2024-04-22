@@ -69,12 +69,12 @@
     in
     flake-utils.lib.eachDefaultSystem
       (system:
-        {
-          packages = flake-utils.lib.flattenTree {
-            neovim = (mkNixos "nixos" system [ ]).options.programs.neovim.finalPackage.value;
-            tmate = (import nixpkgs { inherit system; overlays = [ packageOverlays ]; }).tmate-my;
-          };
-        }
+      {
+        packages = flake-utils.lib.flattenTree {
+          neovim = (mkNixos "nixos" system [ ]).options.programs.neovim.finalPackage.value;
+          tmate = (import nixpkgs { inherit system; overlays = [ packageOverlays ]; }).tmate-my;
+        };
+      }
       ) // {
       nixosConfigurations = {
         xps = mkNixos "xps" "x86_64-linux"
