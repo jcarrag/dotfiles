@@ -42,19 +42,6 @@
         { x = 1024; y = 640; }
       ];
     };
-    udev = {
-      extraHwdb = ''
-        # internal keyboard
-        evdev:input:b0011v0001p0001*
-          KEYBOARD_KEY_db=leftalt
-          KEYBOARD_KEY_38=leftmeta
-
-        # [US office] Cherry USB keyboard
-        evdev:input:b0003v046ApB090*
-          KEYBOARD_KEY_700e3=leftalt
-          KEYBOARD_KEY_700e2=leftmeta
-      '';
-    };
   };
 
   users.extraGroups.vboxusers.members = [ "james" ];

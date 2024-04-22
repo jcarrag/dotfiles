@@ -439,12 +439,7 @@ in
       # https://yulistic.gitlab.io/2017/12/linux-keymapping-with-udev-hwdb
       # https://wiki.archlinux.org/title/map_scancodes_to_keycodes
       # (trailing newline between rules & all-caps in ids are needed)
-      extraHwdb = ''
-        # magicforce
-        evdev:input:b0003v04D9p0024*
-          KEYBOARD_KEY_700e3=leftalt
-          KEYBOARD_KEY_700e2=leftmeta
-      '';
+      extraHwdb = '''';
       extraRules = ''
         ATTRS{idVendor}=="239a", ATTRS{idProduct}=="8087", TAG+="uaccess"
 
@@ -517,6 +512,7 @@ in
             "com.moonlight_stream.Moonlight"
             # "brave-browser"
           ];
+          device.not = [ "HOLDCHIP USB Gaming Keyboard" ];
           remap = {
             "KEY_LEFTMETA" = "KEY_LEFTALT";
           };
@@ -528,6 +524,7 @@ in
             "com.moonlight_stream.Moonlight"
             # "brave-browser"
           ];
+          device.not = [ "HOLDCHIP USB Gaming Keyboard" ];
           remap = {
             "KEY_LEFTALT" = "KEY_LEFTMETA";
           };

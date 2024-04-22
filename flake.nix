@@ -9,12 +9,10 @@
 
   inputs.xremap.url = "github:xremap/nix-flake";
 
-  inputs.parsec.url = "github:jcarrag/parsec-gaming-nix";
-
   # inputs.ynab-updater.url = "git+file:///home/james/dev/my/ynab_updater";
   inputs.ynab-updater.url = "github:jcarrag/ynab-updater";
 
-  outputs = { self, nixpkgs, unstable, flake-utils, xremap, parsec, ynab-updater }:
+  outputs = { self, nixpkgs, unstable, flake-utils, xremap, ynab-updater }:
     let
       packageOverlays = import ./nix/overlays;
 
@@ -45,7 +43,6 @@
               (import ./nix/nixos/base-configuration.nix)
               {
                 environment.systemPackages = [
-                  parsec.packages.${system}.parsecgaming
                   rebuild
                 ];
                 networking.hostName = hostname;
