@@ -73,7 +73,7 @@
           [
             ./nix/nixos/xps/hardware-configuration.nix
             ./nix/nixos/xps/configuration.nix
-            ../modules/moixa.nix
+            ./nix/modules/moixa.nix
           ];
         mbp = mkNixos "mbp" "x86_64-linux"
           [
