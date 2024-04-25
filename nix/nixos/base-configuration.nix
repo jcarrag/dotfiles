@@ -500,6 +500,7 @@ in
       '';
     };
     xremap = {
+      watch = true;
       serviceMode = "user";
       userName = "james";
       withHypr = true;
