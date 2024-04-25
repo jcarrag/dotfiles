@@ -31,6 +31,8 @@ in
       unstable.vulkan-tools
       ### Misc
       aoe-2-de
+      unstable.atuin
+      unstable.blesh
       brave
       calibre
       unstable.chiaki
@@ -472,6 +474,13 @@ in
 
         # SEGGER J-Link mini
         ATTRS{idVendor}=="1366", ATTRS{idProduct}=="0101", MODE="0666", TAG+="uaccess", GROUP="users"
+
+        # ZSA Voyager
+        # Rules for Oryx web flashing and live training
+        KERNEL=="hidraw*", ATTRS{idVendor}=="3297", MODE="0664", GROUP="plugdev"
+
+        # Keymapp Flashing rules for the Voyager
+        SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", MODE:="0666", SYMLINK+="ignition_dfu"
       '';
     };
     xserver = {

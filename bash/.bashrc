@@ -37,3 +37,7 @@ eval "$(direnv hook bash)"
 [ -f ~/.config/tabtab/bash/__tabtab.bash ] && . ~/.config/tabtab/bash/__tabtab.bash || true
 
 eval "$(starship init bash)"
+
+source "$(blesh-share)/ble.sh"
+
+eval "$(atuin init bash --disable-up-arrow)"
