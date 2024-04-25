@@ -519,7 +519,6 @@ in
           application.not = [
             ".gamescope-wrapped"
             "com.moonlight_stream.Moonlight"
-            # "brave-browser"
           ];
           remap = {
             "KEY_LEFTMETA" = "KEY_LEFTALT";
@@ -530,7 +529,6 @@ in
           application.not = [
             ".gamescope-wrapped"
             "com.moonlight_stream.Moonlight"
-            # "brave-browser"
           ];
           remap = {
             "KEY_LEFTALT" = "KEY_LEFTMETA";
