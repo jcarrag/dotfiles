@@ -51,6 +51,7 @@
           vim-surround # Shortcuts for setting () {} etc.
           vim-visualstar
           direnv-vim
+          nvim-autopairs
           coc-nvim
           coc-git
           coc-highlight
