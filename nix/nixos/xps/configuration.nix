@@ -2,10 +2,6 @@
 { pkgs, ... }:
 
 {
-  imports = [
-    ../../modules/taffybar-my.nix
-  ];
-
   # https://alexbakker.me/post/nixos-pci-passthrough-qemu-vfio.html
   # https://forum.level1techs.com/t/nixos-vfio-pcie-passthrough/130916
   # boot.kernelParams = [ "intel_iommu=on" ];
@@ -16,8 +12,6 @@
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "iHD";
   };
-
-  programs.taffybar-my.enable = true;
 
   services = {
     tailscale = {

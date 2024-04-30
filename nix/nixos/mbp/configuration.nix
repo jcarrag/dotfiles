@@ -2,15 +2,9 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ../../modules/taffybar-my.nix
-  ];
-
   hardware = {
     facetimehd.enable = true;
   };
-
-  programs.taffybar-my.enable = true;
 
   services.xserver = {
     xrandrHeads = [

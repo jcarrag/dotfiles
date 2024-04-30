@@ -116,7 +116,6 @@ in
       unstable.helvum # pipewire
       rofi-wayland
       slurp # wayland paste to stdout
-      taffybar-my
       alacritty
       update-resolv-conf
       xclip
