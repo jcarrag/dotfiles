@@ -44,8 +44,19 @@
     "on-click": "pavucontrol"
   },
   "battery": {
-    "format": "{capacity}% {icon}",
-    "format-icons": ["", "", "", "", ""]
+    "format": "{icon} {capacity}% ( {time} )",
+    "format-icons": ["", "", "", "", ""],
+    "format-time": "{H}h{M}m",
+    "format-discharging": "{icon}   {capacity}% ( {time} )",
+    "format-charging": "{icon}   {capacity}% ( {time} )  ",
+    "format-full": "{icon}  ",
+    "interval": 10,
+    "states": {
+      "warning": 25,
+      "critical": 10
+    },
+    "tooltip": false,
+    "on-click": "2"
   },
   "clock": {
     "format-alt": "{:%a, %d. %b  %H:%M}"
