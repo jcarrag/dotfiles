@@ -164,15 +164,17 @@ in
       zip
     ] ++ scripts;
 
-  fonts = {
-    fonts = with pkgs; [
-      (nerdfonts.override { fonts = [ "Hack" ]; })
-      noto-fonts-cjk
-      font-awesome
-      feather-font
-      gnome3.adwaita-icon-theme
-    ];
-  };
+  fonts.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "Hack" "NerdFontsSymbolsOnly" ]; })
+    noto-fonts
+    noto-fonts-emoji
+    noto-fonts-cjk
+    font-awesome
+    feather-font
+    powerline-fonts
+    powerline-symbols
+    gnome3.adwaita-icon-theme
+  ];
 
   hardware = {
     saleae-logic.enable = true;
