@@ -59,6 +59,7 @@
     "on-click": "2"
   },
   "clock": {
-    "format-alt": "{:%a, %d. %b  %H:%M}"
+    "format": "{:%a, %d. %b %H:%M}",
+    "format-alt": "{:%H:%M}"
   }
 }
