@@ -155,6 +155,10 @@
 
   services = {
     avahi.hostName = "hc";
+    kolide-launcher = {
+      enable = true;
+      enrollSecretDirectory = "/home/james/secrets/kolide-k2";
+    };
     udev = {
       # work keyboards
       extraHwdb = ''

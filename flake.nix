@@ -14,6 +14,11 @@
   # inputs.ynab-updater.url = "git+file:///home/james/dev/my/ynab_updater";
   inputs.ynab-updater.url = "github:jcarrag/ynab-updater";
 
+  inputs.kolide-launcher = {
+    url = "github:/kolide/nix-agent/main";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
   outputs =
     { self
     , nixpkgs
@@ -22,6 +27,7 @@
     , xremap
     , hyprlock
     , ynab-updater
+    , kolide-launcher
     }:
     let
       packageOverlays = import ./nix/overlays;
@@ -35,7 +41,10 @@
                 allowUnfree = true;
                 segger-jlink.acceptLicense = true;
               };
-              nixpkgs.overlays = [ packageOverlays ];
+              nixpkgs.overlays = [
+                packageOverlays
+                (kolide-launcher.overlays)
+              ];
             };
             _self = self;
           };
@@ -50,6 +59,7 @@
             [
               (xremap.nixosModules.default)
               (ynab-updater.nixosModules.ynab-updater)
+              (kolide-launcher.nixosModules.kolide-launcher)
               (import ./nix/nixos/base-configuration.nix)
               {
                 environment.systemPackages = [

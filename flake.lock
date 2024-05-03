@@ -302,6 +302,27 @@
         "type": "github"
       }
     },
+    "kolide-launcher": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1710943656,
+        "narHash": "sha256-NeQnFlvMtXWpAAyi03G6RSsVd41LBuRnwjRPjrUroeY=",
+        "owner": "kolide",
+        "repo": "nix-agent",
+        "rev": "90b7761a40a54dd94ca631b8a5f632e304e07d44",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kolide",
+        "ref": "main",
+        "repo": "nix-agent",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1712963716,
@@ -436,6 +457,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "hyprlock": "hyprlock",
+        "kolide-launcher": "kolide-launcher",
         "nixpkgs": "nixpkgs_2",
         "unstable": "unstable",
         "xremap": "xremap",
