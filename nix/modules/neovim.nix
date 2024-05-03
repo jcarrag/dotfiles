@@ -52,6 +52,7 @@
           vim-visualstar
           direnv-vim
           nvim-autopairs
+          sort-nvim
           coc-nvim
           coc-git
           coc-highlight

@@ -380,6 +380,10 @@ in
     gnome.gnome-keyring.enable = true;
     hardware.bolt.enable = true;
     localtimed.enable = true;
+    logind.extraConfig = ''
+      # don’t shutdown when power button is short-pressed
+      HandlePowerKey=ignore
+    '';
     openssh.enable = true;
     openvpn = {
       servers = {
@@ -508,9 +512,10 @@ in
       config.modmap = [
         {
           name = "ctrl=caps_lock";
+          device.not = [ "ZSA Technology Labs Voyager" ];
           remap = {
             "CapsLock" = {
-              held = "Ctrl_R";
+              held = "Ctrl_L";
               alone = "Esc";
               aloneTimeout = 500;
             };
@@ -518,6 +523,7 @@ in
         }
         {
           name = "swap alt_l / meta_l";
+          device.not = [ "ZSA Technology Labs Voyager" ];
           application.not = [
             ".gamescope-wrapped"
             "com.moonlight_stream.Moonlight"
@@ -528,6 +534,7 @@ in
         }
         {
           name = "swap meta_l / alt_l";
+          device.not = [ "ZSA Technology Labs Voyager" ];
           application.not = [
             ".gamescope-wrapped"
             "com.moonlight_stream.Moonlight"
