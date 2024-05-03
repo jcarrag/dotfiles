@@ -8,6 +8,7 @@
 
   # AMD RX 5700 XT
   boot.initrd.kernelModules = [ "amdgpu" ];
+  boot.initrd.luks.devices."luks-b6ee5065-b576-407b-9419-4651b91daad9".device = "/dev/disk/by-uuid/b6ee5065-b576-407b-9419-4651b91daad9";
 
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "iHD";
