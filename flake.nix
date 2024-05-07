@@ -41,10 +41,7 @@
                 allowUnfree = true;
                 segger-jlink.acceptLicense = true;
               };
-              nixpkgs.overlays = [
-                packageOverlays
-                (kolide-launcher.overlays)
-              ];
+              nixpkgs.overlays = [ packageOverlays ];
             };
             _self = self;
           };
