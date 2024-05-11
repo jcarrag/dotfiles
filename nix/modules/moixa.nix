@@ -20,6 +20,8 @@
     onShutdown = "shutdown";
   };
 
+  virtualisation.docker.enable = true;
+
   programs = {
     dconf.enable = true;
   };
