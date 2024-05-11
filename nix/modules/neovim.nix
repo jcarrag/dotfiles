@@ -7,6 +7,17 @@
       customRC = builtins.readFile "${pkgs._self}/nix/modules/vimrc";
       packages.myPlugins.start = with pkgs.unstable.vimPlugins;
         let
+          vim-alloy = pkgs.vimUtils.buildVimPlugin {
+            pname = "vim-alloy";
+            version = "2024-05-11";
+            src = pkgs.fetchFromGitHub {
+              owner = "grafana";
+              repo = "vim-alloy";
+              rev = "main";
+              sha256 = "sha256-1zUL3PN7LVXXwZxsGlHG6UCPIbDhqSN9ns7jxpzpzZk=";
+            };
+            meta.homepage = "https://github.com/grafana/vim-alloy";
+          };
           vim-github-link = pkgs.vimUtils.buildVimPlugin {
             pname = "github-link";
             version = "2022-12-22";
@@ -43,6 +54,7 @@
         in
         [
           vim-abolish
+          vim-alloy
           vim-commentary
           vim-devicons
           vim-sensible
