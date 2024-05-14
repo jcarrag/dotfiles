@@ -15,6 +15,8 @@
   };
 
   services = {
+    # the SDD is LUKS encrypted so a password is already required
+    getty.autologinUser = "james";
     tailscale = {
       enable = true;
       package = pkgs.unstable.tailscale;

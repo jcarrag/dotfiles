@@ -157,8 +157,6 @@
 
   services = {
     avahi.hostName = "hc";
-    # the SDD is LUKS encrypted so a password is already required
-    getty.autologinUser = "james";
     kolide-launcher = {
       enable = true;
       enrollSecretDirectory = "/home/james/secrets/kolide-k2";
