@@ -76,7 +76,6 @@
               libdrm
               libxkbcommon
               mesa
-              unstable.postman
 
               xorg.libX11
               xorg.libXcursor
@@ -115,6 +114,7 @@
       virt-manager
       adoptopenjdk-bin
       unstable.ngrok
+      unstable.postman
       unstable.libimobiledevice
       react-native-debugger-fixed
       airplay
