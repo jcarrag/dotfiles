@@ -251,7 +251,6 @@ in
     nixPath = pkgs.lib.mapAttrsToList
       (key: value: "${key}=${value.to.path}")
       (pkgs.lib.filterAttrs (key: value: value ? to.path) config.nix.registry);
-    package = pkgs.unstable.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
