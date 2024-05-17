@@ -76,6 +76,7 @@
               libdrm
               libxkbcommon
               mesa
+              unstable.postman
 
               xorg.libX11
               xorg.libXcursor
