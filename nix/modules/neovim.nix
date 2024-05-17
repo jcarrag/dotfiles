@@ -14,7 +14,7 @@
               owner = "grafana";
               repo = "vim-alloy";
               rev = "main";
-              sha256 = "sha256-1zUL3PN7LVXXwZxsGlHG6UCPIbDhqSN9ns7jxpzpzZk=";
+              sha256 = "sha256-lUOVfbdmEBuuIyxTFkWy7R3Sem6DnC6pjmu8XJWJYM8=";
             };
             meta.homepage = "https://github.com/grafana/vim-alloy";
           };
