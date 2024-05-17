@@ -44,7 +44,7 @@
     "on-click": "pavucontrol"
   },
   "battery": {
-    "format": "{icon} {capacity}% ( {time} )",
+    "format": "{icon}   {capacity}% ( {time} )",
     "format-icons": ["", "", "", "", ""],
     "format-time": "{H}h{M}m",
     "format-discharging": "{icon}   {capacity}% ( {time} )",
