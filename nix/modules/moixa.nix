@@ -51,6 +51,12 @@
       airplay = pkgs.writeShellScriptBin "airplay" ''
         ${pkgs.unstable.uxplay}/bin/uxplay -p -reset 0
       '';
+      base64Decode = pkgs.writeShellScriptBin "base_64_decode" ''
+        ${pkgs.nodePackages.nodejs}/bin/node -e "console.log(Buffer.from(process.argv[1], 'base64').toString('utf8'))" -- "$@"
+      '';
+      base64Encode = pkgs.writeShellScriptBin "base_64_encode" ''
+        ${pkgs.nodePackages.nodejs}/bin/node -e "console.log(Buffer.from(process.argv[1], 'utf8').toString('base64'))" -- "$@"
+      '';
       react-native-debugger-fixed = pkgs.react-native-debugger.overrideAttrs
         (old:
           let
@@ -124,6 +130,8 @@
       hc-ssh-home
       hc-ssh-installer-api
       screen
+      base64Decode
+      base64Encode
     ];
 
   networking = {
