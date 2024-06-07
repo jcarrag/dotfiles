@@ -368,7 +368,7 @@ in
   services = {
     avahi = {
       enable = true;
-      nssmdns = true;
+      nssmdns4 = true;
       publish.enable = true;
       publish.userServices = true;
     };
@@ -378,6 +378,13 @@ in
     geoclue2.enableDemoAgent = true;
     gnome.gnome-keyring.enable = true;
     hardware.bolt.enable = true;
+    libinput = {
+      enable = true;
+      touchpad = {
+        disableWhileTyping = true;
+        accelSpeed = "0.0";
+      };
+    };
     localtimed.enable = true;
     logind.extraConfig = ''
       # don’t shutdown when power button is short-pressed
@@ -423,6 +430,15 @@ in
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      extraConfig.pipewire = {
+        "92-raop-discover.conf" = {
+          "context.modules" = [
+            {
+              name = "libpipewire-module-raop-discover";
+            }
+          ];
+        };
+      };
     };
     printing = {
       enable = true;
@@ -490,13 +506,6 @@ in
     xserver = {
       enable = true;
       exportConfiguration = true;
-      libinput = {
-        enable = true;
-        touchpad = {
-          disableWhileTyping = true;
-          accelSpeed = "0.0";
-        };
-      };
       serverLayoutSection = ''
         Option "StandbyTime" "0"
         Option "SuspendTime" "0"
@@ -565,7 +574,6 @@ in
     uid = 1000;
   };
 
-
   xdg =
     {
       mime.defaultApplications = {
@@ -586,20 +594,6 @@ in
     WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
   };
-
-  environment.etc =
-    let
-      json = pkgs.formats.json { };
-    in
-    {
-      "pipewire/pipewire.conf.d/92-raop-discover.conf".source = json.generate "92-raop-discover.conf" {
-        "context.modules" = [
-          {
-            name = "libpipewire-module-raop-discover";
-          }
-        ];
-      };
-    };
 
   system.stateVersion = "20.09";
 }
