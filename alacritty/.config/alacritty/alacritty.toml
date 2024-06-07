@@ -1,0 +1,30 @@
+[colors.primary]
+background = "#0F111A"
+foreground = "#CDD3DE"
+
+[env]
+WINIT_X11_SCALE_FACTOR = "1"
+
+[font]
+size = 11
+
+[font.bold]
+family = "Hack Nerd Font Mono"
+
+[font.bold_italic]
+family = "Hack Nerd Font Mono"
+
+[font.italic]
+family = "Hack Nerd Font Mono"
+
+[font.normal]
+family = "Hack Nerd Font Mono"
+style = "Regular"
+
+[[keyboard.bindings]]
+action = "SpawnNewInstance"
+key = "Return"
+mods = "Control|Super"
+
+[scrolling]
+history = 50000
