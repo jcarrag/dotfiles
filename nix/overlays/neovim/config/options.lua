@@ -1,3 +1,6 @@
+vim.g.mapleader = ','
+vim.g.maplocalleader = ','
+
 -- THEME
 vim.opt.termguicolors = true
 vim.opt.background='dark'
