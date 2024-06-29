@@ -1,35 +1,35 @@
-function dirLookup(dir)
-   -- Return first result from find
-   local p = io.popen('find '..dir..' -maxdepth 0 -type d | head -n 1')  
-   for file in p:lines() do 
-       return file
-   end
-end
-
-local dap = require('dap')
-dap.adapters.cppdbg = {
-  id = 'cppdbg',
-  type = 'executable',
-  command = dirLookup('/nix/store/*vscode-extension-ms-vscode-cpptools*')..'/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7',
-}
-
-dap.configurations.cpp = {
-  {
-    name = "Launch file",
-    type = "cppdbg",
-    request = "launch",
-    program = function()
-      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-    end,
-    cwd = '${workspaceFolder}',
-    stopAtEntry = true,
-  },
-}
-
-dap.configurations.c = dap.configurations.cpp
-dap.configurations.rust = dap.configurations.cpp
-
-require("nvim-dap-virtual-text").setup()
+--function dirLookup(dir)
+--   -- Return first result from find
+--   local p = io.popen('find '..dir..' -maxdepth 0 -type d | head -n 1')  
+--   for file in p:lines() do 
+--       return file
+--   end
+--end
+--
+--local dap = require('dap')
+--dap.adapters.cppdbg = {
+--  id = 'cppdbg',
+--  type = 'executable',
+--  command = dirLookup('/nix/store/*vscode-extension-ms-vscode-cpptools*')..'/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7',
+--}
+--
+--dap.configurations.cpp = {
+--  {
+--    name = "Launch file",
+--    type = "cppdbg",
+--    request = "launch",
+--    program = function()
+--      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+--    end,
+--    cwd = '${workspaceFolder}',
+--    stopAtEntry = true,
+--  },
+--}
+--
+--dap.configurations.c = dap.configurations.cpp
+--dap.configurations.rust = dap.configurations.cpp
+--
+--require("nvim-dap-virtual-text").setup()
 
 require("dapui").setup({
   icons = { expanded = "", collapsed = "", current_frame = "" },
