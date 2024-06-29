@@ -1,6 +1,14 @@
 vim.g.mapleader = ','
 vim.g.maplocalleader = ','
 
+vim.api.nvim_create_autocmd({"FocusLost"}, {
+  callback = function() vim.api.nvim_cmd({
+    cmd = "wa",
+    mods = { silent = true }
+  }, { output = true }) end,
+})
+vim.opt.autowriteall = true
+
 -- THEME
 vim.opt.termguicolors = true
 vim.opt.background='dark'
