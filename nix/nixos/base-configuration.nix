@@ -6,7 +6,8 @@ in
 {
 
   imports = [
-    ../modules/neovim.nix
+    #../modules/neovim.nix
+    ../overlays/neovim
     ../modules/anki.nix
   ];
 
@@ -18,6 +19,9 @@ in
 
   environment.systemPackages = with pkgs;
     [
+      # _neovim
+      vim-language-server
+      lua-language-server
       ### Communication
       unstable.discord
       unstable.signal-desktop

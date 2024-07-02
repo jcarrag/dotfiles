@@ -12,7 +12,7 @@ vim.api.nvim_set_keymap('n', '<leader>td', '<cmd>TroubleToggle lsp_definitions<c
 vim.api.nvim_set_keymap('n', '<leader>tr', '<cmd>TroubleToggle lsp_references<cr>', { noremap = true })
 
 -- telescope
-vim.api.nvim_set_keymap('n', '<C-g>', "<cmd>lua require('telescope.builtin').find_files()<cr>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-g>', "<cmd>lua require('telescope.builtin').git_files()<cr>", { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader><C-g>', "<cmd>lua require('telescope.builtin').grep_string{ shorten_path = true, word_match = '-w', search = '', additional_args = { '--hidden' } }<cr>", { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader><C-w>', "<cmd>lua require('telescope.builtin').buffers({ sort_lastused = true })<cr>", { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", { noremap = true })
@@ -37,7 +37,8 @@ vim.api.nvim_set_keymap('n', '<leader>qp', '<cmd>:cp<CR>', { noremap = true })
 
 -- Neotree
 -- the Neotree commands don't work when bound to just <C-*> and called when Neotree is focussed
-vim.api.nvim_set_keymap('', '<leader><C-f>', '<cmd>Neotree toggle<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader><C-f>', '<cmd>Neotree reveal<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader><C-b>', '<cmd>Neotree toggle<CR>', { noremap = true })
 
 -- Windows
 vim.api.nvim_set_keymap('n', '<M-j>', '<C-W>+', { noremap = true })
