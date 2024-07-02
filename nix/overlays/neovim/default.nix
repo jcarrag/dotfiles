@@ -51,6 +51,13 @@ in
               type = "lua";
             }
             pkgs.vimPlugins.telescope-fzf-native-nvim
+            {
+              plugin = pkgs.vimPlugins.project-nvim;
+              config = ''
+                require("project_nvim").setup {}
+              '';
+              type = "lua";
+            }
             pkgs.vimPlugins.harpoon
 
             ## cmp
@@ -82,6 +89,7 @@ in
             pkgs.vimPlugins.lspkind-nvim
             pkgs.vimPlugins.rainbow
             pkgs.vimPlugins.nvim-web-devicons
+            pkgs.vimPlugins.nui-nvim
             pkgs.vimPlugins.surround-nvim
             pkgs.vimPlugins.lazygit-nvim
             pkgs.vimPlugins.nvim-code-action-menu
@@ -122,10 +130,67 @@ in
               type = "lua";
             }
             {
+              plugin = pkgs.vimPlugins.neo-tree-nvim;
+              config = ''
+                require('neo-tree').setup {
+                  filesystem = {
+                    window = {
+                      mappings = {
+                        ["u"] = "navigate_up",
+                        ["O"] = "expand_all_nodes",
+                      }
+                    },
+                    filtered_items = {
+                      visible = true,
+                      show_hidden_count = true,
+                      hide_dotfiles = false,
+                      hide_gitignored = false,
+                    },
+                    follow_current_file = {
+                      enabled = true,
+                      leave_dirs_open = false,
+                    },
+                  },
+                  buffers = { follow_current_file = { enable = true } },
+                }
+
+                -- auto close https://github.com/gomfol12/dotfiles/blob/47efefe2bfe3f800b0f94b5036e83a79e85fac4c/.config/nvim/lua/tree.lua#L103C3-L124
+                local function is_modified_buffer_open(buffers)
+                    for _, v in pairs(buffers) do
+                        if v.name:match("neo%-tree") == nil then
+                            return true
+                        end
+                    end
+                    return false
+                end
+                local function non_floating_wins_count()
+                    local i = 0
+                    for _, v in pairs(vim.api.nvim_list_wins()) do
+                        if vim.api.nvim_win_get_config(v).relative == "" then
+                          i = i + 1
+                        end
+                    end
+                    return i
+                end
+                vim.api.nvim_create_autocmd("BufEnter", {
+                    nested = true,
+                    callback = function()
+                        if
+                            non_floating_wins_count() == 1
+                            and vim.api.nvim_buf_get_name(0):match("neo%-tree") ~= nil
+                        then
+                            vim.cmd("quit")
+                        end
+                    end,
+                })
+              '';
+              type = "lua";
+            }
+            {
               plugin = pkgs.vimPlugins.fidget-nvim;
               config = "require('fidget').setup{}";
               type = "lua";
-            }
+             }
             {
               plugin = pkgs.vimPlugins.trouble-nvim;
               config = "require('trouble').setup {}";
