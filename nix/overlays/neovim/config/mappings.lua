@@ -50,6 +50,7 @@ vim.api.nvim_set_keymap('n', '<C-j>', '<C-W>j', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-k>', '<C-W>k', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-l>', '<C-W>l', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-h>', '<C-W>h', { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-p>', '<C-W>p', { noremap = true })
 
 -- Harpoon
 -- vim.api.nvim_set_keymap('n', '<leader>s', '<cmd>lua require("harpoon.mark").add_file()<cr>', { noremap = true })
