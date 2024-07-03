@@ -1,7 +1,7 @@
 --function dirLookup(dir)
 --   -- Return first result from find
---   local p = io.popen('find '..dir..' -maxdepth 0 -type d | head -n 1')  
---   for file in p:lines() do 
+--   local p = io.popen('find '..dir..' -maxdepth 0 -type d | head -n 1')
+--   for file in p:lines() do
 --       return file
 --   end
 --end
@@ -36,6 +36,7 @@
 
 require("dapui").setup({
   icons = { expanded = "", collapsed = "", current_frame = "" },
+  force_buffers = true,
   mappings = {
     -- Use a table to apply multiple mappings
     expand = { "<CR>", "<2-LeftMouse>" },
@@ -66,7 +67,7 @@ require("dapui").setup({
   layouts = {
     {
       elements = {
-      -- Elements can be strings or table with id and size keys.
+        -- Elements can be strings or table with id and size keys.
         { id = "scopes", size = 0.25 },
         "breakpoints",
         "stacks",
@@ -101,16 +102,19 @@ require("dapui").setup({
     },
   },
   floating = {
-    max_height = nil, -- These can be integers or a float between 0 and 1.
-    max_width = nil, -- Floats will be treated as percentage of your screen.
+    max_height = nil,  -- These can be integers or a float between 0 and 1.
+    max_width = nil,   -- Floats will be treated as percentage of your screen.
     border = "single", -- Border style. Can be "single", "double" or "rounded"
     mappings = {
       close = { "q", "<Esc>" },
     },
   },
-  windows = { indent = 1 },
+  windows = {
+    indent = 1
+  },
   render = {
-    max_type_length = nil, -- Can be integer or nil.
-    max_value_lines = 100, -- Can be integer or nil.
+    indent = 2,
+    --max_type_length = nil, -- Can be integer or nil.
+    --max_value_lines = 100, -- Can be integer or nil.
   }
 })
