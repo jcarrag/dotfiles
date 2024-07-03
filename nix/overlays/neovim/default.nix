@@ -23,8 +23,23 @@ in
           homeManagerPlugins = [
             ## Theme
             {
-              plugin = pkgs.vimPlugins.tokyonight-nvim;
-              config = "vim.cmd[[colorscheme tokyonight-night]]";
+              plugin = pkgs.vimPlugins.lualine-nvim;
+              config = ''
+                require('lualine').setup {
+                    options = {
+                        theme = 'auto',
+                    }
+                }
+              '';
+              type = "lua";
+            }
+            {
+              plugin = pkgs.vimPlugins.material-nvim;
+              config = ''
+                vim.g.material_style = "deep ocean"
+                require("material").setup {}
+                vim.cmd 'colorscheme material'
+              '';
               type = "lua";
             }
 
@@ -91,7 +106,6 @@ in
             pkgs.vimPlugins.nvim-web-devicons
             pkgs.vimPlugins.nui-nvim
             pkgs.vimPlugins.surround-nvim
-            pkgs.vimPlugins.lazygit-nvim
             pkgs.vimPlugins.nvim-code-action-menu
             pkgs.vimPlugins.vim-multiple-cursors
             pkgs.vimPlugins.csv-vim
@@ -216,16 +230,33 @@ in
             }
             {
               plugin = pkgs.vimPlugins.gitsigns-nvim;
-              config = "require('gitsigns').setup()";
-              type = "lua";
-            }
-            {
-              plugin = pkgs.vimPlugins.lualine-nvim;
               config = ''
-                require('lualine').setup {
-                    options = {
-                        theme = 'tokyonight',
-                    }
+                require('gitsigns').setup{
+                  on_attach = function(bufnr)
+                    local gitsigns = require('gitsigns')
+
+                    local function map(mode, l, r, opts)
+                      opts = opts or {}
+                      opts.buffer = bufnr
+                      vim.keymap.set(mode, l, r, opts)
+                    end
+
+                    map('n', ']g', function()
+                      if vim.wo.diff then
+                        vim.cmd.normal({']c', bang = true})
+                      else
+                        gitsigns.nav_hunk('next')
+                      end
+                    end)
+
+                    map('n', '[g', function()
+                      if vim.wo.diff then
+                        vim.cmd.normal({'[c', bang = true})
+                      else
+                        gitsigns.nav_hunk('prev')
+                      end
+                    end)
+                  end
                 }
               '';
               type = "lua";
