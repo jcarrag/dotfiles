@@ -6,6 +6,7 @@ require'lspconfig'.dockerls.setup{capabilities=capabilities}
 require'lspconfig'.nil_ls.setup{capabilities=capabilities}
 require'lspconfig'.bufls.setup{capabilities=capabilities}
 require'lspconfig'.ansiblels.setup{}
+require'lspconfig'.tsserver.setup{}
 require'lspconfig'.pyright.setup{
   capabilities=capabilities,
   settings = {

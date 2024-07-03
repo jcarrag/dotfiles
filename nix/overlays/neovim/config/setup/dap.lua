@@ -31,6 +31,9 @@
 --
 --require("nvim-dap-virtual-text").setup()
 
+-- TODO: configure probe-rs
+-- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#probe-rs
+
 require("dapui").setup({
   icons = { expanded = "", collapsed = "", current_frame = "" },
   mappings = {

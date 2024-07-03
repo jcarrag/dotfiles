@@ -22,6 +22,7 @@ in
       # _neovim
       vim-language-server
       lua-language-server
+      nodePackages.typescript-language-server
       ### Communication
       unstable.discord
       unstable.signal-desktop
