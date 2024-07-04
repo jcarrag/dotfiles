@@ -65,11 +65,37 @@ in
               config = builtins.readFile config/setup/telescope.lua;
               type = "lua";
             }
-            pkgs.vimPlugins.telescope-fzf-native-nvim
+            # pkgs.vimPlugins.telescope-fzf-native-nvim
+            {
+              plugin = pkgs.vimPlugins.fzf-lua;
+              config = ''
+                require("fzf-lua").setup({
+                  defaults = {
+                    winopts = {
+                      preview = {
+                        hidden = 'hidden',
+                      },
+                    },
+                  },
+                  keymap = {
+                    builtin = {
+                      ['?'] = 'toggle-preview',
+                    },
+                    fzf = {
+                      ['?'] = 'toggle-preview',
+                    },
+                  },
+                })
+                require("fzf-lua").register_ui_select()
+              '';
+              type = "lua";
+            }
             {
               plugin = pkgs.vimPlugins.project-nvim;
               config = ''
-                require("project_nvim").setup {}
+                require("project_nvim").setup {
+                  patterns = { ".git" },
+                }
               '';
               type = "lua";
             }

@@ -13,11 +13,15 @@ vim.api.nvim_set_keymap('n', 'gd', '<cmd>TroubleToggle lsp_definitions<cr>', { n
 vim.api.nvim_set_keymap('n', 'gy', '<cmd>TroubleToggle lsp_type_definitions<cr>', { noremap = true })
 vim.api.nvim_set_keymap('n', 'gi', '<cmd>TroubleToggle lsp_implementations<cr>', { noremap = true })
 
+-- fzf
+vim.api.nvim_set_keymap('n', '<C-g>', "<cmd>lua require('fzf-lua').git_files()<cr>", { noremap = true })
+-- a couple of necessary extra params here:
+-- 1. disable adding icons since it makes fzf 10x slower (https://github.com/ibhagwan/fzf-lua/issues/1005#issuecomment-1894367825)
+-- 2. include filename in fzf's fuzzy search
+vim.api.nvim_set_keymap('n', '<leader><C-g>', "<cmd>lua require('fzf-lua').grep_project({ file_icons=false, git_icons=false, fzf_opts = { ['--nth'] = '1..' } })<cr>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader><C-w>', "<cmd>lua require('fzf-lua').buffers()<cr>", { noremap = true })
+
 -- telescope
-vim.api.nvim_set_keymap('n', '<C-g>', "<cmd>lua require('telescope.builtin').git_files()<cr>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<leader><C-g>', "<cmd>lua require('telescope.builtin').grep_string{ shorten_path = true, word_match = '-w', search = '', additional_args = { '--hidden' } }<cr>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<leader><C-w>', "<cmd>lua require('telescope.builtin').buffers({ sort_lastused = true })<cr>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>fd', "<cmd>lua require('telescope.builtin').diagnostics()<cr>", { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>fi', "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>", { noremap = true })
