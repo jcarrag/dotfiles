@@ -521,7 +521,7 @@ in
       watch = true;
       serviceMode = "user";
       userName = "james";
-      withHypr = true;
+      withWlroots = true;
       config.modmap = [
         {
           name = "ctrl=caps_lock";
