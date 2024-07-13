@@ -1,14 +1,25 @@
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-require'lspconfig'.clangd.setup{capabilities=capabilities}
+require 'lspconfig'.clangd.setup { capabilities = capabilities }
 -- require'lspconfig'.rust_analyzer.setup{capabilities=capabilities} -- This is setup by rust-tools
-require'lspconfig'.cmake.setup{capabilities=capabilities}
-require'lspconfig'.dockerls.setup{capabilities=capabilities}
-require'lspconfig'.nil_ls.setup{capabilities=capabilities}
-require'lspconfig'.bufls.setup{capabilities=capabilities}
-require'lspconfig'.ansiblels.setup{}
-require'lspconfig'.tsserver.setup{}
-require'lspconfig'.pyright.setup{
-  capabilities=capabilities,
+require 'lspconfig'.cmake.setup { capabilities = capabilities }
+require 'lspconfig'.dockerls.setup { capabilities = capabilities }
+require('lspconfig').nil_ls.setup {
+  autostart = true,
+  capabilities = capabilities,
+  settings = {
+    ['nil'] = {
+      testSetting = 42,
+      formatting = {
+        command = { "nixpkgs-fmt" },
+      },
+    },
+  },
+}
+require 'lspconfig'.bufls.setup { capabilities = capabilities }
+require 'lspconfig'.ansiblels.setup {}
+require 'lspconfig'.tsserver.setup {}
+require 'lspconfig'.pyright.setup {
+  capabilities = capabilities,
   settings = {
     python = {
       analysis = {
@@ -17,11 +28,11 @@ require'lspconfig'.pyright.setup{
     }
   }
 }
-require'lspconfig'.vimls.setup{}
-require'lspconfig'.lua_ls.setup {
+require 'lspconfig'.vimls.setup {}
+require 'lspconfig'.lua_ls.setup {
   on_init = function(client)
     local path = client.workspace_folders[1].name
-    if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
+    if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
       return
     end
 

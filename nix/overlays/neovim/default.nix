@@ -238,7 +238,7 @@ in
               plugin = pkgs.vimPlugins.fidget-nvim;
               config = "require('fidget').setup{}";
               type = "lua";
-             }
+            }
             {
               plugin = pkgs.vimPlugins.trouble-nvim;
               config = "require('trouble').setup {}";
