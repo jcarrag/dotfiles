@@ -15,6 +15,9 @@ require('lspconfig').nil_ls.setup {
     },
   },
 }
+require'lspconfig'.jsonls.setup {
+  capabilities = capabilities,
+}
 require 'lspconfig'.bufls.setup { capabilities = capabilities }
 require 'lspconfig'.ansiblels.setup {}
 require 'lspconfig'.tsserver.setup {}

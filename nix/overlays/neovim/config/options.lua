@@ -15,6 +15,7 @@ HOME = os.getenv("HOME")
 vim.opt.backupdir = HOME .. '/.config/nvim/tmp/backup_files/'
 vim.opt.directory = HOME .. '/.config/nvim/tmp/swap_files/'
 vim.opt.undodir = HOME .. '/.config/nvim/tmp/undo_files/'
+vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.undoreload = 10000
 vim.opt.tabstop = 2

@@ -22,6 +22,7 @@ in
       # _neovim
       vim-language-server
       lua-language-server
+      vscode-langservers-extracted # JSON lsp
       nodePackages.typescript-language-server
       ### Communication
       unstable.discord
