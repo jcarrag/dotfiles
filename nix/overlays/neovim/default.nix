@@ -24,7 +24,7 @@ in
             ## Theme
             {
               plugin = pkgs.vimPlugins.lualine-nvim;
-              config = ''
+              config = /* lua */ ''
                 require('lualine').setup {
                     options = {
                         theme = 'auto',
@@ -35,7 +35,7 @@ in
             }
             {
               plugin = pkgs.vimPlugins.material-nvim;
-              config = ''
+              config = /* lua */''
                 vim.g.material_style = "deep ocean"
                 require("material").setup {}
                 vim.cmd 'colorscheme material'
@@ -68,7 +68,7 @@ in
             # pkgs.vimPlugins.telescope-fzf-native-nvim
             {
               plugin = pkgs.vimPlugins.fzf-lua;
-              config = ''
+              config = /* lua */''
                 require("fzf-lua").setup({
                   defaults = {
                     winopts = {
@@ -92,7 +92,7 @@ in
             }
             {
               plugin = pkgs.vimPlugins.project-nvim;
-              config = ''
+              config = /* lua */ ''
                 require("project_nvim").setup {
                   patterns = { ".git" },
                 }
@@ -118,7 +118,7 @@ in
             pkgs.vimPlugins.vim-repeat
             {
               plugin = fromGitHub "afd76df166ed0f223ede1071e0cfde8075cc4a24" "main" "TabbyML/vim-tabby";
-              config = ''
+              config = /* lua */''
                 vim.cmd([[
                   let g:tabby_keybinding_accept = '<Tab>'
                 ]])
@@ -174,12 +174,12 @@ in
             # (fromGitHub "8843b72822151bb7792f3fdad4b63df0bc1dd4a6" "main" "MattCairns/telescope-cargo-workspace.nvim")
             {
               plugin = pkgs.vimPlugins.oil-nvim;
-              config = "require('oil').setup()";
+              config = /* lua */"require('oil').setup()";
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.neo-tree-nvim;
-              config = ''
+              config = /* lua */''
                 require('neo-tree').setup {
                   filesystem = {
                     window = {
@@ -236,12 +236,12 @@ in
             }
             {
               plugin = pkgs.vimPlugins.fidget-nvim;
-              config = "require('fidget').setup{}";
+              config = /* lua */ "require('fidget').setup{}";
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.trouble-nvim;
-              config = "require('trouble').setup {}";
+              config = /* lua */"require('trouble').setup {}";
               type = "lua";
             }
             {
@@ -251,12 +251,12 @@ in
             }
             {
               plugin = pkgs.vimPlugins.comment-nvim;
-              config = "require('Comment').setup()";
+              config = /* lua */"require('Comment').setup()";
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.gitsigns-nvim;
-              config = ''
+              config = /* lua */''
                 require('gitsigns').setup{
                   on_attach = function(bufnr)
                     local gitsigns = require('gitsigns')

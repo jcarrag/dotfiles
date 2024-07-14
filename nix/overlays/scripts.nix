@@ -2,7 +2,7 @@ self: super:
 
 with self.pkgs;
 let
-  moonlight-qt-pipewire = writeScriptBin "moonlight" ''
+  moonlight-qt-pipewire = writeScriptBin "moonlight" /* bash */ ''
     # moonlight crashes when run as regular user, but works when run as sudo
     # debugged by comparing the difference in runtime env vars, recorded via:
     # for sudo: sudo /nix/store/fg7gdbmxrijkc2g93dx55b4s4bqg200z-moonlight-qt-5.0.1/bin/moonlight & sudo cat /proc/$(pgrep moonlight)/environ --show-nonprinting | tr '^@' '\n' | tr : '\n' > moonlight_sudo_env_vars.txt
@@ -29,7 +29,7 @@ let
     # ...
     SDL_AUDIODRIVER=pipewire ${unstable.moonlight-qt}/bin/moonlight
   '';
-  toggleRotateScreen = with xorg; writeScriptBin "toggleRotateScreen" ''
+  toggleRotateScreen = with xorg; writeScriptBin "toggleRotateScreen" /* bash */ ''
     #!${stdenv.shell}
     #
     # rotate_desktop.sh

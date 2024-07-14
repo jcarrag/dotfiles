@@ -2,7 +2,7 @@ self: super:
 
 {
   nix-npm-install =
-    with self; pkgs.writeScriptBin "nix-npm-install" ''
+    with self; pkgs.writeScriptBin "nix-npm-install" /* bash */ ''
       #!/usr/bin/env bash
         tempdir="/tmp/nix-npm-install/$1"
         mkdir -p $tempdir
