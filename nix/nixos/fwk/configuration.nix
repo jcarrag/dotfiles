@@ -16,4 +16,5 @@
     };
     xserver.videoDrivers = [ "amdgpu" ];
   };
+  virtualisation.docker.enable = true;
 }

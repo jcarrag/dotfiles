@@ -24,6 +24,7 @@ in
       lua-language-server
       vscode-langservers-extracted # JSON lsp
       nodePackages.typescript-language-server
+      dockerfile-language-server-nodejs
       ### Communication
       unstable.discord
       unstable.signal-desktop

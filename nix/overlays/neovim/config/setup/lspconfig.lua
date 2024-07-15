@@ -15,7 +15,18 @@ require('lspconfig').nil_ls.setup {
     },
   },
 }
-require'lspconfig'.jsonls.setup {
+require("lspconfig").dockerls.setup {
+  settings = {
+    docker = {
+      languageserver = {
+        formatter = {
+          ignoreMultilineInstructions = true,
+        },
+      },
+    }
+  }
+}
+require 'lspconfig'.jsonls.setup {
   capabilities = capabilities,
 }
 require 'lspconfig'.bufls.setup { capabilities = capabilities }
