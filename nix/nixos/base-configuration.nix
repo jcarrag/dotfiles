@@ -264,15 +264,17 @@ in
     settings = {
       auto-optimise-store = true;
       substituters = [
+        "http://hm90.tail7f031.ts.net:5000" # harmonia
+        "http://fwk.tail7f031.ts.net:5000" # harmonia
         "https://cache.nixos.org/"
-        "http://fwk.tail7f031.ts.net:5000" # harmonia fwk
       ];
       trusted-substituters = [
         "https://cache.iog.io"
         "https://jcarrag.cachix.org"
       ];
       trusted-public-keys = [
-        "fwk.tail7f031.ts.net:VH6U0MFW2pggLXy51YiAGvr8gnC37HYLsM+6Nm1ivZU=" # harmonia fwk
+        "hm90.tail7f031.ts.net:MCfNHw7zYy994pMsO/bq1aduiMirFR5tuXYNv4/LAj8=" # harmonia
+        "fwk.tail7f031.ts.net:VH6U0MFW2pggLXy51YiAGvr8gnC37HYLsM+6Nm1ivZU=" # harmonia
       ];
       trusted-users = [ "root" "james" ];
     };

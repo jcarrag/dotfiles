@@ -31,6 +31,10 @@
     };
   };
 
+  networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
+    5000 # harmonia
+  ];
+
   services = {
     calibre-web = {
       enable = true;
@@ -45,6 +49,14 @@
     tailscale = {
       enable = true;
       package = pkgs.unstable.tailscale;
+    };
+    harmonia = {
+      enable = true;
+      # nix-store --generate-binary-cache-key hm90.tail7f031.ts.net harmonia.pem harmonia.pub
+      signKeyPath = /home/james/secrets/harmonia.pem;
+      settings = {
+        bind = "100.65.97.33:5000";
+      };
     };
     xserver.displayManager.autoLogin = {
       enable = true;
