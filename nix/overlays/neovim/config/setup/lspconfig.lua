@@ -2,7 +2,6 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 require 'lspconfig'.clangd.setup { capabilities = capabilities }
 -- require'lspconfig'.rust_analyzer.setup{capabilities=capabilities} -- This is setup by rust-tools
 require 'lspconfig'.cmake.setup { capabilities = capabilities }
-require 'lspconfig'.dockerls.setup { capabilities = capabilities }
 require('lspconfig').nil_ls.setup {
   autostart = true,
   capabilities = capabilities,
@@ -31,7 +30,6 @@ require 'lspconfig'.jsonls.setup {
 }
 require 'lspconfig'.bufls.setup { capabilities = capabilities }
 require 'lspconfig'.ansiblels.setup {}
-require 'lspconfig'.tsserver.setup {}
 require 'lspconfig'.pyright.setup {
   capabilities = capabilities,
   settings = {

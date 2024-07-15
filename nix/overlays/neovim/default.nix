@@ -100,7 +100,13 @@ in
               type = "lua";
             }
             pkgs.vimPlugins.harpoon
-
+            {
+              plugin = pkgs.vimPlugins.typescript-tools-nvim;
+              config = ''
+                require("typescript-tools").setup {}
+              '';
+              type = "lua";
+            }
             ## cmp
             {
               plugin = pkgs.vimPlugins.nvim-cmp;
