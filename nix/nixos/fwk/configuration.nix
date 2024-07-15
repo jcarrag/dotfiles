@@ -9,7 +9,19 @@
   # AMD RX 5700 XT
   boot.initrd.kernelModules = [ "amdgpu" ];
 
+  networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
+    5000 # harmonia
+  ];
+
   services = {
+    harmonia = {
+      enable = true;
+      # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
+      signKeyPath = /home/james/secrets/harmonia.pem;
+      settings = {
+        bind = "100.124.115.79:5000";
+      };
+    };
     tailscale = {
       enable = true;
       package = pkgs.unstable.tailscale;

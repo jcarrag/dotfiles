@@ -265,10 +265,14 @@ in
       auto-optimise-store = true;
       substituters = [
         "https://cache.nixos.org/"
+        "http://fwk.tail7f031.ts.net:5000" # harmonia fwk
       ];
       trusted-substituters = [
         "https://cache.iog.io"
         "https://jcarrag.cachix.org"
+      ];
+      trusted-public-keys = [
+        "fwk.tail7f031.ts.net:VH6U0MFW2pggLXy51YiAGvr8gnC37HYLsM+6Nm1ivZU=" # harmonia fwk
       ];
       trusted-users = [ "root" "james" ];
     };
