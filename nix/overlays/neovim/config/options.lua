@@ -1,7 +1,7 @@
 vim.api.nvim_create_autocmd({"FocusLost"}, {
   callback = function() vim.api.nvim_cmd({
     cmd = "wa",
-    mods = { silent = true }
+    mods = { emsg_silent = true }
   }, { output = true }) end,
 })
 vim.opt.autowriteall = true
