@@ -260,13 +260,15 @@ in
       (pkgs.lib.filterAttrs (key: value: value ? to.path) config.nix.registry);
     extraOptions = ''
       experimental-features = nix-command flakes
+      connect-timeout = 1
     '';
     settings = {
       auto-optimise-store = true;
       substituters = [
-        "http://hm90.tail7f031.ts.net:5000" # harmonia
-        "http://fwk.tail7f031.ts.net:5000" # harmonia
-        "http://xps-1.tail7f031.ts.net:5000" # harmonia
+        # disabled because: https://github.com/NixOS/nix/issues/6901
+        # "http://hm90.tail7f031.ts.net:5000" # harmonia
+        # "http://fwk.tail7f031.ts.net:5000" # harmonia
+        # "http://xps-1.tail7f031.ts.net:5000" # harmonia
         "https://cache.nixos.org/"
       ];
       trusted-substituters = [

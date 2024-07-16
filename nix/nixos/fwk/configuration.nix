@@ -15,7 +15,7 @@
 
   services = {
     harmonia = {
-      enable = true;
+      enable = false;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
       signKeyPath = /home/james/secrets/harmonia.pem;
       settings = {
