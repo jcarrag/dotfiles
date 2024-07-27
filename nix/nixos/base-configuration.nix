@@ -360,6 +360,7 @@ in
     hyprland = {
       enable = true;
       package = unstable.hyprland;
+      portalPackage = pkgs.xdg-desktop-portal-wlr;
       xwayland.enable = true;
     };
     hyprlock.enable = true;
@@ -600,10 +601,6 @@ in
         "x-scheme-handler/https" = "brave-browser.desktop";
         "x-scheme-handler/about" = "brave-browser.desktop";
         "x-scheme-handler/unknown" = "brave-browser.desktop";
-      };
-      portal = {
-        enable = true;
-        extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       };
     };
 
