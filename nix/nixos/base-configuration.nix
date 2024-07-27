@@ -584,7 +584,7 @@ in
 
   users.extraUsers.james = {
     createHome = true;
-    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "docker" "dialout" ];
+    extraGroups = [ "wheel" "users" "video" "audio" "disk" "networkmanager" "docker" "dialout" ];
     group = "users";
     home = "/home/james";
     # allow emby-server access to ~/emby-library
