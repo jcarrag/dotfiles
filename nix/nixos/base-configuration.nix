@@ -362,6 +362,7 @@ in
       package = unstable.hyprland;
       xwayland.enable = true;
     };
+    hyprlock.enable = true;
     light.enable = true;
     nm-applet = {
       enable = true;

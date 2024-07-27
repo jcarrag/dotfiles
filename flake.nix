@@ -9,8 +9,6 @@
 
   inputs.xremap.url = "github:xremap/nix-flake";
 
-  inputs.hyprlock.url = "github:hyprwm/hyprlock";
-
   # inputs.ynab-updater.url = "git+file:///home/james/dev/my/ynab_updater";
   inputs.ynab-updater.url = "github:jcarrag/ynab-updater";
 
@@ -39,7 +37,6 @@
     , unstable
     , flake-utils
     , xremap
-    , hyprlock
     , ynab-updater
     , kolide-launcher
     }:
@@ -75,7 +72,6 @@
               {
                 environment.systemPackages = [
                   rebuild
-                  (hyprlock.packages.${system}.default)
                 ];
                 networking.hostName = hostname;
                 nixpkgs.overlays = [ extrasOverlay packageOverlays ];
