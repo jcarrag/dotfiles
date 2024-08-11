@@ -1,0 +1,1 @@
+- [ ] [in TS code] when there's an error and cursor is over error then diagnostic message is shown. this message prevents you from pressing K to see documentation (that would help solve the error), i.e. funtion parameter list docs
