@@ -109,8 +109,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.api.nvim_set_keymap('n', '<leader>cl', '<cmd>CodeActionMenu<cr>', { noremap = true })
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', '<leader>p', function()
-      vim.lsp.buf.format { async = true }
-    end, opts)
+    -- Using formatter.nvim
+    -- vim.keymap.set('n', '<leader>p', function()
+    --   vim.lsp.buf.format { async = true }
+    -- end, opts)
   end,
 })

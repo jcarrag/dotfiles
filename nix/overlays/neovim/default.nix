@@ -42,6 +42,24 @@ in
               '';
               type = "lua";
             }
+            {
+              # plugin = fromGitHub "d98e732cb73690b07c00c839c924be1d1d9ac5c2" "main" "MunifTanjim/prettier.nvim";
+              plugin = pkgs.vimPlugins.formatter-nvim;
+              config = /* lua */''
+                require("formatter").setup {
+                  filetype = {
+                    javascript = {
+                      require("formatter.filetypes.javascript").prettier,
+                    },
+                    typescript = {
+                      require("formatter.filetypes.typescript").prettier,
+                    }
+                  }
+                }
+              vim.keymap.set('n', '<leader>p', '<cmd>Format<cr>')
+              '';
+              type = "lua";
+            }
 
             ## Treesitter
             {
@@ -94,6 +112,7 @@ in
               plugin = pkgs.vimPlugins.project-nvim;
               config = /* lua */ ''
                 require("project_nvim").setup {
+                  detection_methods = { "pattern" },
                   patterns = { ".git" },
                 }
               '';
@@ -102,8 +121,14 @@ in
             pkgs.vimPlugins.harpoon
             {
               plugin = pkgs.vimPlugins.typescript-tools-nvim;
-              config = ''
-                require("typescript-tools").setup {}
+              config = /* lua */ ''
+                require("typescript-tools").setup {
+                  settings = {
+                    expose_as_code_action = "all",
+                    tsserver_max_memory = 30000
+                  }
+                }
+              vim.keymap.set('n', '<lea', '<cmd>Format<cr>')
               '';
               type = "lua";
             }
