@@ -49,6 +49,7 @@ in
       google-chrome
       unstable.hypnotix
       mpv # needed for anki
+      unstable.obsidian
       sunshine
       spotify
       unstable.starship
@@ -377,6 +378,7 @@ in
       enable = true;
       gamescopeSession.enable = true;
     };
+    thunar.enable = true;
     waybar.enable = true;
   };
 

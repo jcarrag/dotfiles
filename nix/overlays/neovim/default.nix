@@ -60,6 +60,21 @@ in
               '';
               type = "lua";
             }
+            {
+              plugin = pkgs.vimPlugins.obsidian-nvim;
+              config = /* lua */''
+                require("obsidian").setup {
+                  workspaces = {
+                    {
+                      name = "obsidian",
+                      path = "~/obsidian",
+                    },
+                  },
+                }
+              vim.opt.conceallevel = 1
+              '';
+              type = "lua";
+            }
 
             ## Treesitter
             {
