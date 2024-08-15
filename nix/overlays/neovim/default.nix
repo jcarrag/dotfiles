@@ -159,6 +159,7 @@ in
             pkgs.vimPlugins.cmp_luasnip
 
             ## Tpope
+            pkgs.vimPlugins.vim-abolish
             pkgs.vimPlugins.vim-surround
             pkgs.vimPlugins.vim-sleuth
             pkgs.vimPlugins.vim-repeat
