@@ -97,6 +97,7 @@ in
       arandr
       d-spy # d-bus monitor
       bustle # d-bus monitor
+      comma # run any program without installation
       dunst
       dnsmasq
       file
@@ -353,6 +354,7 @@ in
     };
     autojump.enable = true;
     bash.enableCompletion = true;
+    command-not-found.dbPath = "/home/james/.cache/nix-index/files";
     fzf = {
       keybindings = true;
       fuzzyCompletion = true;
