@@ -2,7 +2,15 @@ self: super:
 
 with super.lib;
 let
-  overlays = map import [
+  overlays = [
+    (self: super: {
+       brave = super.brave.override {
+         commandLineArgs =
+           "--enable-wayland-ime";
+         };
+       }
+    )
+  ] ++ map import [
     ./aoe2de.nix
     ./anki.nix
     ./asciichart.nix

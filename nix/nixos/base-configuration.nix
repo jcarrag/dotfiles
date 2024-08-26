@@ -213,7 +213,7 @@ in
     inputMethod = {
       enabled = "fcitx5";
       fcitx5 = {
-        addons = with pkgs; [ fcitx5-mozc ];
+        addons = with pkgs; [ fcitx5-mozc fcitx5-gtk ];
         waylandFrontend = true;
       };
     };
@@ -615,6 +615,8 @@ in
     # hyprland/wayland
     WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
+    # GTK_IM_MODULE="fcitx"; # suggested to leave unset
+    QT_IM_MODULE="fcitx";
   };
 
   system.stateVersion = "20.09";
