@@ -93,7 +93,6 @@ in
       traceroute
       wireshark
       ### System
-      alock
       arandr
       d-spy # d-bus monitor
       bustle # d-bus monitor
@@ -170,6 +169,7 @@ in
       watchexec
       which
       wl-clipboard # wayland clipboard
+      wlogout
       zip
     ] ++ scripts;
 
@@ -278,7 +278,7 @@ in
       ];
       trusted-substituters = [
         "https://cache.iog.io"
-        "https://jcarrag.cachix.org"
+        # "https://jcarrag.cachix.org"
       ];
       trusted-public-keys = [
         "hm90.tail7f031.ts.net:MCfNHw7zYy994pMsO/bq1aduiMirFR5tuXYNv4/LAj8=" # harmonia
@@ -315,11 +315,6 @@ in
     };
 
   };
-
-  powerManagement.resumeCommands = ''
-    ${pkgs.dunst}/bin/dunstctl set-paused true
-    ${pkgs.alock}/bin/alock
-  '';
 
   programs = {
     anki = {
@@ -392,6 +387,19 @@ in
   };
 
   services = {
+    auto-cpufreq = {
+      enable = true;
+      settings = {
+        battery = {
+           governor = "powersave";
+           turbo = "never";
+        };
+        charger = {
+           governor = "performance";
+           turbo = "auto";
+        };
+      };
+    };
     avahi = {
       enable = true;
       nssmdns4 = true;
@@ -413,8 +421,8 @@ in
     };
     localtimed.enable = true;
     logind.extraConfig = ''
-      # don’t shutdown when power button is short-pressed
       HandlePowerKey=ignore
+      HandleLidSwitch=suspend-then-hibernate
     '';
     openssh.enable = true;
     openvpn = {
