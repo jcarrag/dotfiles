@@ -360,7 +360,6 @@ in
     };
     hyprland = {
       enable = true;
-      package = unstable.hyprland;
       portalPackage = pkgs.xdg-desktop-portal-wlr;
       xwayland.enable = true;
     };
