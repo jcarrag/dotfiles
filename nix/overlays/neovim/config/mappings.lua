@@ -19,7 +19,7 @@ vim.api.nvim_set_keymap('n', '<C-g>', "<cmd>lua require('fzf-lua').git_files()<c
 -- 1. disable adding icons since it makes fzf 10x slower (https://github.com/ibhagwan/fzf-lua/issues/1005#issuecomment-1894367825)
 -- 2. include filename in fzf's fuzzy search
 vim.api.nvim_set_keymap('n', '<leader><C-g>',
-  "<cmd>lua require('fzf-lua').grep_project({ file_icons=false, git_icons=false, fzf_opts = { ['--nth'] = '1..' } })<cr>",
+  "<cmd>lua require('fzf-lua').grep_project({ file_icons=false, git_icons=false, fzf_opts = { ['--nth'] = '1..' }, rg_opts = '--hidden --column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e' })<cr>",
   { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader><C-w>', "<cmd>lua require('fzf-lua').buffers()<cr>", { noremap = true })
 
