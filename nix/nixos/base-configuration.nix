@@ -40,7 +40,7 @@ in
       aoe-2-de
       unstable.atuin
       unstable.blesh
-      brave
+      unstable.brave
       calibre
       unstable.chiaki
       entr
