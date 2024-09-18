@@ -96,6 +96,7 @@ in
       arandr
       d-spy # d-bus monitor
       bustle # d-bus monitor
+      catppuccin-cursors.mochaMauve
       comma # run any program without installation
       dunst
       dnsmasq
@@ -622,7 +623,12 @@ in
     # hyprland/wayland
     WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
-    # GTK_IM_MODULE="fcitx"; # suggested to leave unset
+    # hyprcursors, also run:
+    #   dconf write /org/gnome/desktop/interface/cursor-theme "'catppuccin-mocha-mauve-cursors'"
+    #   dconf write /org/gnome/desktop/interface/cursor-size 30
+    HYPRCURSOR_THEME = "catppuccin-mocha-mauve-cursors";
+    HYPRCURSOR_SIZE = 30;
+    # fcitx
     QT_IM_MODULE="fcitx";
   };
 
