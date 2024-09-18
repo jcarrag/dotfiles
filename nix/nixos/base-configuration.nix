@@ -623,7 +623,7 @@ in
     # hyprland/wayland
     WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
-    # hyprcursors, also run:
+    # hyprcursors, also run (for consistent cursor theme/size across apps):
     #   dconf write /org/gnome/desktop/interface/cursor-theme "'catppuccin-mocha-mauve-cursors'"
     #   dconf write /org/gnome/desktop/interface/cursor-size 30
     HYPRCURSOR_THEME = "catppuccin-mocha-mauve-cursors";
