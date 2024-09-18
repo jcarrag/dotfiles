@@ -1,23 +1,19 @@
 {
   description = "A flake for my systems";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-
-  inputs.unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-
-  inputs.xremap.url = "github:xremap/nix-flake";
-
-  # inputs.ynab-updater.url = "git+file:///home/james/dev/my/ynab_updater";
-  inputs.ynab-updater.url = "github:jcarrag/ynab-updater";
-
-  inputs.kolide-launcher = {
-    url = "github:/kolide/nix-agent/main";
-    inputs.nixpkgs.follows = "nixpkgs";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+    xremap.url = "github:xremap/nix-flake";
+    # ynab-updater.url = "git+file:///home/james/dev/my/ynab_updater";
+    ynab-updater.url = "github:jcarrag/ynab-updater";
+    kolide-launcher = {
+      url = "github:/kolide/nix-agent/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  # TOOD: setup cachix CI https://nix.dev/tutorials/nixos/continuous-integration-github-actions.html
   nixConfig = {
     extra-substituters = [
       "https://cache.nixos.org"
@@ -32,13 +28,11 @@
   };
 
   outputs =
-    { self
+    inputs@{ self
     , nixpkgs
     , unstable
     , flake-utils
-    , xremap
-    , ynab-updater
-    , kolide-launcher
+    , ...
     }:
     let
       packageOverlays = import ./nix/overlays;
@@ -65,9 +59,9 @@
           system = system;
           modules =
             [
-              (xremap.nixosModules.default)
-              (ynab-updater.nixosModules.ynab-updater)
-              (kolide-launcher.nixosModules.kolide-launcher)
+              inputs.xremap.nixosModules.default
+              inputs.ynab-updater.nixosModules.ynab-updater
+              inputs.kolide-launcher.nixosModules.kolide-launcher
               (import ./nix/nixos/base-configuration.nix)
               {
                 environment.systemPackages = [
@@ -84,10 +78,10 @@
             ] ++ (map import modules);
         };
     in
-    flake-utils.lib.eachDefaultSystem
+    inputs.flake-utils.lib.eachDefaultSystem
       (system:
       {
-        packages = flake-utils.lib.flattenTree {
+        packages = inputs.flake-utils.lib.flattenTree {
           neovim = (mkNixos "nixos" system [ ]).options.programs.neovim.finalPackage.value;
           tmate = (import nixpkgs { inherit system; overlays = [ packageOverlays ]; }).tmate-my;
         };
