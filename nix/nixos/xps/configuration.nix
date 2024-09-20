@@ -54,5 +54,9 @@
     };
   };
 
+  systemd = {
+    user.services = pkgs.systemd.user;
+  };
+
   users.extraGroups.vboxusers.members = [ "james" ];
 }

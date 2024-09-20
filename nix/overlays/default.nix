@@ -19,6 +19,7 @@ let
     ./ferdi.nix
     ./nix-npm-install.nix
     ./scripts.nix
+    ./systemd-services.nix
     ./taffybar
     ./tmate.nix
     ./virtualbox.nix
