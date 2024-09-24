@@ -80,3 +80,7 @@ vim.api.nvim_set_keymap('n', '<leader>oo', '<cmd>Oil<cr>', { noremap = true })
 
 vim.api.nvim_set_keymap('n', 'J', "<cmd>lua require('config.utils').join_spaceless()<cr>", { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-w>o', "<cmd>lua require('config.utils').onlyAndNeotree()<cr>", { noremap = true })
+
+
+-- copy current filename + position
+vim.api.nvim_set_keymap('n', 'yL', "<cmd>let @+=join([expand('%:p'),  line('.')], ':')<cr>", { noremap = true })
