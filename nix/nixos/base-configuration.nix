@@ -123,7 +123,9 @@ in
       paprefs # pulseaudio preferences
       pasystray # pulseaudio systray
       pavucontrol # pulseaudio volume control
-      unstable.helvum # pipewire
+      pwvucontrol # pipewire
+      qpwgraph # pipewire
+      helvum # pipewire
       rofi-wayland
       slurp # wayland paste to stdout
       alacritty
@@ -588,11 +590,6 @@ in
         }
       ];
     };
-  };
-
-  sound = {
-    enable = true;
-    mediaKeys.enable = true;
   };
 
   # https://github.com/NixOS/nixpkgs/issues/180175
