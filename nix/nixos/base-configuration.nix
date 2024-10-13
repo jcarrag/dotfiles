@@ -22,14 +22,14 @@ in
       # _neovim
       vim-language-server
       lua-language-server
-      vscode-langservers-extracted # JSON lsp
+      unstable.vscode-langservers-extracted # JSON lsp
       nodePackages.typescript-language-server
       dockerfile-language-server-nodejs
       pyright
       ### Communication
       unstable.discord
       unstable.signal-desktop
-      skypeforlinux
+      unstable.skypeforlinux
       unstable.slack
       # unstable.zoom-us
       ### eGPU
@@ -54,7 +54,6 @@ in
       sunshine
       spotify
       unstable.starship
-      unstable.syncplay
       unstable.telegram-desktop
       vlc
       ### Programming
@@ -133,6 +132,7 @@ in
       xclip
       ### Util
       asciicharts
+      bandwhich
       bat
       binutils-unwrapped
       briss # pdf crop

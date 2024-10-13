@@ -13,13 +13,6 @@
   #   modprobe -i vfio-pci
   # '';
 
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu.ovmf.enable = true;
-    onBoot = "ignore";
-    onShutdown = "shutdown";
-  };
-
   virtualisation.docker.enable = true;
 
   programs = {
@@ -57,72 +50,12 @@
       base64Encode = pkgs.writeShellScriptBin "base_64_encode" ''
         ${pkgs.nodePackages.nodejs}/bin/node -e "console.log(Buffer.from(process.argv[1], 'utf8').toString('base64'))" -- "$@"
       '';
-      react-native-debugger-fixed = pkgs.react-native-debugger.overrideAttrs
-        (old:
-          let
-            rpath = with pkgs; lib.makeLibraryPath [
-              cairo
-              stdenv.cc.cc
-              gdk-pixbuf
-              fontconfig
-              pango
-              atk
-              gtk3
-              glib
-              freetype
-              dbus
-              nss
-              nspr
-              alsa-lib
-              cups
-              expat
-              udev
-              at-spi2-atk
-              at-spi2-core
-              libdrm
-              libxkbcommon
-              mesa
-
-              xorg.libX11
-              xorg.libXcursor
-              xorg.libXtst
-              xorg.libxcb
-              xorg.libXext
-              xorg.libXi
-              xorg.libXdamage
-              xorg.libXrandr
-              xorg.libXcomposite
-              xorg.libXfixes
-              xorg.libXrender
-              xorg.libXScrnSaver
-            ];
-          in
-          {
-            buildInputs = [ pkgs.makeWrapper ];
-            buildCommand = ''
-              shopt -s extglob
-              mkdir -p $out
-              unzip $src -d $out
-              mkdir $out/{lib,bin,share}
-              mv $out/{libEGL,libGLESv2,libvk_swiftshader,libffmpeg}.so $out/lib
-              mv $out/!(lib|share|bin) $out/share
-              patchelf \
-                --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-                --set-rpath ${rpath}:$out/lib \
-                $out/share/react-native-debugger
-              wrapProgram $out/share/react-native-debugger --add-flags --no-sandbox
-              ln -s $out/share/react-native-debugger $out/bin/react-native-debugger
-            '';
-          });
     in
     [
-      foreman
-      virt-manager
       adoptopenjdk-bin
       unstable.ngrok
       unstable.postman
       unstable.libimobiledevice
-      react-native-debugger-fixed
       airplay
       copy
       hc-serial
