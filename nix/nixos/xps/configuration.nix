@@ -7,15 +7,15 @@
   # https://bbs.archlinux.org/viewtopic.php?pid=2194400#p2194400
   # already fixed upstream, waiting for nixpkgs
   # TODO: remove when fix released into nixpkgs
-  boot.kernelPatches = [
-    {
-      name = "fix pipewire";
-      patch = builtins.fetchurl {
-        url = "https://patchwork.kernel.org/project/alsa-devel/patch/20240909164746.136629-1-krzysztof.kozlowski@linaro.org/raw";
-        sha256 = "sha256:0ims0cwmdyna1lpx2vb37a17wmv91afyhbay02d9bnr41wbvjriz";
-      };
-    }
-  ];
+  # boot.kernelPatches = [
+  #   {
+  #     name = "fix pipewire";
+  #     patch = builtins.fetchurl {
+  #       url = "https://patchwork.kernel.org/project/alsa-devel/patch/20240909164746.136629-1-krzysztof.kozlowski@linaro.org/raw";
+  #       sha256 = "sha256:0ims0cwmdyna1lpx2vb37a17wmv91afyhbay02d9bnr41wbvjriz";
+  #     };
+  #   }
+  # ];
 
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "iHD";

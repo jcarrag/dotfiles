@@ -152,7 +152,7 @@ in
                     tsserver_max_memory = 30000
                   }
                 }
-              vim.keymap.set('n', '<lea', '<cmd>Format<cr>')
+              vim.keymap.set('n', ':OR', '<cmd>TSToolsOrganizeImports<cr>')
               '';
               type = "lua";
             }
