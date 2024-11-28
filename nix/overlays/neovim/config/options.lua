@@ -38,6 +38,7 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 -- stop vim from creating automatic backups
 -- vim.opt.noswapfile = true
+vim.opt.backupcopy = 'yes'
 -- vim.opt.nobackup = true
 -- vim.opt.nowb = true
 --vim.opt.wrap = false

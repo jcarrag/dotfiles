@@ -3,6 +3,12 @@
 
 {
   boot.initrd.luks.devices."luks-b6ee5065-b576-407b-9419-4651b91daad9".device = "/dev/disk/by-uuid/b6ee5065-b576-407b-9419-4651b91daad9";
+
+  hardware.ipu6 = {
+    enable = true;
+    platform = "ipu6ep";
+  };
+
   # 20/09/24: pipewire broken for linux 6.10.{8,9}
   # https://bbs.archlinux.org/viewtopic.php?pid=2194400#p2194400
   # already fixed upstream, waiting for nixpkgs
@@ -68,7 +74,7 @@
   };
 
   systemd = {
-    user.services = pkgs.systemd.user;
+    # user.services = pkgs.systemd-services.user;
   };
 
   users.extraGroups.vboxusers.members = [ "james" ];

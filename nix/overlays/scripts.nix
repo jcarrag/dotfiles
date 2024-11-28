@@ -2,6 +2,12 @@ self: super:
 
 with self.pkgs;
 let
+  firefox-personal = writeShellScriptBin "firefox_personal" ''
+    ${pkgs.firefox}/bin/firefox -P personal
+  '';
+  firefox-lunar = writeShellScriptBin "firefox_lunar" ''
+    ${pkgs.firefox}/bin/firefox -P lunar
+  '';
   moonlight-qt-pipewire = writeScriptBin "moonlight" /* bash */ ''
     # moonlight crashes when run as regular user, but works when run as sudo
     # debugged by comparing the difference in runtime env vars, recorded via:
@@ -89,6 +95,8 @@ let
 in
 {
   scripts = [
+    firefox-personal
+    firefox-lunar
     moonlight-qt-pipewire
     toggleRotateScreen
   ];

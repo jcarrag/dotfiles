@@ -41,7 +41,7 @@ in
       aoe-2-de
       unstable.atuin
       unstable.blesh
-      unstable.brave
+      brave
       calibre
       unstable.chiaki
       entr
@@ -85,7 +85,7 @@ in
       sshfs
       unstable.tailscale
       tmate-connect
-      unstable._1password-gui
+      _1password-gui
       tmux
       ### Networking
       socat
@@ -209,7 +209,7 @@ in
         pkgs.vaapiIntel
       ];
     };
-    xpadneo.enable = true;
+    #xpadneo.enable = true;
   };
 
   i18n = {
@@ -391,7 +391,7 @@ in
 
   services = {
     auto-cpufreq = {
-      enable = true;
+      enable = false;
       settings = {
         battery = {
            governor = "powersave";
@@ -550,6 +550,7 @@ in
       '';
     };
     xremap = {
+      debug = true;
       watch = true;
       serviceMode = "user";
       userName = "james";
@@ -593,9 +594,11 @@ in
         }
         {
           name = "swap alt_l / meta_l";
+          # this is configured on the kbd itself
           device.only = [ "ZSA Technology Labs Voyager" ];
           application.only = [
             ".gamescope-wrapped"
+            "dota2"
             "com.moonlight_stream.Moonlight"
           ];
           remap = {
@@ -604,9 +607,11 @@ in
         }
         {
           name = "swap meta_l / alt_l";
+          # this is configured on the kbd itself
           device.only = [ "ZSA Technology Labs Voyager" ];
           application.only = [
             ".gamescope-wrapped"
+            "dota2"
             "com.moonlight_stream.Moonlight"
           ];
           remap = {

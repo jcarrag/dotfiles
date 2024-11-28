@@ -51,7 +51,13 @@ in
                     javascript = {
                       require("formatter.filetypes.javascript").prettier,
                     },
+                    javascriptreact = {
+                      require("formatter.filetypes.typescript").prettier,
+                    },
                     typescript = {
+                      require("formatter.filetypes.typescript").prettier,
+                    },
+                    typescriptreact = {
                       require("formatter.filetypes.typescript").prettier,
                     }
                   }
@@ -373,6 +379,11 @@ in
             {
               plugin = pkgs.vimPlugins.nvim-dap;
               config = builtins.readFile config/setup/dap.lua;
+              type = "lua";
+            }
+            {
+              plugin = pkgs.vimPlugins.nvim-dap-python;
+              config = /* lua */ "require('dap-python').setup('/home/james/dev/lunar/gridshare-edge/stacks/gridshare-flink/gridshare-device-alerts-1/.devenv/state/venv/bin/python')";
               type = "lua";
             }
             {

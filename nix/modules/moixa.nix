@@ -98,7 +98,7 @@
   };
 
   services = {
-    avahi.hostName = "hc";
+    # avahi.hostName = "hc";
     kolide-launcher = {
       enable = true;
       enrollSecretDirectory = "/home/james/secrets/kolide-k2";
