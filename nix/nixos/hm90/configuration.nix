@@ -31,9 +31,34 @@
     };
   };
 
-  networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
-    5000 # harmonia
-  ];
+  networking = {
+    firewall = {
+      allowedUDPPorts = [
+        51820 # wireguard
+      ];
+      interfaces."tailscale0".allowedTCPPorts = [
+        5000 # harmonia
+      ];
+    };
+    wireguard = {
+      enable = true;
+      interfaces.wg0 = {
+        ips = [ "10.13.13.3" ];
+        listenPort = 51820;
+        privateKeyFile = "/home/james/secrets/wireguard/hm90_private";
+        peers = [
+          {
+            # hades - downloaded config
+            endpoint = "45.86.221.100:24762";
+            publicKey = "aG/hA+lURm/3OjOBJU7S2FSvyZ9z1VjuBer6fasWOyM=";
+            presharedKeyFile = "/home/james/secrets/wireguard/hades_hm90_presharedkey";
+            allowedIPs = [ "10.13.13.1/32" ];
+            persistentKeepalive = 25;
+          }
+        ];
+      };
+    };
+  };
 
   services = {
     calibre-web = {
