@@ -25,6 +25,7 @@ in
       unstable.vscode-langservers-extracted # JSON lsp
       nodePackages.typescript-language-server
       dockerfile-language-server-nodejs
+      screen
       pyright
       ### Communication
       unstable.discord
