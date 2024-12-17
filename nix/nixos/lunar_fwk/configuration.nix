@@ -22,10 +22,7 @@
   services = {
     # the SDD is LUKS encrypted so a password is already required
     getty.autologinUser = "james";
-    displayManager.autoLogin = {
-      enable = true;
-      user = "james";
-    };
+    displayManager.autoLogin.user = "james";
     harmonia = {
       enable = false;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
@@ -41,9 +38,7 @@
     xserver.videoDrivers = [ "amdgpu" ];
   };
 
-  systemd = {
-    # user.services = pkgs.systemd-services.user;
-  };
+  systemd = pkgs.systemd-services;
 
   virtualisation.docker.enable = true;
 

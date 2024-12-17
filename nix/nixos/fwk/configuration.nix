@@ -29,9 +29,7 @@
     xserver.videoDrivers = [ "amdgpu" ];
   };
 
-  systemd = {
-    # user.services = pkgs.systemd-services.user;
-  };
+  systemd = pkgs.systemd-services;
 
   virtualisation.docker.enable = true;
 }

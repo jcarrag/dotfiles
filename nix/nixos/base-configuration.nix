@@ -84,6 +84,7 @@ in
       unstable.awscli
       sshfs
       unstable.tailscale
+      wireguard-tools
       tmate-connect
       _1password-gui
       tmux
@@ -156,7 +157,7 @@ in
       input-utils
       lsof
       mitmproxy
-      ncdu
+      ncdu # directory size tui
       yarn # needed for coc.nvim's post-install step
       p7zip
       pciutils
