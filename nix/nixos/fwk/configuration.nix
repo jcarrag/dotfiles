@@ -32,6 +32,7 @@
             presharedKeyFile = "/home/james/secrets/wireguard/hades_fwk_presharedkey";
             allowedIPs = [ "10.13.13.1/32" ];
             persistentKeepalive = 25;
+            dynamicEndpointRefreshSeconds = 25;
           }
         ];
       };
