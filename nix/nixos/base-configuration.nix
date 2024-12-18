@@ -58,6 +58,8 @@ in
       unstable.telegram-desktop
       vlc
       ### Programming
+      unstable.go
+      unstable.gopls
       pkg-config
       (openssl.dev)
       unstable.saleae-logic-2

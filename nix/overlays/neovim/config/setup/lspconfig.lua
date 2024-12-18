@@ -28,6 +28,9 @@ require("lspconfig").dockerls.setup {
 require 'lspconfig'.jsonls.setup {
   capabilities = capabilities,
 }
+require'lspconfig'.gopls.setup{
+  capabilities = capabilities,
+}
 require 'lspconfig'.bufls.setup { capabilities = capabilities }
 require 'lspconfig'.ansiblels.setup {}
 require 'lspconfig'.pyright.setup {
