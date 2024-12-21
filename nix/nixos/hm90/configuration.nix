@@ -32,27 +32,33 @@
   };
 
   networking = {
-    firewall = {
-      allowedUDPPorts = [
+    firewall.interfaces = {
+      wg0.allowedUDPPorts = [
         51820 # wireguard
       ];
-      interfaces."tailscale0".allowedTCPPorts = [
+      tailscale0.allowedTCPPorts = [
         5000 # harmonia
       ];
     };
     wireguard = {
       enable = true;
       interfaces.wg0 = {
-        ips = [ "10.13.13.3" ];
+        ips = [ "10.69.69.1" ];
         listenPort = 51820;
         privateKeyFile = "/home/james/secrets/wireguard/hm90_private";
         peers = [
           {
-            # hades - downloaded config
-            endpoint = "45.86.221.100:24762";
-            publicKey = "aG/hA+lURm/3OjOBJU7S2FSvyZ9z1VjuBer6fasWOyM=";
-            presharedKeyFile = "/home/james/secrets/wireguard/hades_hm90_presharedkey";
-            allowedIPs = [ "10.13.13.1/32" ];
+            endpoint = "fwk-0x00.duckdns.org:51820";
+            publicKey = "wtVTHqOGwRiIL0jmebqUT6bxU1hHveKAW7VU4RPSRj0=";
+            allowedIPs = [ "10.69.69.2/32" ];
+            persistentKeepalive = 25;
+            dynamicEndpointRefreshSeconds = 25;
+          }
+          {
+            # linode
+            endpoint = "172.236.1.158:51820";
+            publicKey = "QvAir8j5oU0vKr5xaotNPAY7wqH/6+7iEFxperJgiUA=";
+            allowedIPs = [ "10.69.69.3/32" ];
             persistentKeepalive = 25;
             dynamicEndpointRefreshSeconds = 25;
           }
