@@ -11,14 +11,12 @@
 
   networking = {
     firewall = {
-      interfaces = {
-        tailscale0.allowedTCPPorts = [
-          5000 # harmonia
-        ];
-        wg0.allowedUDPPorts = [
-          51820 # wireguard
-        ];
-      };
+      allowedUDPPorts = [
+        51820 # wireguard
+      ];
+      interfaces.tailscale0.allowedTCPPorts = [
+        5000 # harmonia
+      ];
     };
     wireguard = {
       enable = true;

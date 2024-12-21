@@ -32,11 +32,11 @@
   };
 
   networking = {
-    firewall.interfaces = {
-      wg0.allowedUDPPorts = [
+    firewall = {
+      allowedUDPPorts = [
         51820 # wireguard
       ];
-      tailscale0.allowedTCPPorts = [
+      interfaces.tailscale0.allowedTCPPorts = [
         5000 # harmonia
       ];
     };
