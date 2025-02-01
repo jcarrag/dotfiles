@@ -240,6 +240,7 @@ in
         6002 # airplay
         8000 # python -m SimpleHTTPServer
         7000 # airplay
+        27040 # steam local network transfer
         # https://portforward.com/moonlight-game-streaming/
         47984 # sunshine
         47989 # sunshine
@@ -249,6 +250,12 @@ in
         6001 # airplay
         6002 # airplay
         7000 # airplay
+        27031 # steam local network transfer client discovery
+        27032 # steam local network transfer client discovery
+        27033 # steam local network transfer client discovery
+        27034 # steam local network transfer client discovery
+        27035 # steam local network transfer client discovery
+        27036 # steam local network transfer client discovery
         47998 # sunshine
         47999 # sunshine
         48000 # sunshine
