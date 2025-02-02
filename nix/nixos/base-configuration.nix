@@ -632,7 +632,8 @@ in
     isNormalUser = true;
     uid = 1000;
     openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHMKP2hPhz+L3GJ2eoj4DTtZbdgSm5cS+RVtV9lY7fpB james@carragher.dev"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHMKP2hPhz+L3GJ2eoj4DTtZbdgSm5cS+RVtV9lY7fpB james@carragher.dev" # fwk
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID+kfnnvuaVqRuhUPpPlUY4s7UPMkoI9vGskJxep0ZPa james@carragher.dev" # lunar-fwk
     ];
   };
 
