@@ -34,36 +34,11 @@
   networking = {
     firewall = {
       allowedUDPPorts = [
-        51820 # wireguard
       ];
-      interfaces.tailscale0.allowedTCPPorts = [
-        5000 # harmonia
-      ];
-    };
-    wireguard = {
-      enable = true;
-      interfaces.wg0 = {
-        ips = [ "10.69.69.1" ];
-        listenPort = 51820;
-        privateKeyFile = "/home/james/secrets/wireguard/hm90_private";
-        peers = [
-          {
-            endpoint = "fwk-0x00.duckdns.org:51820";
-            publicKey = "wtVTHqOGwRiIL0jmebqUT6bxU1hHveKAW7VU4RPSRj0=";
-            allowedIPs = [ "10.69.69.2/32" ];
-            persistentKeepalive = 25;
-            dynamicEndpointRefreshSeconds = 25;
-          }
-          {
-            # linode
-            endpoint = "172.236.1.158:51820";
-            publicKey = "QvAir8j5oU0vKr5xaotNPAY7wqH/6+7iEFxperJgiUA=";
-            allowedIPs = [ "10.69.69.3/32" ];
-            persistentKeepalive = 25;
-            dynamicEndpointRefreshSeconds = 25;
-          }
-        ];
-      };
+      interfaces.tailscale0.allowedTCPPorts =
+        if config.services.harmonia.enable then [
+          5000 # harmonia
+        ] else [ ];
     };
   };
 
@@ -81,6 +56,7 @@
     tailscale = {
       enable = true;
       package = pkgs.unstable.tailscale;
+      extraSetFlags = [ "--advertise-routes=192.168.69.0/24" ];
     };
     harmonia = {
       enable = false;
