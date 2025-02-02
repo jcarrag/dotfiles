@@ -1,5 +1,5 @@
 # Framework 13 7040
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   # Bootloader.
@@ -15,9 +15,16 @@
   # AMD RX 5700 XT
   boot.initrd.kernelModules = [ "amdgpu" ];
 
-  networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
-    5000 # harmonia
-  ];
+  networking = {
+    firewall = {
+      allowedUDPPorts = [
+      ];
+      interfaces.tailscale0.allowedTCPPorts =
+        if config.services.harmonia.enable then [
+          5000 # harmonia
+        ] else [ ];
+    };
+  };
 
   services = {
     # the SDD is LUKS encrypted so a password is already required
@@ -34,6 +41,7 @@
     tailscale = {
       enable = true;
       package = pkgs.unstable.tailscale;
+      extraSetFlags = [ "--accept-routes" ];
     };
     xserver.videoDrivers = [ "amdgpu" ];
   };

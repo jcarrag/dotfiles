@@ -56,7 +56,7 @@
     tailscale = {
       enable = true;
       package = pkgs.unstable.tailscale;
-      extraSetFlags = [ "--advertise-routes=192.168.69.0/24" ];
+      extraSetFlags = [ "--accept-routes" ];
     };
     harmonia = {
       enable = false;
