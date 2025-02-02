@@ -24,6 +24,7 @@
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "jcarrag.cachix.org-1:FA5BLvAZdzLaJztyyou115tAQjT1cQsiAG03dm0AdvI="
+      "lunar-fwk.local:H4NmafY0vSkC34A3i3ck8o74iljZQ4p15qKclcOLM2g="
     ];
   };
 
