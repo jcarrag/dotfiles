@@ -57,6 +57,7 @@
       enable = true;
       package = pkgs.unstable.tailscale;
       extraSetFlags = [ "--accept-routes" ];
+      useRoutingFeatures = "both";
     };
     harmonia = {
       enable = false;
