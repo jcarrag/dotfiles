@@ -137,8 +137,7 @@ ForegroundVisited=155,89,182
 
 [General]
 AccentColor=0,0,0,0
-ColorScheme=BreezeDark
-ColorSchemeHash=01662607e36cd33eacc7d7d7189f69c26b9a2cc8
+ColorSchemeHash=cb4c6ee5cc9a59dbe09fb467a529af1bf5c55c97
 LastUsedCustomAccentColor=233,58,154
 accentColorFromWallpaper=false
 
