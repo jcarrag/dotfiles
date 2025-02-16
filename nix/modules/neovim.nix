@@ -5,7 +5,8 @@
     enable = true;
     configure = {
       customRC = builtins.readFile "${pkgs._self}/nix/modules/vimrc";
-      packages.myPlugins.start = with pkgs.unstable.vimPlugins;
+      packages.myPlugins.start =
+        with pkgs.unstable.vimPlugins;
         let
           vim-alloy = pkgs.vimUtils.buildVimPlugin {
             pname = "vim-alloy";

@@ -1,7 +1,6 @@
 self: super:
 
-with self.pkgs;
-{
+with self.pkgs; {
   systemd-services = {
     services = {
       duck-dns = {
@@ -24,6 +23,6 @@ with self.pkgs;
         };
       };
     };
-    user.services = {};
+    user.services = { };
   };
 }

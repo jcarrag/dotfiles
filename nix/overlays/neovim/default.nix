@@ -1,9 +1,11 @@
-{ pkgs
-, lib
-, ...
+{
+  pkgs,
+  lib,
+  ...
 }:
 let
-  fromGitHub = rev: ref: repo:
+  fromGitHub =
+    rev: ref: repo:
     pkgs.vimUtils.buildVimPlugin {
       pname = "${lib.strings.sanitizeDerivationName repo}";
       version = ref;
@@ -24,69 +26,74 @@ in
             ## Theme
             {
               plugin = pkgs.vimPlugins.lualine-nvim;
-              config = /* lua */ ''
-                require('lualine').setup {
-                    options = {
-                        theme = 'auto',
-                    }
-                }
-              '';
+              config = # lua
+                ''
+                  require('lualine').setup {
+                      options = {
+                          theme = 'auto',
+                      }
+                  }
+                '';
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.material-nvim;
-              config = /* lua */''
-                vim.g.material_style = "deep ocean"
-                require("material").setup {}
-                vim.cmd 'colorscheme material'
-              '';
+              config = # lua
+                ''
+                  vim.g.material_style = "deep ocean"
+                  require("material").setup {}
+                  vim.cmd 'colorscheme material'
+                '';
               type = "lua";
             }
             {
               plugin = fromGitHub "d98e732cb73690b07c00c839c924be1d1d9ac5c2" "main" "MunifTanjim/prettier.nvim";
-              config = /* lua */''
-                require("prettier").setup({
-                  bin = 'prettierd',
-                  filetypes = {
-                    "css",
-                    "graphql",
-                    "html",
-                    "javascript",
-                    "javascriptreact",
-                    "json",
-                    "less",
-                    "markdown",
-                    "scss",
-                    "typescript",
-                    "typescriptreact",
-                    "yaml",
-                  },
-                })
-              '';
+              config = # lua
+                ''
+                  require("prettier").setup({
+                    bin = 'prettierd',
+                    filetypes = {
+                      "css",
+                      "graphql",
+                      "html",
+                      "javascript",
+                      "javascriptreact",
+                      "json",
+                      "less",
+                      "markdown",
+                      "scss",
+                      "typescript",
+                      "typescriptreact",
+                      "yaml",
+                    },
+                  })
+                '';
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.obsidian-nvim;
-              config = /* lua */''
-                require("obsidian").setup {
-                  workspaces = {
-                    {
-                      name = "obsidian",
-                      path = "~/obsidian",
-                    },
-                  },
-                }
-              vim.opt.conceallevel = 1
-              '';
+              config = # lua
+                ''
+                    require("obsidian").setup {
+                      workspaces = {
+                        {
+                          name = "obsidian",
+                          path = "~/obsidian",
+                        },
+                      },
+                    }
+                  vim.opt.conceallevel = 1
+                '';
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.auto-session;
-              config = /* lua */''
-                require("auto-session").setup {
-                  suppressed_dirs = { "~/", "~/tmp", "~/Downloads", "/"},
-                }
-              '';
+              config = # lua
+                ''
+                  require("auto-session").setup {
+                    suppressed_dirs = { "~/", "~/tmp", "~/Downloads", "/"},
+                  }
+                '';
               type = "lua";
             }
 
@@ -115,49 +122,52 @@ in
             # pkgs.vimPlugins.telescope-fzf-native-nvim
             {
               plugin = pkgs.vimPlugins.fzf-lua;
-              config = /* lua */''
-                require("fzf-lua").setup({
-                  defaults = {
-                    winopts = {
-                      preview = {
-                        hidden = 'hidden',
+              config = # lua
+                ''
+                  require("fzf-lua").setup({
+                    defaults = {
+                      winopts = {
+                        preview = {
+                          hidden = 'hidden',
+                        },
                       },
                     },
-                  },
-                  keymap = {
-                    builtin = {
-                      ['?'] = 'toggle-preview',
+                    keymap = {
+                      builtin = {
+                        ['?'] = 'toggle-preview',
+                      },
+                      fzf = {
+                        ['?'] = 'toggle-preview',
+                      },
                     },
-                    fzf = {
-                      ['?'] = 'toggle-preview',
-                    },
-                  },
-                })
-                require("fzf-lua").register_ui_select()
-              '';
+                  })
+                  require("fzf-lua").register_ui_select()
+                '';
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.project-nvim;
-              config = /* lua */ ''
-                require("project_nvim").setup {
-                  detection_methods = { "pattern" },
-                  patterns = { ".git" },
-                }
-              '';
+              config = # lua
+                ''
+                  require("project_nvim").setup {
+                    detection_methods = { "pattern" },
+                    patterns = { ".git" },
+                  }
+                '';
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.typescript-tools-nvim;
-              config = /* lua */ ''
-                require("typescript-tools").setup {
-                  settings = {
-                    expose_as_code_action = "all",
-                    tsserver_max_memory = 30000
+              config = # lua
+                ''
+                  require("typescript-tools").setup {
+                    settings = {
+                      expose_as_code_action = "all",
+                      tsserver_max_memory = 30000
+                    }
                   }
-                }
-                vim.keymap.set('n', ':OR', '<cmd>TSToolsOrganizeImports<cr>')
-              '';
+                  vim.keymap.set('n', ':OR', '<cmd>TSToolsOrganizeImports<cr>')
+                '';
               type = "lua";
             }
             ## cmp
@@ -178,11 +188,12 @@ in
             pkgs.vimPlugins.vim-repeat
             {
               plugin = fromGitHub "afd76df166ed0f223ede1071e0cfde8075cc4a24" "main" "TabbyML/vim-tabby";
-              config = /* lua */''
-                vim.cmd([[
-                  let g:tabby_keybinding_accept = '<Tab>'
-                ]])
-              '';
+              config = # lua
+                ''
+                  vim.cmd([[
+                    let g:tabby_keybinding_accept = '<Tab>'
+                  ]])
+                '';
               type = "lua";
             }
 
@@ -233,74 +244,78 @@ in
             # (fromGitHub "8843b72822151bb7792f3fdad4b63df0bc1dd4a6" "main" "MattCairns/telescope-cargo-workspace.nvim")
             {
               plugin = pkgs.vimPlugins.oil-nvim;
-              config = /* lua */"require('oil').setup()";
+              config = # lua
+                "require('oil').setup()";
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.neo-tree-nvim;
-              config = /* lua */''
-                require('neo-tree').setup {
-                  filesystem = {
-                    window = {
-                      mappings = {
-                        ["u"] = "navigate_up",
-                        ["O"] = "expand_all_nodes",
-                      }
+              config = # lua
+                ''
+                  require('neo-tree').setup {
+                    filesystem = {
+                      window = {
+                        mappings = {
+                          ["u"] = "navigate_up",
+                          ["O"] = "expand_all_nodes",
+                        }
+                      },
+                      filtered_items = {
+                        visible = true,
+                        show_hidden_count = true,
+                        hide_dotfiles = false,
+                        hide_gitignored = false,
+                      },
+                      follow_current_file = {
+                        enabled = true,
+                        leave_dirs_open = false,
+                      },
                     },
-                    filtered_items = {
-                      visible = true,
-                      show_hidden_count = true,
-                      hide_dotfiles = false,
-                      hide_gitignored = false,
-                    },
-                    follow_current_file = {
-                      enabled = true,
-                      leave_dirs_open = false,
-                    },
-                  },
-                  buffers = { follow_current_file = { enable = true } },
-                }
+                    buffers = { follow_current_file = { enable = true } },
+                  }
 
-                -- auto close https://github.com/gomfol12/dotfiles/blob/47efefe2bfe3f800b0f94b5036e83a79e85fac4c/.config/nvim/lua/tree.lua#L103C3-L124
-                local function is_modified_buffer_open(buffers)
-                    for _, v in pairs(buffers) do
-                        if v.name:match("neo%-tree") == nil then
-                            return true
-                        end
-                    end
-                    return false
-                end
-                local function non_floating_wins_count()
-                    local i = 0
-                    for _, v in pairs(vim.api.nvim_list_wins()) do
-                        if vim.api.nvim_win_get_config(v).relative == "" then
-                          i = i + 1
-                        end
-                    end
-                    return i
-                end
-                vim.api.nvim_create_autocmd("BufEnter", {
-                    nested = true,
-                    callback = function()
-                        if
-                            non_floating_wins_count() == 1
-                            and vim.api.nvim_buf_get_name(0):match("neo%-tree") ~= nil
-                        then
-                            vim.cmd("quit")
-                        end
-                    end,
-                })
-              '';
+                  -- auto close https://github.com/gomfol12/dotfiles/blob/47efefe2bfe3f800b0f94b5036e83a79e85fac4c/.config/nvim/lua/tree.lua#L103C3-L124
+                  local function is_modified_buffer_open(buffers)
+                      for _, v in pairs(buffers) do
+                          if v.name:match("neo%-tree") == nil then
+                              return true
+                          end
+                      end
+                      return false
+                  end
+                  local function non_floating_wins_count()
+                      local i = 0
+                      for _, v in pairs(vim.api.nvim_list_wins()) do
+                          if vim.api.nvim_win_get_config(v).relative == "" then
+                            i = i + 1
+                          end
+                      end
+                      return i
+                  end
+                  vim.api.nvim_create_autocmd("BufEnter", {
+                      nested = true,
+                      callback = function()
+                          if
+                              non_floating_wins_count() == 1
+                              and vim.api.nvim_buf_get_name(0):match("neo%-tree") ~= nil
+                          then
+                              vim.cmd("quit")
+                          end
+                      end,
+                  })
+                '';
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.fidget-nvim;
-              config = /* lua */ "require('fidget').setup{}";
+              config = # lua
+                "require('fidget').setup{}";
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.trouble-nvim;
-              config = /* lua */"require('trouble').setup {}";
+              config = # lua
+                "require('trouble').setup {}";
               type = "lua";
             }
             {
@@ -310,40 +325,42 @@ in
             }
             {
               plugin = pkgs.vimPlugins.comment-nvim;
-              config = /* lua */"require('Comment').setup()";
+              config = # lua
+                "require('Comment').setup()";
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.gitsigns-nvim;
-              config = /* lua */''
-                require('gitsigns').setup{
-                  on_attach = function(bufnr)
-                    local gitsigns = require('gitsigns')
+              config = # lua
+                ''
+                  require('gitsigns').setup{
+                    on_attach = function(bufnr)
+                      local gitsigns = require('gitsigns')
 
-                    local function map(mode, l, r, opts)
-                      opts = opts or {}
-                      opts.buffer = bufnr
-                      vim.keymap.set(mode, l, r, opts)
+                      local function map(mode, l, r, opts)
+                        opts = opts or {}
+                        opts.buffer = bufnr
+                        vim.keymap.set(mode, l, r, opts)
+                      end
+
+                      map('n', ']g', function()
+                        if vim.wo.diff then
+                          vim.cmd.normal({']c', bang = true})
+                        else
+                          gitsigns.nav_hunk('next')
+                        end
+                      end)
+
+                      map('n', '[g', function()
+                        if vim.wo.diff then
+                          vim.cmd.normal({'[c', bang = true})
+                        else
+                          gitsigns.nav_hunk('prev')
+                        end
+                      end)
                     end
-
-                    map('n', ']g', function()
-                      if vim.wo.diff then
-                        vim.cmd.normal({']c', bang = true})
-                      else
-                        gitsigns.nav_hunk('next')
-                      end
-                    end)
-
-                    map('n', '[g', function()
-                      if vim.wo.diff then
-                        vim.cmd.normal({'[c', bang = true})
-                      else
-                        gitsigns.nav_hunk('prev')
-                      end
-                    end)
-                  end
-                }
-              '';
+                  }
+                '';
               type = "lua";
             }
             # {
@@ -381,50 +398,52 @@ in
             }
             {
               plugin = pkgs.vimPlugins.nvim-dap-python;
-              config = /* lua */ "require('dap-python').setup('/home/james/dev/lunar/gridshare-edge/stacks/gridshare-flink/gridshare-device-alerts-1/.devenv/state/venv/bin/python')";
+              config = # lua
+                "require('dap-python').setup('/home/james/dev/lunar/gridshare-edge/stacks/gridshare-flink/gridshare-device-alerts-1/.devenv/state/venv/bin/python')";
               type = "lua";
             }
             {
               plugin = pkgs.vimPlugins.rustaceanvim;
-              config = /*lua*/ ''
-                vim.g.rustaceanvim = {
-                  -- Plugin configuration
-                  tools = {
-                  },
-                  -- LSP configuration
-                  server = {
-                    on_attach = function(client, bufnr)
-                      -- you can also put keymaps in here
-                    end,
-                    settings = {
-                      -- rust-analyzer language server configuration
-                      ['rust-analyzer'] = {
-                       cargo = {
-                          allFeatures = true,
-                          loadOutDirsFromCheck = true,
-                          runBuildScripts = true,
-                        },
-                        checkOnSave = {
-                          allFeatures = true,
-                          command = "clippy",
-                          extraArgs = { "--no-deps" },
-                        },
-                        procMacro = {
-                          enable = true,
-                          ignored = {
-                            ["async-trait"] = { "async_trait" },
-                            ["napi-derive"] = { "napi" },
-                            ["async-recursion"] = { "async_recursion" },
+              config = # lua
+                ''
+                  vim.g.rustaceanvim = {
+                    -- Plugin configuration
+                    tools = {
+                    },
+                    -- LSP configuration
+                    server = {
+                      on_attach = function(client, bufnr)
+                        -- you can also put keymaps in here
+                      end,
+                      settings = {
+                        -- rust-analyzer language server configuration
+                        ['rust-analyzer'] = {
+                         cargo = {
+                            allFeatures = true,
+                            loadOutDirsFromCheck = true,
+                            runBuildScripts = true,
+                          },
+                          checkOnSave = {
+                            allFeatures = true,
+                            command = "clippy",
+                            extraArgs = { "--no-deps" },
+                          },
+                          procMacro = {
+                            enable = true,
+                            ignored = {
+                              ["async-trait"] = { "async_trait" },
+                              ["napi-derive"] = { "napi" },
+                              ["async-recursion"] = { "async_recursion" },
+                            },
                           },
                         },
                       },
                     },
-                  },
-                  -- DAP configuration
-                  dap = {
-                  },
-                }
-              '';
+                    -- DAP configuration
+                    dap = {
+                    },
+                  }
+                '';
               type = "lua";
             }
           ];
@@ -436,16 +455,17 @@ in
           plugins = lib.lists.map (p: if (p ? plugin) then p.plugin else p) homeManagerPlugins;
         in
         {
-          customRC = ''
-            lua << EOF
-            package.path = "${pkgs._self}/nix/overlays/neovim/?.lua;" .. package.path
-          ''
-          + pkgs.lib.readFile ./config/options.lua
-          + pkgs.lib.readFile ./config/mappings.lua
-          + luaConfig
-          + ''
-            EOF
-          '';
+          customRC =
+            ''
+              lua << EOF
+              package.path = "${pkgs._self}/nix/overlays/neovim/?.lua;" .. package.path
+            ''
+            + pkgs.lib.readFile ./config/options.lua
+            + pkgs.lib.readFile ./config/mappings.lua
+            + luaConfig
+            + ''
+              EOF
+            '';
           packages.myPlugins.start = plugins;
         };
       enable = true;

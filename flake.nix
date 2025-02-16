@@ -29,15 +29,17 @@
   };
 
   outputs =
-    inputs@{ self
-    , nixpkgs
-    , unstable
-    , flake-utils
-    , ...
+    inputs@{
+      self,
+      nixpkgs,
+      unstable,
+      flake-utils,
+      ...
     }:
     let
       packageOverlays = import ./nix/overlays;
-      mkNixos = hostname: system: modules:
+      mkNixos =
+        hostname: system: modules:
         let
           extrasOverlay = _: _: {
             unstable = import unstable {
@@ -58,76 +60,76 @@
         in
         nixosSystem {
           system = system;
-          modules =
-            [
-              inputs.xremap.nixosModules.default
-              inputs.ynab-updater.nixosModules.ynab-updater
-              inputs.kolide-launcher.nixosModules.kolide-launcher
-              (import ./nix/nixos/base-configuration.nix)
-              {
-                environment.systemPackages = [
-                  rebuild
-                ];
-                networking.hostName = hostname;
-                nixpkgs.overlays = [ extrasOverlay packageOverlays ];
-                nix.registry = {
-                  self.flake = self;
-                  nixpkgs.flake = nixpkgs;
-                  unstable.flake = unstable;
-                };
-              }
-            ] ++ (map import modules);
+          modules = [
+            inputs.xremap.nixosModules.default
+            inputs.ynab-updater.nixosModules.ynab-updater
+            inputs.kolide-launcher.nixosModules.kolide-launcher
+            (import ./nix/nixos/base-configuration.nix)
+            {
+              environment.systemPackages = [
+                rebuild
+              ];
+              networking.hostName = hostname;
+              nixpkgs.overlays = [
+                extrasOverlay
+                packageOverlays
+              ];
+              nix.registry = {
+                self.flake = self;
+                nixpkgs.flake = nixpkgs;
+                unstable.flake = unstable;
+              };
+            }
+          ] ++ (map import modules);
         };
     in
-    inputs.flake-utils.lib.eachDefaultSystem
-      (system:
-      {
-        packages = inputs.flake-utils.lib.flattenTree {
-          neovim = (mkNixos "nixos" system [ ]).options.programs.neovim.finalPackage.value;
-          tmate = (import nixpkgs { inherit system; overlays = [ packageOverlays ]; }).tmate-my;
-        };
-      }
-      ) // {
+    inputs.flake-utils.lib.eachDefaultSystem (system: {
+      packages = inputs.flake-utils.lib.flattenTree {
+        neovim = (mkNixos "nixos" system [ ]).options.programs.neovim.finalPackage.value;
+        tmate =
+          (import nixpkgs {
+            inherit system;
+            overlays = [ packageOverlays ];
+          }).tmate-my;
+      };
+    })
+    // {
       nixosConfigurations = {
-        xps = mkNixos "xps" "x86_64-linux"
-          [
-            ./nix/nixos/xps/hardware-configuration.nix
-            ./nix/nixos/xps/configuration.nix
-            ./nix/modules/moixa.nix
-          ]
-          [
-            {
-              meta.description = "ipu6: update packages";
-              url = "https://github.com/NixOS/nixpkgs/pull/347918.diff";
-              sha256 = "sha256-oPaPWa0xPr3Os1ivkuxh04umZK5MAhBuTPei0ncgT4Y=";
-            }
-          ];
-        mbp = mkNixos "mbp" "x86_64-linux"
-          [
-            ./nix/nixos/mbp/hardware-configuration.nix
-            ./nix/nixos/mbp/configuration.nix
-          ];
-        nuc = mkNixos "nuc" "x86_64-linux"
-          [
-            ./nix/nixos/nuc/hardware-configuration.nix
-            ./nix/nixos/nuc/configuration.nix
-          ];
-        hm90 = mkNixos "hm90" "x86_64-linux"
-          [
-            ./nix/nixos/hm90/hardware-configuration.nix
-            ./nix/nixos/hm90/configuration.nix
-          ];
-        fwk = mkNixos "fwk" "x86_64-linux"
-          [
-            ./nix/nixos/fwk/hardware-configuration.nix
-            ./nix/nixos/fwk/configuration.nix
-          ];
-        lunar-fwk = mkNixos "lunar-fwk" "x86_64-linux"
-          [
-            ./nix/nixos/lunar_fwk/hardware-configuration.nix
-            ./nix/nixos/lunar_fwk/configuration.nix
-            ./nix/modules/moixa.nix
-          ];
+        xps =
+          mkNixos "xps" "x86_64-linux"
+            [
+              ./nix/nixos/xps/hardware-configuration.nix
+              ./nix/nixos/xps/configuration.nix
+              ./nix/modules/moixa.nix
+            ]
+            [
+              {
+                meta.description = "ipu6: update packages";
+                url = "https://github.com/NixOS/nixpkgs/pull/347918.diff";
+                sha256 = "sha256-oPaPWa0xPr3Os1ivkuxh04umZK5MAhBuTPei0ncgT4Y=";
+              }
+            ];
+        mbp = mkNixos "mbp" "x86_64-linux" [
+          ./nix/nixos/mbp/hardware-configuration.nix
+          ./nix/nixos/mbp/configuration.nix
+        ];
+        nuc = mkNixos "nuc" "x86_64-linux" [
+          ./nix/nixos/nuc/hardware-configuration.nix
+          ./nix/nixos/nuc/configuration.nix
+        ];
+        hm90 = mkNixos "hm90" "x86_64-linux" [
+          ./nix/nixos/hm90/hardware-configuration.nix
+          ./nix/nixos/hm90/configuration.nix
+        ];
+        fwk = mkNixos "fwk" "x86_64-linux" [
+          ./nix/nixos/fwk/hardware-configuration.nix
+          ./nix/nixos/fwk/configuration.nix
+        ];
+        lunar-fwk = mkNixos "lunar-fwk" "x86_64-linux" [
+          ./nix/nixos/lunar_fwk/hardware-configuration.nix
+          ./nix/nixos/lunar_fwk/configuration.nix
+          ./nix/modules/moixa.nix
+        ];
       };
     };
 }

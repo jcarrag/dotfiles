@@ -1,6 +1,12 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
-with lib; with lib.types;
+with lib;
+with lib.types;
 let
   cfg = config.programs.tailscale-funnel;
 in
@@ -12,26 +18,26 @@ in
       description = lib.mdDoc "The port at which this Tailscale Funnel is listening.";
     };
 
-    services = mkOption
-      {
-        description = "The definition of the Tailscale Funnel.";
-        type = types.attrsOf
-          (types.submodule {
-            options = {
-              enable = mkEnableOption "proxying this service via Tailscale Funnel.";
+    services = mkOption {
+      description = "The definition of the Tailscale Funnel.";
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            enable = mkEnableOption "proxying this service via Tailscale Funnel.";
 
-              port = mkOption {
-                type = types.port;
-                description = lib.mdDoc "The port at which this service is listening.";
-              };
-
-              path = mkOption {
-                type = types.str;
-                description = lib.mdDoc "The URL path at which this service will be proxied.";
-              };
+            port = mkOption {
+              type = types.port;
+              description = lib.mdDoc "The port at which this service is listening.";
             };
-          });
-      };
+
+            path = mkOption {
+              type = types.str;
+              description = lib.mdDoc "The URL path at which this service will be proxied.";
+            };
+          };
+        }
+      );
+    };
   };
 
   config =
@@ -42,31 +48,36 @@ in
     in
     lib.attrsets.recursiveUpdate
       {
-        systemd.services = lib.attrsets.mapAttrs'
-          (name: { enable, port, path }:
-            let
-              start = "${pkgs.unstable.tailscale}/bin/tailscale funnel --bg --https ${builtins.toString cfg.port} --set-path=${path} localhost:${builtins.toString port}";
-              stop = "${start} off";
-            in
-            lib.attrsets.nameValuePair
-              "tailscale-funnel-${name}"
-              {
-                description = "Tailscale Funnel forwarding for ${name}";
-                # https://old.reddit.com/r/Tailscale/comments/ubk9mo/systemd_how_do_get_something_to_run_if_tailscale/jia3pwn/
-                after = [ "sys-subsystem-net-devices-tailscale0.device" "tailscaled.service" ];
-                wantedBy = [ "multi-user.target" ];
+        systemd.services = lib.attrsets.mapAttrs' (
+          name:
+          {
+            enable,
+            port,
+            path,
+          }:
+          let
+            start = "${pkgs.unstable.tailscale}/bin/tailscale funnel --bg --https ${builtins.toString cfg.port} --set-path=${path} localhost:${builtins.toString port}";
+            stop = "${start} off";
+          in
+          lib.attrsets.nameValuePair "tailscale-funnel-${name}" {
+            description = "Tailscale Funnel forwarding for ${name}";
+            # https://old.reddit.com/r/Tailscale/comments/ubk9mo/systemd_how_do_get_something_to_run_if_tailscale/jia3pwn/
+            after = [
+              "sys-subsystem-net-devices-tailscale0.device"
+              "tailscaled.service"
+            ];
+            wantedBy = [ "multi-user.target" ];
 
-                serviceConfig = {
-                  Type = "oneshot";
-                  RemainAfterExit = true;
-                  ExecStart = start;
-                  ExecStop = stop;
-                  # ExecStopPost = "${pkgs.systemd}/bin/systemctl restart tailscaled.service";
-                  Restart = "on-failure";
-                };
-              }
-          )
-          enabled;
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = start;
+              ExecStop = stop;
+              # ExecStopPost = "${pkgs.systemd}/bin/systemctl restart tailscaled.service";
+              Restart = "on-failure";
+            };
+          }
+        ) enabled;
       }
       # (if anyEnabled then
       {

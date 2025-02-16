@@ -52,13 +52,13 @@ self: super:
       @@ -11,6 +11,9 @@ from .reading import mecab, srcFields, dstFields
        from .notetypes import isJapaneseNoteType
        from aqt import mw
-      
+
       +config = mw.addonManager.getConfig(__name__)
       +furiganaFieldSuffix = config['furiganaSuffix']
       +
        # Bulk updates
        ##########################################################################
-      
+
       @@ -20,40 +23,26 @@ def regenerateReadings(nids):
            mw.progress.start()
            for nid in nids:

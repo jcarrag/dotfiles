@@ -1,6 +1,12 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
-with lib; with lib.types;
+with lib;
+with lib.types;
 let
   cfg = config.programs.anki;
 
@@ -13,30 +19,28 @@ in
     addons = mkOption {
       description = "Addons for Anki";
       default = [ ];
-      type = listOf (
-        submodule {
-          options = {
-            ankiWebId = mkOption {
-              description = "The id of the addon in AnkiWeb";
-              type = str;
-            };
-            sha256 = mkOption {
-              description = "The sha256 of the addon";
-              type = str;
-            };
-            patches = mkOption {
-              description = "Patches to be applied";
-              default = [ ];
-              type = listOf path;
-            };
-            addonConfig = mkOption {
-              type = addonConfigFormat.type;
-              default = { };
-              description = "Addon configuration";
-            };
+      type = listOf (submodule {
+        options = {
+          ankiWebId = mkOption {
+            description = "The id of the addon in AnkiWeb";
+            type = str;
           };
-        }
-      );
+          sha256 = mkOption {
+            description = "The sha256 of the addon";
+            type = str;
+          };
+          patches = mkOption {
+            description = "Patches to be applied";
+            default = [ ];
+            type = listOf path;
+          };
+          addonConfig = mkOption {
+            type = addonConfigFormat.type;
+            default = { };
+            description = "Addon configuration";
+          };
+        };
+      });
     };
   };
 
@@ -50,16 +54,14 @@ in
 
         version = "2.1";
 
-        srcs = map
-          (
-            { ankiWebId, sha256, ... }:
-            pkgs.fetchurl {
-              name = "${ankiWebId}.zip";
-              url = "https://ankiweb.net/shared/download/${ankiWebId}?v=2.1";
-              sha256 = sha256;
-            }
-          )
-          cfg.addons;
+        srcs = map (
+          { ankiWebId, sha256, ... }:
+          pkgs.fetchurl {
+            name = "${ankiWebId}.zip";
+            url = "https://ankiweb.net/shared/download/${ankiWebId}?v=2.1";
+            sha256 = sha256;
+          }
+        ) cfg.addons;
 
         nativeBuildInputs = [ pkgs.unzip ];
 
@@ -71,39 +73,30 @@ in
           done
         '';
 
-        patchPhase = concatMap
-          (
-            id:
-            map
-              (
-                patches: ''
-                  cd ${id}
-                  patch < "${patches}"
-                  cd ..
-                ''
-              )
-              addonById.${id}.patches
-          )
-          ids;
+        patchPhase = concatMap (
+          id:
+          map (patches: ''
+            cd ${id}
+            patch < "${patches}"
+            cd ..
+          '') addonById.${id}.patches
+        ) ids;
 
-        installPhase = map
-          (
-            id:
+        installPhase =
+          map (id: ''
+            cd ${id}
+            cat <<EOF > meta.json
+            {"name":"${id}", "mod": 0, "config": ${builtins.toJSON addonById.${id}.addonConfig}}
+            EOF
+            cd ..
+          '') ids
+          ++ [
             ''
-              cd ${id}
-              cat <<EOF > meta.json
-              {"name":"${id}", "mod": 0, "config": ${builtins.toJSON addonById.${id}.addonConfig}}
-              EOF
-              cd ..
-            ''
-          )
-          ids ++ [
-          ''
-            mkdir $out/
+              mkdir $out/
 
-            cp -r * $out/
-          ''
-        ];
+              cp -r * $out/
+            ''
+          ];
       };
 
       anki-bin = pkgs.unstable.anki-bin;

@@ -17,7 +17,8 @@ in
     loader.efi.canTouchEfiVariables = true;
   };
 
-  environment.systemPackages = with pkgs;
+  environment.systemPackages =
+    with pkgs;
     [
       # _neovim
       vim-language-server
@@ -184,10 +185,16 @@ in
       wl-clipboard # wayland clipboard
       wlogout
       zip
-    ] ++ scripts;
+    ]
+    ++ scripts;
 
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "Hack" "NerdFontsSymbolsOnly" ]; })
+    (nerdfonts.override {
+      fonts = [
+        "Hack"
+        "NerdFontsSymbolsOnly"
+      ];
+    })
     noto-fonts
     noto-fonts-emoji
     noto-fonts-cjk
@@ -202,11 +209,9 @@ in
     saleae-logic.enable = true;
     bluetooth = {
       enable = true;
-      package = pkgs.bluez.overrideAttrs (
-        oldAttrs: {
-          configureFlags = oldAttrs.configureFlags ++ [ "--enable-sixaxis" ];
-        }
-      );
+      package = pkgs.bluez.overrideAttrs (oldAttrs: {
+        configureFlags = oldAttrs.configureFlags ++ [ "--enable-sixaxis" ];
+      });
     };
     brillo.enable = true;
     opengl = {
@@ -226,7 +231,10 @@ in
     inputMethod = {
       enabled = "fcitx5";
       fcitx5 = {
-        addons = with pkgs; [ fcitx5-mozc fcitx5-gtk ];
+        addons = with pkgs; [
+          fcitx5-mozc
+          fcitx5-gtk
+        ];
         waylandFrontend = true;
       };
     };
@@ -264,9 +272,9 @@ in
   };
 
   nix = {
-    nixPath = pkgs.lib.mapAttrsToList
-      (key: value: "${key}=${value.to.path}")
-      (pkgs.lib.filterAttrs (key: value: value ? to.path) config.nix.registry);
+    nixPath = pkgs.lib.mapAttrsToList (key: value: "${key}=${value.to.path}") (
+      pkgs.lib.filterAttrs (key: value: value ? to.path) config.nix.registry
+    );
     extraOptions = ''
       experimental-features = nix-command flakes
       connect-timeout = 1
@@ -289,7 +297,10 @@ in
         "fwk.tail7f031.ts.net:VH6U0MFW2pggLXy51YiAGvr8gnC37HYLsM+6Nm1ivZU=" # harmonia
         "xps-1.tail7f031.ts.net:3Ltju5+Q1rszLnD2ti4eitAXrE3cit9Ck84BSsz/K/I=" # harmonia
       ];
-      trusted-users = [ "root" "james" ];
+      trusted-users = [
+        "root"
+        "james"
+      ];
     };
   };
 
@@ -303,18 +314,19 @@ in
     # https://github.com/NixOS/nixpkgs/issues/162562#issuecomment-1229444338
     packageOverrides = pkgs: {
       steam = pkgs.steam.override {
-        extraPkgs = pkgs: with pkgs; [
-          xorg.libXcursor
-          xorg.libXi
-          xorg.libXinerama
-          xorg.libXScrnSaver
-          libpng
-          libpulseaudio
-          libvorbis
-          stdenv.cc.cc.lib
-          libkrb5
-          keyutils
-        ];
+        extraPkgs =
+          pkgs: with pkgs; [
+            xorg.libXcursor
+            xorg.libXi
+            xorg.libXinerama
+            xorg.libXScrnSaver
+            libpng
+            libpulseaudio
+            libvorbis
+            stdenv.cc.cc.lib
+            libkrb5
+            keyutils
+          ];
       };
     };
 
@@ -396,12 +408,12 @@ in
       enable = false;
       settings = {
         battery = {
-           governor = "powersave";
-           turbo = "never";
+          governor = "powersave";
+          turbo = "never";
         };
         charger = {
-           governor = "performance";
-           turbo = "auto";
+          governor = "performance";
+          turbo = "auto";
         };
       };
     };
@@ -434,33 +446,31 @@ in
       servers = {
         express-vpn-uk = {
           autoStart = false;
-          config =
-            ''
-              config /home/james/vpn/my_expressvpn_uk_-_east_london_udp.ovpn
+          config = ''
+            config /home/james/vpn/my_expressvpn_uk_-_east_london_udp.ovpn
 
-              auth-user-pass /home/james/vpn/my_expressvpn_uk_-_east_london_udp.conf
+            auth-user-pass /home/james/vpn/my_expressvpn_uk_-_east_london_udp.conf
 
-              script-security 2
-              up ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
-              up-restart
-              down ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
-              down-pre
-            '';
+            script-security 2
+            up ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
+            up-restart
+            down ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
+            down-pre
+          '';
         };
         express-vpn-us = {
           autoStart = false;
-          config =
-            ''
-              config /home/james/vpn/my_expressvpn_usa_-_new_jersey_-_3_udp.ovpn
+          config = ''
+            config /home/james/vpn/my_expressvpn_usa_-_new_jersey_-_3_udp.ovpn
 
-              auth-user-pass /home/james/vpn/my_expressvpn_usa_-_new_jersey_-_3_udp.conf
+            auth-user-pass /home/james/vpn/my_expressvpn_usa_-_new_jersey_-_3_udp.conf
 
-              script-security 2
-              up ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
-              up-restart
-              down ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
-              down-pre
-            '';
+            script-security 2
+            up ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
+            up-restart
+            down ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved
+            down-pre
+          '';
         };
       };
     };
@@ -631,7 +641,16 @@ in
 
   users.extraUsers.james = {
     createHome = true;
-    extraGroups = [ "wheel" "users" "video" "audio" "disk" "networkmanager" "docker" "dialout" ];
+    extraGroups = [
+      "wheel"
+      "users"
+      "video"
+      "audio"
+      "disk"
+      "networkmanager"
+      "docker"
+      "dialout"
+    ];
     group = "users";
     home = "/home/james";
     # allow emby-server access to ~/emby-library
@@ -644,16 +663,15 @@ in
     ];
   };
 
-  xdg =
-    {
-      mime.defaultApplications = {
-        "text/html" = "brave-browser.desktop";
-        "x-scheme-handler/http" = "brave-browser.desktop";
-        "x-scheme-handler/https" = "brave-browser.desktop";
-        "x-scheme-handler/about" = "brave-browser.desktop";
-        "x-scheme-handler/unknown" = "brave-browser.desktop";
-      };
+  xdg = {
+    mime.defaultApplications = {
+      "text/html" = "brave-browser.desktop";
+      "x-scheme-handler/http" = "brave-browser.desktop";
+      "x-scheme-handler/https" = "brave-browser.desktop";
+      "x-scheme-handler/about" = "brave-browser.desktop";
+      "x-scheme-handler/unknown" = "brave-browser.desktop";
     };
+  };
 
   environment.sessionVariables = {
     # hyprland/wayland
@@ -665,7 +683,7 @@ in
     HYPRCURSOR_THEME = "catppuccin-mocha-mauve-cursors";
     HYPRCURSOR_SIZE = 30;
     # fcitx
-    QT_IM_MODULE="fcitx";
+    QT_IM_MODULE = "fcitx";
   };
 
   system.stateVersion = "20.09";

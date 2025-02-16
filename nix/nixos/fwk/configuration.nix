@@ -11,12 +11,16 @@
 
   networking = {
     firewall = {
-      allowedUDPPorts = [
-      ];
+      allowedUDPPorts =
+        [
+        ];
       interfaces.tailscale0.allowedTCPPorts =
-        if config.services.harmonia.enable then [
-          5000 # harmonia
-        ] else [ ];
+        if config.services.harmonia.enable then
+          [
+            5000 # harmonia
+          ]
+        else
+          [ ];
     };
   };
 

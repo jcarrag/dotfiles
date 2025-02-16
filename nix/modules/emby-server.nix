@@ -1,6 +1,12 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
-with lib; with lib.types;
+with lib;
+with lib.types;
 let
   cfg = config.programs.emby-server;
 in

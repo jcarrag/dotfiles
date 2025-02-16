@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 {
 
@@ -19,7 +24,8 @@
     dconf.enable = true;
   };
 
-  environment.systemPackages = with pkgs;
+  environment.systemPackages =
+    with pkgs;
     let
       copy = pkgs.writeShellScriptBin "copy" ''
         ${pkgs.xclip}/bin/xclip -sel clip
