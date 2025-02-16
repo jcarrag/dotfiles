@@ -8,6 +8,5 @@ options = ["--edition", "2018"]
 includes = ["*.rs"]
 
 [formatter.lua]
-command = "lua-format"
-options = ["-i"]
+command = "stylua"
 includes = ["*.lua"]

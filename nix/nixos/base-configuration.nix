@@ -23,7 +23,7 @@ in
       # _neovim
       vim-language-server
       lua-language-server
-      luaformatter
+      stylua
       unstable.vscode-langservers-extracted # JSON lsp
       nodePackages.typescript-language-server
       dockerfile-language-server-nodejs
