@@ -22,6 +22,7 @@ in
       # _neovim
       vim-language-server
       lua-language-server
+      luaformatter
       unstable.vscode-langservers-extracted # JSON lsp
       nodePackages.typescript-language-server
       dockerfile-language-server-nodejs
@@ -63,6 +64,7 @@ in
       pkg-config
       (openssl.dev)
       unstable.saleae-logic-2
+      unstable.treefmt
       ## C++
       ccls
       gcc

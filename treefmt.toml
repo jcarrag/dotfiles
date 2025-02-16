@@ -1,0 +1,13 @@
+[formatter.nix]
+command = "nixfmt"
+includes = ["*.nix"]
+
+[formatter.rust]
+command = "rustfmt"
+options = ["--edition", "2018"]
+includes = ["*.rs"]
+
+[formatter.lua]
+command = "lua-format"
+options = ["-i"]
+includes = ["*.lua"]
