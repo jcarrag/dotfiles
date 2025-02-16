@@ -2,18 +2,15 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 require 'lspconfig'.clangd.setup { capabilities = capabilities }
 -- require'lspconfig'.rust_analyzer.setup{capabilities=capabilities} -- This is setup by rust-tools
 require 'lspconfig'.cmake.setup { capabilities = capabilities }
-require('lspconfig').nil_ls.setup {
-  autostart = true,
-  capabilities = capabilities,
-  settings = {
-    ['nil'] = {
-      testSetting = 42,
-      formatting = {
-        command = { "nixpkgs-fmt" },
+require("lspconfig").nixd.setup({
+   settings = {
+      nixd = {
+         formatting = {
+            command = { "nixfmt" },
+         },
       },
-    },
-  },
-}
+   },
+})
 require("lspconfig").dockerls.setup {
   settings = {
     docker = {
@@ -76,6 +73,55 @@ require 'lspconfig'.lua_ls.setup {
   }
 }
 
+-- Assumes `autocmd BufEnter *.ers  setlocal filetype=rustscript` or similar
+vim.filetype.add({
+  extension = {
+    ers = 'rustscript'
+  }
+})
+local lsp_configs = require 'lspconfig.configs'
+if not lsp_configs.rlscls then
+    lsp_configs.rlscls = {
+        default_config = {
+            cmd = { 'rscls' },
+            filetypes = { 'rustscript' },
+            root_dir = function(fname)
+                return require 'lspconfig'.util.path.dirname(fname)
+            end,
+        },
+        docs = {
+            description = [[
+https://github.com/MiSawa/rscls
+
+rscls, a language server for rust-script
+]],
+        }
+    }
+end
+require 'lspconfig'.rlscls.setup {
+    settings = {
+        ['rust-analyzer'] = {
+            imports = {
+                group = {
+                    enable = true,
+                },
+                granularity = {
+                    enforce = true,
+                    group = "crate",
+                },
+            },
+            cargo = {
+                buildScripts = {
+                    enable = true,
+                },
+            },
+            procMacro = {
+                enable = true,
+            },
+        },
+    }
+}
+
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
@@ -112,9 +158,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.api.nvim_set_keymap('n', '<leader>cl', '<cmd>CodeActionMenu<cr>', { noremap = true })
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    -- Using formatter.nvim
-    -- vim.keymap.set('n', '<leader>p', function()
-    --   vim.lsp.buf.format { async = true }
-    -- end, opts)
+    vim.keymap.set('n', '<leader>p', function()
+      vim.lsp.buf.format { async = true }
+    end, opts)
   end,
 })

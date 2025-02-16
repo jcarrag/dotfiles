@@ -43,26 +43,25 @@ in
               type = "lua";
             }
             {
-              # plugin = fromGitHub "d98e732cb73690b07c00c839c924be1d1d9ac5c2" "main" "MunifTanjim/prettier.nvim";
-              plugin = pkgs.vimPlugins.formatter-nvim;
+              plugin = fromGitHub "d98e732cb73690b07c00c839c924be1d1d9ac5c2" "main" "MunifTanjim/prettier.nvim";
               config = /* lua */''
-                require("formatter").setup {
-                  filetype = {
-                    javascript = {
-                      require("formatter.filetypes.javascript").prettier,
-                    },
-                    javascriptreact = {
-                      require("formatter.filetypes.typescript").prettier,
-                    },
-                    typescript = {
-                      require("formatter.filetypes.typescript").prettier,
-                    },
-                    typescriptreact = {
-                      require("formatter.filetypes.typescript").prettier,
-                    }
-                  }
-                }
-              vim.keymap.set('n', '<leader>p', '<cmd>Format<cr>')
+                require("prettier").setup({
+                  bin = 'prettierd',
+                  filetypes = {
+                    "css",
+                    "graphql",
+                    "html",
+                    "javascript",
+                    "javascriptreact",
+                    "json",
+                    "less",
+                    "markdown",
+                    "scss",
+                    "typescript",
+                    "typescriptreact",
+                    "yaml",
+                  },
+                })
               '';
               type = "lua";
             }
@@ -148,7 +147,6 @@ in
               '';
               type = "lua";
             }
-            pkgs.vimPlugins.harpoon
             {
               plugin = pkgs.vimPlugins.typescript-tools-nvim;
               config = /* lua */ ''
@@ -158,7 +156,7 @@ in
                     tsserver_max_memory = 30000
                   }
                 }
-              vim.keymap.set('n', ':OR', '<cmd>TSToolsOrganizeImports<cr>')
+                vim.keymap.set('n', ':OR', '<cmd>TSToolsOrganizeImports<cr>')
               '';
               type = "lua";
             }

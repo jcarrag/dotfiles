@@ -70,14 +70,17 @@ in
       unstable.rust-analyzer
       unstable.cargo
       unstable.rustc
+      unstable.rust-script
       unstable.rustfmt
+      rscls
       ## Javascript
       nix-npm-install
       nodejs-18_x
       nodePackages.node2nix
+      prettierd
       ## Nix
-      unstable.nil
-      unstable.nixpkgs-fmt
+      unstable.nixd
+      unstable.nixfmt-rfc-style
       ## Python
       python3Minimal
       ## Scala
@@ -621,6 +624,8 @@ in
 
   # https://github.com/NixOS/nixpkgs/issues/180175
   systemd.services.NetworkManager-wait-online.enable = false;
+
+  time.timeZone = "Europe/London";
 
   users.extraUsers.james = {
     createHome = true;

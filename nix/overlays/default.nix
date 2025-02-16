@@ -18,6 +18,7 @@ let
     ./feather-font/feather-font.nix
     ./ferdi.nix
     ./nix-npm-install.nix
+    ./rscls.nix
     ./scripts.nix
     ./systemd-services.nix
     ./taffybar

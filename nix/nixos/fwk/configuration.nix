@@ -21,6 +21,8 @@
   };
 
   services = {
+    getty.autologinUser = "james";
+    displayManager.autoLogin.user = "james";
     harmonia = {
       enable = false;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
@@ -34,7 +36,6 @@
       package = pkgs.unstable.tailscale;
       extraSetFlags = [ "--accept-routes" ];
     };
-    xserver.videoDrivers = [ "amdgpu" ];
   };
 
   systemd = pkgs.systemd-services;
