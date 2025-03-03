@@ -34,7 +34,6 @@ in
       unstable.signal-desktop
       unstable.skypeforlinux
       unstable.slack
-      # unstable.zoom-us
       ### eGPU
       unstable.intel-gpu-tools
       unstable.glxinfo
@@ -112,8 +111,8 @@ in
       dnsmasq
       file
       gnome2.gnome_icon_theme
-      gnome3.adwaita-icon-theme
-      gnome3.zenity
+      adwaita-icon-theme
+      zenity
       gnupg
       gparted
       grim # wayland screenshots
@@ -163,7 +162,6 @@ in
       fd
       libnotify
       lshw
-      input-utils
       lsof
       mitmproxy
       ncdu # directory size tui
@@ -197,12 +195,12 @@ in
     })
     noto-fonts
     noto-fonts-emoji
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     font-awesome
     feather-font
     powerline-fonts
     powerline-symbols
-    gnome3.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   hardware = {
@@ -214,10 +212,10 @@ in
       });
     };
     brillo.enable = true;
-    opengl = {
+    graphics = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
+      # driSupport = true;
+      enable32Bit = true;
       extraPackages = [
         pkgs.intel-media-driver
         pkgs.vaapiIntel
@@ -364,7 +362,7 @@ in
       ];
     };
     autojump.enable = true;
-    bash.enableCompletion = true;
+    bash.completion.enable = true;
     command-not-found.dbPath = "/home/james/.cache/nix-index/files";
     fzf = {
       keybindings = true;
@@ -645,7 +643,7 @@ in
   # https://github.com/NixOS/nixpkgs/issues/180175
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  time.timeZone = "Europe/London";
+  # time.timeZone = "Europe/London";
 
   users.extraUsers.james = {
     createHome = true;

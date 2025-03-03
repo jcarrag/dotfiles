@@ -319,16 +319,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1731797254,
-        "narHash": "sha256-df3dJApLPhd11AlueuoN0Q4fHo/hagP75LlM5K1sz9g=",
+        "lastModified": 1740339700,
+        "narHash": "sha256-cbrw7EgQhcdFnu6iS3vane53bEagZQy/xyIkDWpCgVE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e8c38b73aeb218e27163376a2d617e61a2ad9b59",
+        "rev": "04ef94c4c1582fd485bbfdb8c4a8ba250e359195",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-24.05",
+        "ref": "nixos-24.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -425,48 +425,13 @@
         "type": "github"
       }
     },
-    "nixpkgs_7": {
-      "locked": {
-        "lastModified": 1733935885,
-        "narHash": "sha256-xyiHLs6KJ1fxeGmcCxKjJE4yJknVJxbC8Y/ZRYyC8WE=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "5a48e3c2e435e95103d56590188cfed7b70e108c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
         "kolide-launcher": "kolide-launcher",
         "nixpkgs": "nixpkgs",
         "unstable": "unstable",
-        "xremap": "xremap",
-        "ynab-updater": "ynab-updater"
-      }
-    },
-    "rustOverlay": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_7"
-      },
-      "locked": {
-        "lastModified": 1734143514,
-        "narHash": "sha256-1+r8wYucn8kp9d/IBW1uYGs31QQmSZURElsiOTx65xM=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "81fe5c27cb281a9b796d7ad05ad9179e5bd0c78d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
+        "xremap": "xremap"
       }
     },
     "systems": {
@@ -529,22 +494,6 @@
       "original": {
         "owner": "NixOS",
         "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "unstable_2": {
-      "locked": {
-        "lastModified": 1732014248,
-        "narHash": "sha256-y/MEyuJ5oBWrWAic/14LaIr/u5E0wRVzyYsouYY3W6w=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "23e89b7da85c3640bbc2173fe04f4bd114342367",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "23e89b7da85c3640bbc2173fe04f4bd114342367",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -622,24 +571,6 @@
         "ref": "v0.10.1",
         "repo": "xremap",
         "type": "github"
-      }
-    },
-    "ynab-updater": {
-      "inputs": {
-        "rustOverlay": "rustOverlay",
-        "unstable": "unstable_2"
-      },
-      "locked": {
-        "dirtyRev": "5743a71d771866047435b623a398a1d180b93bcf-dirty",
-        "dirtyShortRev": "5743a71-dirty",
-        "lastModified": 1734154169,
-        "narHash": "sha256-78GqUAPgYIvL3S0vxsnAOS27ol8aecos5u+Esv2W7DE=",
-        "type": "git",
-        "url": "file:///home/james/dev/my/ynab_updater"
-      },
-      "original": {
-        "type": "git",
-        "url": "file:///home/james/dev/my/ynab_updater"
       }
     }
   },
