@@ -381,6 +381,13 @@ in
     };
     hyprlock.enable = true;
     light.enable = true;
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        stdenv.cc.cc.lib
+        zlib
+      ];
+    };
     nm-applet = {
       enable = true;
       indicator = true;
@@ -425,6 +432,7 @@ in
     };
     blueman.enable = true;
     dbus.enable = true;
+    envfs.enable = true;
     fwupd.enable = true;
     geoclue2.enableDemoAgent = true;
     gnome.gnome-keyring.enable = true;
