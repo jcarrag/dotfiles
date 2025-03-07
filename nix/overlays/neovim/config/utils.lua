@@ -15,9 +15,10 @@ end
 function M.onlyAndNeotree()
 	local currentWindowId = vim.api.nvim_get_current_win()
 	for _, windowId in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+		local buf = vim.api.nvim_win_get_buf(windowId)
 		if
 			windowId ~= currentWindowId
-			and vim.api.nvim_get_option_value("filetype", { win = windowId }) ~= "neo-tree"
+			and vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= "neo-tree"
 		then
 			vim.api.nvim_win_call(windowId, function()
 				vim.cmd("silent! close")
