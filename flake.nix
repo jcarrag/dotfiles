@@ -96,20 +96,6 @@
     })
     // {
       nixosConfigurations = {
-        xps =
-          mkNixos "xps" "x86_64-linux"
-            [
-              ./nix/nixos/xps/hardware-configuration.nix
-              ./nix/nixos/xps/configuration.nix
-              ./nix/modules/moixa.nix
-            ]
-            [
-              {
-                meta.description = "ipu6: update packages";
-                url = "https://github.com/NixOS/nixpkgs/pull/347918.diff";
-                sha256 = "sha256-oPaPWa0xPr3Os1ivkuxh04umZK5MAhBuTPei0ncgT4Y=";
-              }
-            ];
         mbp =
           mkNixos "mbp" "x86_64-linux"
             [ ]
