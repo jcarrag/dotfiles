@@ -4,14 +4,17 @@ vim.g.maplocalleader = " "
 -- lazygit
 vim.api.nvim_set_keymap("n", "<leader>lg", "<cmd>LazyGit<cr>", { noremap = true, silent = true })
 
+-- lsp diagnostics cache clear
+vim.api.nvim_set_keymap("n", "<leader>ra", "<cmd>lua vim.diagnostic.reset()<cr>", { noremap = true })
+
 -- lsp trouble
-vim.api.nvim_set_keymap("n", "<leader>a", "<cmd>TroubleToggle document_diagnostics<cr>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<leader>A", "<cmd>TroubleToggle workspace_diagnostics<cr>", { noremap = true })
--- vim.api.nvim_set_keymap('n', '<leader>tq', '<cmd>TroubleToggle quickfix<cr>', { noremap = true })
-vim.api.nvim_set_keymap("n", "gr", "<cmd>TroubleToggle lsp_references<cr>", { noremap = true })
-vim.api.nvim_set_keymap("n", "gd", "<cmd>TroubleToggle lsp_definitions<cr>", { noremap = true })
-vim.api.nvim_set_keymap("n", "gy", "<cmd>TroubleToggle lsp_type_definitions<cr>", { noremap = true })
-vim.api.nvim_set_keymap("n", "gi", "<cmd>TroubleToggle lsp_implementations<cr>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>a", "<cmd>Trouble document_diagnostics toggle<cr>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>A", "<cmd>Trouble workspace_diagnostics toggle<cr>", { noremap = true })
+-- vim.api.nvim_set_keymap('n', '<leader>tq', '<cmd>Trouble quickfix toggle<cr>', { noremap = true })
+vim.api.nvim_set_keymap("n", "gr", "<cmd>Trouble lsp_references toggle<cr>", { noremap = true })
+vim.api.nvim_set_keymap("n", "gd", "<cmd>Trouble lsp_definitions toggle<cr>", { noremap = true })
+vim.api.nvim_set_keymap("n", "gy", "<cmd>Trouble lsp_type_definitions toggle<cr>", { noremap = true })
+vim.api.nvim_set_keymap("n", "gi", "<cmd>Trouble lsp_implementations toggle<cr>", { noremap = true })
 
 -- fzf
 vim.api.nvim_set_keymap("n", "<C-g>", "<cmd>lua require('fzf-lua').git_files()<cr>", { noremap = true })

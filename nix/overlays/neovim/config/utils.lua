@@ -27,4 +27,21 @@ function M.onlyAndNeotree()
 	end
 end
 
+--- Given a delimter split a string into a table.
+---@param s string
+---@param delimiter string
+---@return table of split results
+M.split_on = function(s, delimiter)
+  local result = {}
+  local from = 1
+  local delim_from, delim_to = string.find(s, delimiter, from)
+  while delim_from do
+    table.insert(result, string.sub(s, from, delim_from - 1))
+    from = delim_to + 1
+    delim_from, delim_to = string.find(s, delimiter, from)
+  end
+  table.insert(result, string.sub(s, from))
+  return result
+end
+
 return M

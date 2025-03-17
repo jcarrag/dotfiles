@@ -14,7 +14,7 @@ require("lspconfig").dockerls.setup({
 })
 require("lspconfig").jsonls.setup({ capabilities = capabilities })
 require("lspconfig").gopls.setup({ capabilities = capabilities })
-require("lspconfig").bufls.setup({ capabilities = capabilities })
+require("lspconfig").buf_ls.setup({ capabilities = capabilities })
 require("lspconfig").ansiblels.setup({})
 require("lspconfig").pyright.setup({
 	capabilities = capabilities,
@@ -24,7 +24,7 @@ require("lspconfig").vimls.setup({})
 require("lspconfig").lua_ls.setup({
 	on_init = function(client)
 		local path = client.workspace_folders[1].name
-		if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
+		if vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc") then
 			return
 		end
 
@@ -100,6 +100,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- Enable completion triggered by <c-x><c-o>
 		vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
+		-- inlay hints
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		if client ~= nil and client.server_capabilities.inlayHintProvider then
+			vim.lsp.inlay_hint.enable(true)
+		end
+
 		-- Buffer local mappings.
 		-- See `:help vim.lsp.*` for documentation on any of the below functions
 		local opts = { buffer = ev.buf }
@@ -119,7 +125,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 		end, opts)
 		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-		vim.api.nvim_set_keymap("n", "<leader>cl", "<cmd>CodeActionMenu<cr>", { noremap = true })
+		vim.api.nvim_set_keymap("n", "<leader>cl", "<cmd>lua require('fzf-lua').lsp_code_actions()<cr>", { noremap = true })
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 		vim.keymap.set("n", "<leader>p", function()
 			vim.lsp.buf.format({ async = true })
