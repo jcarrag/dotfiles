@@ -6,7 +6,7 @@ foreground = "#CDD3DE"
 WINIT_X11_SCALE_FACTOR = "1"
 
 [font]
-size = 11
+size = 10.5
 
 [font.bold]
 family = "Hack Nerd Font Mono"
