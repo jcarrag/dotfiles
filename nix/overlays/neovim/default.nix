@@ -145,8 +145,8 @@ in
                 ''
                   require("typescript-tools").setup {
                     settings = {
+                      publish_diagnostic_on = "change",
                       expose_as_code_action = "all",
-                      tsserver_max_memory = 30000
                     }
                   }
                   vim.keymap.set('n', ':OR', '<cmd>TSToolsOrganizeImports<cr>')
@@ -345,30 +345,31 @@ in
                 '';
               type = "lua";
             }
-            # {
-            #   plugin = pkgs.vimPlugins.noice-nvim;
-            #   config = /*lua*/ ''
-            #     require("noice").setup({
-            #       lsp = {
-            #         -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-            #         override = {
-            #           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            #           ["vim.lsp.util.stylize_markdown"] = true,
-            #           ["cmp.entry.get_documentation"] = true,
-            #         },
-            #       },
-            #       -- you can enable a preset for easier configuration
-            #       presets = {
-            #         bottom_search = true, -- use a classic bottom cmdline for search
-            #         command_palette = true, -- position the cmdline and popupmenu together
-            #         long_message_to_split = true, -- long messages will be sent to a split
-            #         inc_rename = false, -- enables an input dialog for inc-rename.nvim
-            #         lsp_doc_border = false, -- add a border to hover docs and signature help
-            #       },
-            #     })
-            #   '';
-            #   type = "lua";
-            # }
+            {
+              plugin = pkgs.vimPlugins.nvim-metals;
+              config = ''
+                metals_config = require("metals").bare_config()
+
+                metals_config.init_options.statusBarProvider = "off"
+                metals_config.capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+                metals_config.on_attach = function(client, bufnr)
+                  require("metals").setup_dap()
+                end
+
+                metals_config.settings.metalsBinaryPath = "${pkgs.unstable.metals}/bin/metals"
+                metals_config.settings.javaHome = "${pkgs.openjdk}"
+                metals_config.settings.verboseCompilation = true
+                metals_config.settings.defaultBspToBuildTool = true
+                metals_config.settings.showImplicitArguments = true
+                metals_config.settings.showImplicitConversionsAndClasses = true
+                metals_config.settings.showInferredType = true
+                metals_config.settings.superMethodLensesEnabled = true
+
+                --require("metals").initialize_or_attach(metals_config)
+                vim.cmd([[autocmd FileType java,scala,sbt lua require('metals').initialize_or_attach(metals_config)]])
+              '';
+              type = "lua";
+            }
 
             ## Debugging
             pkgs.vimPlugins.nvim-dap-ui
