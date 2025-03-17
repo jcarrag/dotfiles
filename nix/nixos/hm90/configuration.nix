@@ -57,6 +57,10 @@
       user = "james";
       group = "users";
     };
+    displayManager.autoLogin = {
+      enable = true;
+      user = "james";
+    };
     tailscale = {
       enable = true;
       package = pkgs.unstable.tailscale;
@@ -70,10 +74,6 @@
       settings = {
         bind = "100.65.97.33:5000";
       };
-    };
-    xserver.displayManager.autoLogin = {
-      enable = true;
-      user = "james";
     };
   };
 
