@@ -52,6 +52,7 @@ in
       google-chrome
       unstable.hypnotix
       mpv # needed for anki
+      numbat
       unstable.obsidian
       sunshine
       spotify
@@ -87,7 +88,8 @@ in
       python3Minimal
       ## Scala
       sbt
-      scala
+      unstable.metals
+      coursier
       ### Services
       unstable.awscli
       sshfs
@@ -214,14 +216,12 @@ in
     brillo.enable = true;
     graphics = {
       enable = true;
-      # driSupport = true;
       enable32Bit = true;
       extraPackages = [
         pkgs.intel-media-driver
         pkgs.vaapiIntel
       ];
     };
-    #xpadneo.enable = true;
   };
 
   i18n = {

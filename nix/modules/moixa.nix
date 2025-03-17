@@ -58,7 +58,6 @@
       '';
     in
     [
-      adoptopenjdk-bin
       unstable.ngrok
       unstable.postman
       unstable.libimobiledevice
