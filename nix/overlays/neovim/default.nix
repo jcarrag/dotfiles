@@ -71,22 +71,6 @@ in
               type = "lua";
             }
             {
-              plugin = pkgs.vimPlugins.obsidian-nvim;
-              config = # lua
-                ''
-                    require("obsidian").setup {
-                      workspaces = {
-                        {
-                          name = "obsidian",
-                          path = "~/obsidian",
-                        },
-                      },
-                    }
-                  vim.opt.conceallevel = 1
-                '';
-              type = "lua";
-            }
-            {
               plugin = pkgs.vimPlugins.auto-session;
               config = # lua
                 ''
@@ -119,7 +103,6 @@ in
               config = builtins.readFile config/setup/telescope.lua;
               type = "lua";
             }
-            # pkgs.vimPlugins.telescope-fzf-native-nvim
             {
               plugin = pkgs.vimPlugins.fzf-lua;
               config = # lua
@@ -203,7 +186,6 @@ in
             pkgs.vimPlugins.nvim-web-devicons
             pkgs.vimPlugins.nui-nvim
             pkgs.vimPlugins.surround-nvim
-            pkgs.vimPlugins.nvim-code-action-menu
             pkgs.vimPlugins.vim-multiple-cursors
             pkgs.vimPlugins.csv-vim
             pkgs.vimPlugins.nvim-autopairs
