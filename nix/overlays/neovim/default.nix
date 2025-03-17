@@ -22,7 +22,7 @@ in
       # TODO: copy https://github.com/zmre/pwnvim/blob/main/pwnvim/plugins.lua
       configure =
         let
-          homeManagerPlugins = [
+          inlinePlugins = with pkgs.unstable; [
             ## Theme
             {
               plugin = pkgs.vimPlugins.lualine-nvim;
@@ -429,12 +429,12 @@ in
               type = "lua";
             }
           ];
-          luaConfig = lib.pipe homeManagerPlugins [
+          luaConfig = lib.pipe inlinePlugins [
             (lib.lists.concatMap (p: if (p ? type && p.type == "lua") then [ p.config ] else [ ]))
             lib.strings.concatLines
             # lib.debug.traceVal
           ];
-          plugins = lib.lists.map (p: if (p ? plugin) then p.plugin else p) homeManagerPlugins;
+          plugins = lib.lists.map (p: if (p ? plugin) then p.plugin else p) inlinePlugins;
         in
         {
           customRC =
