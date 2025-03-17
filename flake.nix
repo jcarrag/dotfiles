@@ -39,7 +39,7 @@
     let
       packageOverlays = import ./nix/overlays;
       mkNixos =
-        hostname: system: modules:
+        hostname: system: modules: importModules:
         let
           extrasOverlay = _: _: {
             unstable = import unstable {
@@ -60,32 +60,33 @@
         in
         nixosSystem {
           system = system;
-          modules = [
-            inputs.xremap.nixosModules.default
-            inputs.ynab-updater.nixosModules.ynab-updater
-            inputs.kolide-launcher.nixosModules.kolide-launcher
-            (import ./nix/nixos/base-configuration.nix)
-            {
-              environment.systemPackages = [
-                rebuild
-              ];
-              networking.hostName = hostname;
-              nixpkgs.overlays = [
-                extrasOverlay
-                packageOverlays
-              ];
-              nix.registry = {
-                self.flake = self;
-                nixpkgs.flake = nixpkgs;
-                unstable.flake = unstable;
-              };
-            }
-          ] ++ (map import modules);
+          modules =
+            [
+              inputs.xremap.nixosModules.default
+              (import ./nix/nixos/base-configuration.nix)
+              {
+                environment.systemPackages = [
+                  rebuild
+                ];
+                networking.hostName = hostname;
+                nixpkgs.overlays = [
+                  extrasOverlay
+                  packageOverlays
+                ];
+                nix.registry = {
+                  self.flake = self;
+                  nixpkgs.flake = nixpkgs;
+                  unstable.flake = unstable;
+                };
+              }
+            ]
+            ++ modules
+            ++ (map import importModules);
         };
     in
-    inputs.flake-utils.lib.eachDefaultSystem (system: {
-      packages = inputs.flake-utils.lib.flattenTree {
-        neovim = (mkNixos "nixos" system [ ]).options.programs.neovim.finalPackage.value;
+    flake-utils.lib.eachDefaultSystem (system: {
+      packages = flake-utils.lib.flattenTree {
+        neovim = (mkNixos "nixos" system [ ] [ ]).options.programs.neovim.finalPackage.value;
         tmate =
           (import nixpkgs {
             inherit system;
@@ -109,27 +110,48 @@
                 sha256 = "sha256-oPaPWa0xPr3Os1ivkuxh04umZK5MAhBuTPei0ncgT4Y=";
               }
             ];
-        mbp = mkNixos "mbp" "x86_64-linux" [
-          ./nix/nixos/mbp/hardware-configuration.nix
-          ./nix/nixos/mbp/configuration.nix
-        ];
-        nuc = mkNixos "nuc" "x86_64-linux" [
-          ./nix/nixos/nuc/hardware-configuration.nix
-          ./nix/nixos/nuc/configuration.nix
-        ];
-        hm90 = mkNixos "hm90" "x86_64-linux" [
-          ./nix/nixos/hm90/hardware-configuration.nix
-          ./nix/nixos/hm90/configuration.nix
-        ];
-        fwk = mkNixos "fwk" "x86_64-linux" [
-          ./nix/nixos/fwk/hardware-configuration.nix
-          ./nix/nixos/fwk/configuration.nix
-        ];
-        lunar-fwk = mkNixos "lunar-fwk" "x86_64-linux" [
-          ./nix/nixos/lunar_fwk/hardware-configuration.nix
-          ./nix/nixos/lunar_fwk/configuration.nix
-          ./nix/modules/moixa.nix
-        ];
+        mbp =
+          mkNixos "mbp" "x86_64-linux"
+            [ ]
+            [
+              ./nix/nixos/mbp/hardware-configuration.nix
+              ./nix/nixos/mbp/configuration.nix
+            ];
+        nuc =
+          mkNixos "nuc" "x86_64-linux"
+            [ ]
+            [
+              ./nix/nixos/nuc/hardware-configuration.nix
+              ./nix/nixos/nuc/configuration.nix
+            ];
+        hm90 =
+          mkNixos "hm90" "x86_64-linux"
+            [
+              inputs.ynab-updater.nixosModules.ynab-updater
+            ]
+            [
+              ./nix/nixos/hm90/hardware-configuration.nix
+              ./nix/nixos/hm90/configuration.nix
+            ];
+        fwk =
+          mkNixos "fwk" "x86_64-linux"
+            [
+              inputs.ynab-updater.nixosModules.ynab-updater
+            ]
+            [
+              ./nix/nixos/fwk/hardware-configuration.nix
+              ./nix/nixos/fwk/configuration.nix
+            ];
+        lunar-fwk =
+          mkNixos "lunar-fwk" "x86_64-linux"
+            [
+              inputs.kolide-launcher.nixosModules.kolide-launcher
+            ]
+            [
+              ./nix/nixos/lunar_fwk/hardware-configuration.nix
+              ./nix/nixos/lunar_fwk/configuration.nix
+              ./nix/modules/moixa.nix
+            ];
       };
     };
 }
