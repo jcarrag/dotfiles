@@ -14,7 +14,7 @@ in
   options.programs.emby-server = {
     enable = mkEnableOption "Enable the Emby server service.";
 
-    package = mkPackageOptionMD pkgs "emby-server" { };
+    package = mkPackageOption pkgs "emby-server" { };
 
     dataDir = mkOption {
       type = types.str;
