@@ -138,6 +138,7 @@ in
       helvum # pipewire
       rofi-wayland
       slurp # wayland paste to stdout
+      syncthingtray
       alacritty
       update-resolv-conf
       xclip
