@@ -11,16 +11,20 @@
 
   networking = {
     firewall = {
-      allowedUDPPorts =
-        [
+      allowedUDPPorts = [
+        # 443 # caddy FIXME: remove after testing
+      ];
+      interfaces.tailscale0 = {
+        allowedUDPPorts = [
+          22000 # syncthing
+          21027 # syncthing
         ];
-      interfaces.tailscale0.allowedTCPPorts =
-        if config.services.harmonia.enable then
-          [
-            5000 # harmonia
-          ]
-        else
-          [ ];
+        allowedTCPPorts = [
+          # 5000 # harmonia
+          8384 # syncthing
+          22000 # syncthing
+        ];
+      };
     };
   };
 
@@ -45,6 +49,10 @@
         devices = {
           hm90 = {
             id = "IEYHIZK-64FMYVQ-BUFCRXV-H5HXUE3-GI6LX52-6MKQTWA-TKBG4CD-DEBK5AY";
+            autoAcceptFolders = true;
+          };
+          fwk = {
+            id = "YJUN6RQ-M6J4OLM-AHX5T5E-R3EQZL2-63Y7SYJ-234K2G2-LZEXEON-6HDYUAX";
             autoAcceptFolders = true;
           };
           lunar-fwk = {

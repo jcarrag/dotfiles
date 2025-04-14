@@ -82,6 +82,10 @@
             id = "IEYHIZK-64FMYVQ-BUFCRXV-H5HXUE3-GI6LX52-6MKQTWA-TKBG4CD-DEBK5AY";
             autoAcceptFolders = true;
           };
+          fwk = {
+            id = "YJUN6RQ-M6J4OLM-AHX5T5E-R3EQZL2-63Y7SYJ-234K2G2-LZEXEON-6HDYUAX";
+            autoAcceptFolders = true;
+          };
           lunar-fwk = {
             id = "LE2NRU6-MD4PBOO-VEOTVRO-6GUGP53-2C2LL3L-WHU6MFN-2L3657P-MZHN2Q4";
             autoAcceptFolders = true;
