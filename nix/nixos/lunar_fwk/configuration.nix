@@ -42,6 +42,19 @@
         bind = "100.124.115.79:5000";
       };
     };
+    syncthing = {
+      enable = true;
+      group = "users";
+      user = "james";
+      dataDir = "/home/james/syncthing";
+      guiAddress = "100.102.227.124:8384"; # lunar-fwk.tail7f031.ts.net
+      settings = {
+        devices = {
+          hm90.id = "IEYHIZK-64FMYVQ-BUFCRXV-H5HXUE3-GI6LX52-6MKQTWA-TKBG4CD-DEBK5AY";
+          lunar-fwk.id = "LE2NRU6-MD4PBOO-VEOTVRO-6GUGP53-2C2LL3L-WHU6MFN-2L3657P-MZHN2Q4";
+        };
+      };
+    };
     tailscale = {
       enable = true;
       package = pkgs.unstable.tailscale;
