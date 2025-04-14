@@ -33,15 +33,17 @@
 
   networking = {
     firewall = {
-      allowedUDPPorts = [
-      ];
-      interfaces.tailscale0.allowedTCPPorts =
-        if config.services.harmonia.enable then
-          [
-            5000 # harmonia
-          ]
-        else
-          [ ];
+      interfaces.tailscale0 = {
+        allowedUDPPorts = [
+          22000 # syncthing
+          21027 # syncthing
+        ];
+        allowedTCPPorts = [
+          5000 # harmonia
+          8384 # syncthing
+          22000 # syncthing
+        ];
+      };
     };
   };
 
@@ -72,6 +74,27 @@
       signKeyPaths = [ "/home/james/secrets/harmonia.pem" ];
       settings = {
         bind = "100.65.97.33:5000";
+      };
+    };
+    syncthing = {
+      enable = true;
+      group = "users";
+      user = "james";
+      dataDir = "/home/james/syncthing";
+      guiAddress = "100.65.97.33:8384"; # hm90.tail7f031.ts.net
+      settings = {
+        devices = {
+          "hm90" = {
+            id = "IEYHIZK-64FMYVQ-BUFCRXV-H5HXUE3-GI6LX52-6MKQTWA-TKBG4CD-DEBK5AY";
+          };
+        };
+        folders = {
+          "Calibre Library" = {
+            path = "/home/james/Calibre Library";
+            devices = [
+            ];
+          };
+        };
       };
     };
   };
