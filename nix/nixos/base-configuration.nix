@@ -151,7 +151,6 @@ in
       # k2pdfopt # pdf crop for kindle [broken]
       cntr
       dig
-      unstable.direnv
       dhcpdump
       ffmpeg-full
       fq
@@ -366,6 +365,7 @@ in
     autojump.enable = true;
     bash.completion.enable = true;
     command-not-found.dbPath = "/home/james/.cache/nix-index/files";
+    direnv.enable = true;
     fzf = {
       keybindings = true;
       fuzzyCompletion = true;
