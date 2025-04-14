@@ -68,7 +68,7 @@
       useRoutingFeatures = "both";
     };
     harmonia = {
-      enable = false;
+      enable = true;
       # nix-store --generate-binary-cache-key hm90.tail7f031.ts.net harmonia.pem harmonia.pub
       signKeyPath = /home/james/secrets/harmonia.pem;
       settings = {
