@@ -31,7 +31,7 @@ in
       pyright
       ### Communication
       unstable.discord
-      unstable.signal-desktop
+      unstable.signal-desktop-bin
       unstable.skypeforlinux
       unstable.slack
       ### eGPU

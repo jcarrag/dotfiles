@@ -33,9 +33,8 @@
 
   networking = {
     firewall = {
-      allowedUDPPorts =
-        [
-        ];
+      allowedUDPPorts = [
+      ];
       interfaces.tailscale0.allowedTCPPorts =
         if config.services.harmonia.enable then
           [
@@ -70,7 +69,7 @@
     harmonia = {
       enable = true;
       # nix-store --generate-binary-cache-key hm90.tail7f031.ts.net harmonia.pem harmonia.pub
-      signKeyPath = /home/james/secrets/harmonia.pem;
+      signKeyPaths = [ "/home/james/secrets/harmonia.pem" ];
       settings = {
         bind = "100.65.97.33:5000";
       };
