@@ -62,12 +62,6 @@
       enable = true;
       user = "james";
     };
-    tailscale = {
-      enable = true;
-      package = pkgs.unstable.tailscale;
-      extraSetFlags = [ "--accept-routes" ];
-      useRoutingFeatures = "both";
-    };
     harmonia = {
       enable = true;
       # nix-store --generate-binary-cache-key hm90.tail7f031.ts.net harmonia.pem harmonia.pub
@@ -84,18 +78,24 @@
       guiAddress = "100.65.97.33:8384"; # hm90.tail7f031.ts.net
       settings = {
         devices = {
-          "hm90" = {
-            id = "IEYHIZK-64FMYVQ-BUFCRXV-H5HXUE3-GI6LX52-6MKQTWA-TKBG4CD-DEBK5AY";
-          };
+          hm90.id = "IEYHIZK-64FMYVQ-BUFCRXV-H5HXUE3-GI6LX52-6MKQTWA-TKBG4CD-DEBK5AY";
+          lunar-fwk.id = "LE2NRU6-MD4PBOO-VEOTVRO-6GUGP53-2C2LL3L-WHU6MFN-2L3657P-MZHN2Q4";
         };
         folders = {
           "Calibre Library" = {
             path = "/home/james/Calibre Library";
             devices = [
+              "lunar-fwk"
             ];
           };
         };
       };
+    };
+    tailscale = {
+      enable = true;
+      package = pkgs.unstable.tailscale;
+      extraSetFlags = [ "--accept-routes" ];
+      useRoutingFeatures = "both";
     };
   };
 
