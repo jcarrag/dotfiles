@@ -95,6 +95,7 @@
           "Calibre Library" = {
             path = "/home/james/Calibre Library";
             devices = [
+              "fwk"
               "lunar-fwk"
             ];
           };
