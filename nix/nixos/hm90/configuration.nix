@@ -78,8 +78,14 @@
       guiAddress = "100.65.97.33:8384"; # hm90.tail7f031.ts.net
       settings = {
         devices = {
-          hm90.id = "IEYHIZK-64FMYVQ-BUFCRXV-H5HXUE3-GI6LX52-6MKQTWA-TKBG4CD-DEBK5AY";
-          lunar-fwk.id = "LE2NRU6-MD4PBOO-VEOTVRO-6GUGP53-2C2LL3L-WHU6MFN-2L3657P-MZHN2Q4";
+          hm90 = {
+            id = "IEYHIZK-64FMYVQ-BUFCRXV-H5HXUE3-GI6LX52-6MKQTWA-TKBG4CD-DEBK5AY";
+            autoAcceptFolders = true;
+          };
+          lunar-fwk = {
+            id = "LE2NRU6-MD4PBOO-VEOTVRO-6GUGP53-2C2LL3L-WHU6MFN-2L3657P-MZHN2Q4";
+            autoAcceptFolders = true;
+          };
         };
         folders = {
           "Calibre Library" = {
