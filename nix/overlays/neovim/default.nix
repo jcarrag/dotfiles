@@ -191,6 +191,8 @@ in
             pkgs.vimPlugins.nvim-autopairs
             pkgs.vimPlugins.direnv-vim
             pkgs.vimPlugins.file-line
+            pkgs.vimPlugins.rest-nvim
+            pkgs.vimPlugins.markdown-preview-nvim
             (fromGitHub "0612c180d699c5d298e5181befa1830980e8e083" "master" "knsh14/vim-github-link")
             (fromGitHub "0273f88f7199189f9a0f32213a34ab778e226f86" "main" "grafana/vim-alloy")
             # {
