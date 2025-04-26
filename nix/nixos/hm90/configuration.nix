@@ -90,6 +90,10 @@
             id = "LE2NRU6-MD4PBOO-VEOTVRO-6GUGP53-2C2LL3L-WHU6MFN-2L3657P-MZHN2Q4";
             autoAcceptFolders = true;
           };
+          sm-x510 = {
+            id = "Z6RHLYN-DXGQCL2-O4LT7AA-6SVG4KF-2OQDN36-M5D7RCT-S6EM6VS-KSGTDQ7";
+            autoAcceptFolders = true;
+          };
         };
         folders = {
           "Calibre Library" = {
@@ -97,6 +101,7 @@
             devices = [
               "fwk"
               "lunar-fwk"
+              "sm-x510"
             ];
           };
         };
