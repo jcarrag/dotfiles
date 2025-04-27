@@ -104,6 +104,13 @@
               "sm-x510"
             ];
           };
+          "storyteller" = {
+            path = "/home/james/storyteller";
+            devices = [
+              "fwk"
+              "lunar-fwk"
+            ];
+          };
         };
       };
     };
@@ -116,4 +123,23 @@
   };
 
   systemd = pkgs.systemd-services;
+
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      storyteller = {
+        image = "registry.gitlab.com/storyteller-platform/storyteller:latest";
+        ports = [
+          "100.65.97.33:8001:8001"
+        ];
+        volumes = [
+          "/home/james/storyteller:/data:rw"
+          "/home/james/secrets/storyteller:/run/secrets/secret_key"
+        ];
+        environment = {
+          STORYTELLER_SECRET_KEY_FILE = "/run/secrets/secret_key";
+        };
+      };
+    };
+  };
 }
