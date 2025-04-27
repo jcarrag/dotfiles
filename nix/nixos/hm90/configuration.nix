@@ -98,6 +98,10 @@
         folders = {
           "Calibre Library" = {
             path = "/home/james/Calibre Library";
+            versioning = {
+              type = "simple";
+              params.keep = "1";
+            };
             devices = [
               "fwk"
               "lunar-fwk"
@@ -106,6 +110,10 @@
           };
           "storyteller" = {
             path = "/home/james/storyteller";
+            versioning = {
+              type = "simple";
+              params.keep = "1";
+            };
             devices = [
               "fwk"
               "lunar-fwk"
