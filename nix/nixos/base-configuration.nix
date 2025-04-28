@@ -279,6 +279,10 @@ in
       experimental-features = nix-command flakes
       connect-timeout = 1
     '';
+    gc = {
+      automatic = true;
+      dates = "weekly";
+    };
     settings = {
       auto-optimise-store = true;
       substituters = [
