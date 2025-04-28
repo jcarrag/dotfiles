@@ -141,6 +141,7 @@ in
       syncthingtray
       alacritty
       update-resolv-conf
+      waybar
       xclip
       ### Util
       asciicharts
@@ -400,7 +401,6 @@ in
       localNetworkGameTransfers.openFirewall = true;
     };
     thunar.enable = true;
-    waybar.enable = true;
   };
 
   security = {
