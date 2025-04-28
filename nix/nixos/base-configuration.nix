@@ -139,6 +139,7 @@ in
       rofi-wayland
       slurp # wayland paste to stdout
       syncthingtray
+      swaynotificationcenter
       alacritty
       update-resolv-conf
       waybar
