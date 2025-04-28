@@ -35,11 +35,11 @@
     getty.autologinUser = "james";
     displayManager.autoLogin.user = "james";
     harmonia = {
-      enable = false;
+      enable = true;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
-      signKeyPath = /home/james/secrets/harmonia.pem;
+      signKeyPaths = [ "/home/james/secrets/harmonia.pem" ];
       settings = {
-        bind = "100.124.115.79:5000";
+        bind = "100.102.227.124:5000";
       };
     };
     syncthing = {
