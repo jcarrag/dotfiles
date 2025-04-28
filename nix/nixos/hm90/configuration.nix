@@ -132,6 +132,21 @@
 
   systemd = pkgs.systemd-services;
 
+  system.autoUpgrade = {
+    enable = true;
+    flake = pkgs._self.outPath;
+    flags = [
+      "--update-input"
+      "nixpkgs"
+      "--update-input"
+      "unstable"
+      "--no-write-lock-file"
+      "--print-build-logs"
+    ];
+    dates = "02:00";
+    randomizedDelaySec = "45min";
+  };
+
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {
