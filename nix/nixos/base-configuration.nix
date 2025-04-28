@@ -109,7 +109,6 @@ in
       bustle # d-bus monitor
       catppuccin-cursors.mochaMauve
       comma # run any program without installation
-      dunst
       dnsmasq
       file
       gnome2.gnome_icon_theme
