@@ -54,7 +54,7 @@
           };
           rebuild = (import nixpkgs { inherit system; }).writeShellScriptBin "rebuild" ''
             set -x
-            sudo nixos-rebuild switch --flake ~/dotfiles/nix#${hostname} "$@"
+            sudo nixos-rebuild switch --flake ~/dotfiles/nix#${hostname} "$@" --log-format internal-json -v |& ${pkgs.nix-output-monitor}/bin/nom --json
           '';
           nixosSystem = import (nixpkgs + "/nixos/lib/eval-config.nix");
         in
