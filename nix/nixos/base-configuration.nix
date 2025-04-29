@@ -276,7 +276,6 @@ in
       pkgs.lib.filterAttrs (key: value: value ? to.path) config.nix.registry
     );
     extraOptions = ''
-      experimental-features = nix-command flakes
       connect-timeout = 1
     '';
     gc = {
@@ -284,22 +283,23 @@ in
       dates = "weekly";
     };
     settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+        "dynamic-derivations"
+        "ca-derivations"
+        "recursive-nix"
+      ];
       auto-optimise-store = true;
       substituters = [
         # disabled because: https://github.com/NixOS/nix/issues/6901
         # "http://hm90.tail7f031.ts.net:5000" # harmonia
         # "http://fwk.tail7f031.ts.net:5000" # harmonia
-        # "http://xps-1.tail7f031.ts.net:5000" # harmonia
         "https://cache.nixos.org/"
-      ];
-      trusted-substituters = [
-        "https://cache.iog.io"
-        # "https://jcarrag.cachix.org"
       ];
       trusted-public-keys = [
         "hm90.tail7f031.ts.net:MCfNHw7zYy994pMsO/bq1aduiMirFR5tuXYNv4/LAj8=" # harmonia
         "fwk.tail7f031.ts.net:VH6U0MFW2pggLXy51YiAGvr8gnC37HYLsM+6Nm1ivZU=" # harmonia
-        "xps-1.tail7f031.ts.net:3Ltju5+Q1rszLnD2ti4eitAXrE3cit9Ck84BSsz/K/I=" # harmonia
       ];
       trusted-users = [
         "root"
