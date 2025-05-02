@@ -518,6 +518,7 @@ in
       '';
     };
     switcherooControl.enable = true;
+    tzupdate.enable = true;
     udev = {
       # https://yulistic.gitlab.io/2017/12/linux-keymapping-with-udev-hwdb
       # https://wiki.archlinux.org/title/map_scancodes_to_keycodes
@@ -672,6 +673,7 @@ in
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHMKP2hPhz+L3GJ2eoj4DTtZbdgSm5cS+RVtV9lY7fpB james@carragher.dev" # fwk
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID+kfnnvuaVqRuhUPpPlUY4s7UPMkoI9vGskJxep0ZPa james@carragher.dev" # lunar-fwk
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIwJ3qvOGZRCgxKwe9TghG03MyM2eYWLy3wmjVK23T+M james@carragher.dev" # hm90
     ];
   };
 
