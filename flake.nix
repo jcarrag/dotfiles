@@ -17,14 +17,9 @@
   nixConfig = {
     extra-substituters = [
       "https://cache.nixos.org"
-      "https://nix-community.cachix.org"
-      "https://jcarrag.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "jcarrag.cachix.org-1:FA5BLvAZdzLaJztyyou115tAQjT1cQsiAG03dm0AdvI="
-      "lunar-fwk.local:H4NmafY0vSkC34A3i3ck8o74iljZQ4p15qKclcOLM2g="
     ];
   };
 
@@ -52,10 +47,18 @@
             };
             _self = self;
           };
-          rebuild = (import nixpkgs { inherit system; }).writeShellScriptBin "rebuild" ''
-            set -x
-            sudo sh -c 'nixos-rebuild switch --flake /home/james/dotfiles#${hostname} "$@" --log-format internal-json -v |& ${pkgs.nix-output-monitor}/bin/nom --json'
-          '';
+          rebuild =
+            with (import nixpkgs { inherit system; });
+            writeShellScriptBin "rebuild" ''
+              set -x
+              sudo sh -c 'nixos-rebuild switch \
+              --flake /home/james/dotfiles#${hostname} \
+              --accept-flake-config \
+              --log-format internal-json \
+              --verbose \
+              "$@" \
+              |& ${nix-output-monitor}/bin/nom --json'
+            '';
           nixosSystem = import (nixpkgs + "/nixos/lib/eval-config.nix");
         in
         nixosSystem {

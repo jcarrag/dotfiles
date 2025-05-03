@@ -122,6 +122,7 @@ in
       inotify-tools
       unstable.lurk
       ntfsprogs # gparted dep
+      numbat # cli scientific calculator
       hicolor-icon-theme
       libsecret
       lm_sensors
