@@ -51,13 +51,14 @@
             with (import nixpkgs { inherit system; });
             writeShellScriptBin "rebuild" ''
               set -x
-              sudo sh -c 'nixos-rebuild switch \
+              EXTRA_ARGS="$@"
+              sudo sh -c "nixos-rebuild switch \
               --flake /home/james/dotfiles#${hostname} \
               --accept-flake-config \
               --log-format internal-json \
               --verbose \
-              "$@" \
-              |& ${nix-output-monitor}/bin/nom --json'
+              ''${EXTRA_ARGS} \
+              |& ${nix-output-monitor}/bin/nom --json"
             '';
           nixosSystem = import (nixpkgs + "/nixos/lib/eval-config.nix");
         in
