@@ -449,7 +449,6 @@ in
         accelSpeed = "0.0";
       };
     };
-    localtimed.enable = true;
     logind.extraConfig = ''
       HandlePowerKey=ignore
       HandleLidSwitch=suspend-then-hibernate
