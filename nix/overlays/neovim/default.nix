@@ -147,6 +147,9 @@ in
                     settings = {
                       publish_diagnostic_on = "change",
                       expose_as_code_action = "all",
+                      -- contrary to the docs, this must be a number or it isn't acknowledged
+                      -- https://github.com/pmizio/typescript-tools.nvim/pull/67/files#diff-a51f0845ed52f1844d37953402f96d8e402fe3c480d06d94df209c6d78c3d8e3R129
+                      tsserver_max_memory = 32768,
                     }
                   }
                   vim.keymap.set('n', ':OR', '<cmd>TSToolsOrganizeImports<cr>')
