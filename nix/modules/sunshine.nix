@@ -37,6 +37,8 @@ in
     };
     systemd.user.services.sunshine = {
       description = "Sunshine self-hosted game stream host for Moonlight";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
       startLimitBurst = 5;
       startLimitIntervalSec = 500;
       serviceConfig = {
