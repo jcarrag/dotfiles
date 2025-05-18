@@ -2,6 +2,10 @@
 { pkgs, config, ... }:
 
 {
+  imports = [
+    ../../modules/sunshine.nix
+  ];
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -29,6 +33,8 @@
           [ ];
     };
   };
+
+  programs.sunshine.enable = true;
 
   services = {
     # the SDD is LUKS encrypted so a password is already required
