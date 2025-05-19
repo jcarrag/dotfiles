@@ -279,10 +279,7 @@ in
     extraOptions = ''
       connect-timeout = 1
     '';
-    gc = {
-      automatic = true;
-      dates = "weekly";
-    };
+    gc.dates = "weekly"; # enabled per-host
     settings = {
       experimental-features = [
         "nix-command"

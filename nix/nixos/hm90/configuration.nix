@@ -11,6 +11,8 @@
     LIBVA_DRIVER_NAME = "iHD";
   };
 
+  nix.gc.automatic = true;
+
   programs = {
     emby-server = {
       enable = true;

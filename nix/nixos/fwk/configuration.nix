@@ -9,6 +9,8 @@
   # AMD RX 5700 XT
   boot.initrd.kernelModules = [ "amdgpu" ];
 
+  nix.gc.automatic = true;
+
   networking = {
     firewall = {
       allowedUDPPorts = [
