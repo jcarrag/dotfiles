@@ -32,7 +32,6 @@ in
       ### Communication
       unstable.discord
       unstable.signal-desktop-bin
-      unstable.skypeforlinux
       unstable.slack
       ### eGPU
       unstable.intel-gpu-tools
