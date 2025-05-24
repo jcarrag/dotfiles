@@ -290,6 +290,7 @@ in
       trusted-public-keys = [
         "hm90.tail7f031.ts.net:MCfNHw7zYy994pMsO/bq1aduiMirFR5tuXYNv4/LAj8=" # harmonia
         "fwk.tail7f031.ts.net:VH6U0MFW2pggLXy51YiAGvr8gnC37HYLsM+6Nm1ivZU=" # harmonia
+        "lunar-fwk.tail7f031.ts.net:uw0LlVOHeb06LtOH/weFSXh0YfI/ZwK5mYjN4Jjk7rs=" # harmonia
       ];
       trusted-users = [
         "root"
