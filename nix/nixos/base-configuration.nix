@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 
 let
   unstable = pkgs.unstable;
@@ -77,7 +77,7 @@ in
       rscls
       ## Javascript
       nix-npm-install
-      nodejs-18_x
+      nodejs
       nodePackages.node2nix
       prettierd
       ## Nix
@@ -110,7 +110,6 @@ in
       comma # run any program without installation
       dnsmasq
       file
-      gnome2.gnome_icon_theme
       adwaita-icon-theme
       zenity
       gnupg
@@ -190,12 +189,6 @@ in
     ++ scripts;
 
   fonts.packages = with pkgs; [
-    (nerdfonts.override {
-      fonts = [
-        "Hack"
-        "NerdFontsSymbolsOnly"
-      ];
-    })
     noto-fonts
     noto-fonts-emoji
     noto-fonts-cjk-sans
@@ -204,7 +197,7 @@ in
     powerline-fonts
     powerline-symbols
     adwaita-icon-theme
-  ];
+  ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
 
   hardware = {
     saleae-logic.enable = true;
