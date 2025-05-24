@@ -13,6 +13,6 @@ self: super:
       hash = "sha256-1j7YRpozmBKfQyACE1wQp7gRegYZye26m1tlUaOLvtE=";
     };
 
-    cargoHash = "sha256-NCts+DHgIJXBdSoHhXFHv1CoBJFsAwgL4rRaC2IZXLU=";
+    cargoHash = "sha256-NsFIryontZWRVDfAVTCDr5deBhvMggRJiiWj5tAAiK0=";
   };
 }

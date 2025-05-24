@@ -12,7 +12,7 @@ let
     }:
 
     let
-      version = "4.9.0.42";
+      version = "4.9.0.60";
       name = "emby-${version}";
     in
     stdenv.mkDerivation {
@@ -20,7 +20,7 @@ let
       # "https://github.com/MediaBrowser/Emby.Releases/releases/download/4.8.0.37/emby-server-deb_4.8.0.37_amd64.deb";
       src = fetchurl {
         url = "https://github.com/MediaBrowser/Emby.Releases/releases/download/${version}/emby-server-deb_${version}_amd64.deb";
-        sha256 = "sha256-dN4zgKwfAdvOjiii2wm6WepG2NwzRO/I3+fXciJJ4bE=";
+        sha256 = "sha256-uiYgz7fLXNT+xrz3dO3oCpYWraPufJ+xBjcU3kTushk=";
       };
 
       preBuild = ''

@@ -46,30 +46,30 @@ in
                 '';
               type = "lua";
             }
-            {
-              plugin = fromGitHub "d98e732cb73690b07c00c839c924be1d1d9ac5c2" "main" "MunifTanjim/prettier.nvim";
-              config = # lua
-                ''
-                  require("prettier").setup({
-                    bin = 'prettierd',
-                    filetypes = {
-                      "css",
-                      "graphql",
-                      "html",
-                      "javascript",
-                      "javascriptreact",
-                      "json",
-                      "less",
-                      "markdown",
-                      "scss",
-                      "typescript",
-                      "typescriptreact",
-                      "yaml",
-                    },
-                  })
-                '';
-              type = "lua";
-            }
+            #{
+            #  plugin = fromGitHub "d98e732cb73690b07c00c839c924be1d1d9ac5c2" "main" "MunifTanjim/prettier.nvim";
+            #  config = # lua
+            #    ''
+            #      require("prettier").setup({
+            #        bin = 'prettierd',
+            #        filetypes = {
+            #          "css",
+            #          "graphql",
+            #          "html",
+            #          "javascript",
+            #          "javascriptreact",
+            #          "json",
+            #          "less",
+            #          "markdown",
+            #          "scss",
+            #          "typescript",
+            #          "typescriptreact",
+            #          "yaml",
+            #        },
+            #      })
+            #    '';
+            #  type = "lua";
+            #}
             {
               plugin = pkgs.vimPlugins.auto-session;
               config = # lua
