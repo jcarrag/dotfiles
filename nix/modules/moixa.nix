@@ -59,7 +59,6 @@
     in
     [
       unstable.ngrok
-      unstable.postman
       unstable.libimobiledevice
       airplay
       copy
