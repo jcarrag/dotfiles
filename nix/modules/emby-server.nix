@@ -24,7 +24,7 @@ in
 
     openFirewall = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = lib.mdDoc "Open ports in the firewall for the Emby web interface.";
     };
 
@@ -47,7 +47,7 @@ in
       "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
     ];
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall.interfaces.tailscale0 = mkIf cfg.openFirewall {
       allowedTCPPorts = [
         8096
         8920
@@ -70,7 +70,8 @@ in
 
     systemd.services.emby-server = {
       description = "Emby server";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 30;
       startLimitBurst = 2;

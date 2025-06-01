@@ -14,12 +14,7 @@
   nix.gc.automatic = true;
 
   programs = {
-    emby-server = {
-      enable = true;
-      user = "emby-server";
-      group = "users";
-      openFirewall = true;
-    };
+    emby-server.enable = true;
     ynab-updater = {
       enable = true;
       configDir = "/home/james/.config/ynab-updater";

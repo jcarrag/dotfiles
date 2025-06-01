@@ -653,11 +653,10 @@ in
       "networkmanager"
       "docker"
       "dialout"
+      "emby-server"
     ];
     group = "users";
     home = "/home/james";
-    # allow emby-server access to ~/emby-library
-    homeMode = "770";
     isNormalUser = true;
     uid = 1000;
     openssh.authorizedKeys.keys = [
