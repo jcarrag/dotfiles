@@ -130,7 +130,7 @@
   systemd = pkgs.systemd-services;
 
   system.autoUpgrade = {
-    enable = true;
+    enable = false;
     flake = pkgs._self.outPath;
     flags = [
       "--update-input"
