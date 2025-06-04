@@ -5,6 +5,7 @@
   imports = [
     ../../modules/emby-server.nix
     ../../modules/tailscale-funnel.nix
+    ../../modules/frigate.nix
   ];
 
   environment.sessionVariables = {
