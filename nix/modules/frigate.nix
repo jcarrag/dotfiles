@@ -75,7 +75,10 @@
         };
       };
       cameras = {
-        # FIXME: replace hostname with camera's final location (also set on camera)
+        # FIXME replace hostname with camera's final location (also set on camera)
+        # FIXME configure new camera's encoding:
+        #   - http://192.168.1.108/#/index/camera/imgset
+        #   - https://docs.frigate.video/frigate/camera_setup/#example-camera-configuration
         HDW3549H = {
           detect = {
             width = 1280;
