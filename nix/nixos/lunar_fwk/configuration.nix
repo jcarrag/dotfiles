@@ -27,7 +27,7 @@
       interfaces.tailscale0.allowedTCPPorts =
         if config.services.harmonia.enable then
           [
-            5000 # harmonia
+            5001 # harmonia
           ]
         else
           [ ];
@@ -45,7 +45,7 @@
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
       signKeyPaths = [ "/home/james/secrets/harmonia.pem" ];
       settings = {
-        bind = "100.102.227.124:5000";
+        bind = "100.102.227.124:5001";
       };
     };
     syncthing = {
