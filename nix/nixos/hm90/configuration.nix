@@ -1,5 +1,10 @@
 # EliteMini HM90
-{ pkgs, config, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -128,27 +133,29 @@
     };
   };
 
-  systemd = pkgs.systemd-services;
-
-  system.autoUpgrade = {
-    enable = false;
-    flake = pkgs._self.outPath;
-    flags = [
-      "--update-input"
-      "nixpkgs"
-      "--update-input"
-      "unstable"
-      "--no-write-lock-file"
-      "--print-build-logs"
+  systemd = pkgs.systemd-services // {
+    # override the systemd service's $user so storyteller runs as so it can be targeted syncthing
+    services.storyteller.serviceConfig.User = lib.mkForce "james";
+    services.storyteller.serviceConfig.Group = lib.mkForce "users";
+    # wait for tailscale for bind
+    services.storyteller.serviceConfig.ExecStartPre = lib.mkForce [
+      "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
     ];
-    dates = "02:00";
-    randomizedDelaySec = "45min";
+    services.storyteller.after = lib.mkForce [
+      "network-online.target"
+      "tailscaled.service"
+    ];
+    services.storyteller.wants = lib.mkForce [
+      "network-online.target"
+      "tailscaled.service"
+    ];
   };
 
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {
       storyteller = {
+        serviceName = "storyteller";
         image = "registry.gitlab.com/storyteller-platform/storyteller:latest";
         ports = [
           "100.65.97.33:8001:8001"
