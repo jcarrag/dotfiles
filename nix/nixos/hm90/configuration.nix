@@ -9,9 +9,9 @@
 {
   imports = [
     ../../modules/emby-server.nix
-    ../../modules/tailscale-funnel.nix
     ../../modules/frigate.nix
     ../../modules/sunshine.nix
+    ../../modules/tailscale-funnel.nix
   ];
 
   environment.sessionVariables = {

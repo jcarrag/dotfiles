@@ -49,7 +49,6 @@ in
       evince
       firefox
       google-chrome
-      unstable.hypnotix
       mpv # needed for anki
       numbat
       unstable.obsidian
