@@ -28,8 +28,7 @@
     ];
     nat = {
       enable = true;
-      # FIXME replace with final eth interface
-      externalInterface = "wlp5s0";
+      externalInterface = "enp6s0"; # 🖧
       internalInterfaces = [
         "en01" # "2.5G LAN"
       ];
