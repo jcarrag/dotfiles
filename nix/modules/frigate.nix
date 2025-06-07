@@ -3,6 +3,11 @@
 {
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1; # don't drop packets meant for NAT'd subnet
 
+  # environment.systemPackages = with pkgs; [
+  #   # used for network bandwidth monitoring
+  #   nethogs
+  # ];
+
   services.dnsmasq = {
     enable = true;
     settings = {
@@ -25,7 +30,9 @@
       enable = true;
       # FIXME replace with final eth interface
       externalInterface = "wlp5s0";
-      internalInterfaces = [ "enp6s0" ];
+      internalInterfaces = [
+        "en01" # "2.5G LAN"
+      ];
     };
     interfaces.enp6s0 = {
       ipv4.addresses = [
@@ -42,7 +49,7 @@
   # https://docs.frigate.video/configuration
   services.frigate = {
     enable = true;
-    hostname = "frigate";
+    hostname = "frigate.carragher.dev";
     settings = {
       environment_vars = {
         LIBVA_DRIVER_NAME = "radeonsi";
@@ -50,12 +57,28 @@
       ffmpeg = {
         hwaccel_args = "preset-vaapi";
       };
-      detectors = {
-        coral = {
-          type = "edgetpu";
-          device = "usb";
-        };
+      detectors.coral = {
+        type = "edgetpu";
+        device = "usb";
       };
+      semantic_search = {
+        enabled = true;
+        model_size = "large";
+      };
+      objects = {
+        track = [
+          "person"
+          "car"
+          "dog"
+          "cat"
+        ];
+      };
+      notifications = {
+        enabled = true;
+        email = "james@carragher.dev";
+      };
+      # FIXME this needs nethogs, which isn't packaged, and adding it to PATH doesn't work
+      # telemetry.stats.network_bandwidth = true;
       record = {
         enabled = true;
         retain = {
@@ -74,12 +97,22 @@
           };
         };
       };
+      camera_groups = {
+        front = {
+          cameras = [
+            "driveway_cam"
+          ];
+          icon = "LuCar";
+          order = 0;
+        };
+      };
       cameras = {
-        # FIXME replace hostname with camera's final location (also set on camera)
+        # FIXME replace hostname & ip with camera's final location (also set on camera)
         # FIXME configure new camera's encoding:
         #   - http://192.168.1.108/#/index/camera/imgset
         #   - https://docs.frigate.video/frigate/camera_setup/#example-camera-configuration
-        HDW3549H = {
+        # hostname: HDW3549H
+        driveway_cam = {
           detect = {
             width = 1280;
             height = 720;
@@ -106,6 +139,8 @@
             # ignore timestamp overlay
             "0.55,0.034,0.551,0.088,0.957,0.088,0.956,0.034"
           ];
+          # FIXME replace w/ static ip
+          webui_url = "http://192.168.1.108";
         };
       };
     };
