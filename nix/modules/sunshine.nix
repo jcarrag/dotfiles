@@ -29,20 +29,23 @@ in
         }
       ];
     };
-    security.wrappers.sunshine = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_sys_admin+p";
-      source = "${pkgs.sunshine}/bin/sunshine";
-    };
-    systemd.user.services.sunshine = {
+    systemd.services.sunshine = {
       description = "Sunshine self-hosted game stream host for Moonlight";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = [
+        "network-online.target"
+        "tailscaled.service"
+      ];
+      wants = [
+        "network-online.target"
+        "tailscaled.service"
+      ];
       startLimitBurst = 5;
       startLimitIntervalSec = 500;
       serviceConfig = {
-        ExecStart = "${config.security.wrapperDir}/sunshine";
+        ExecStartPre = lib.mkForce [
+          "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
+        ];
+        ExecStart = "${pkgs.sunshine}/bin/sunshine";
         Restart = "on-failure";
         RestartSec = "5s";
       };

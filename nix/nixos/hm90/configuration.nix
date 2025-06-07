@@ -11,6 +11,7 @@
     ../../modules/emby-server.nix
     ../../modules/tailscale-funnel.nix
     ../../modules/frigate.nix
+    ../../modules/sunshine.nix
   ];
 
   environment.sessionVariables = {
@@ -25,6 +26,7 @@
       enable = true;
       configDir = "/home/james/.config/ynab-updater";
     };
+    sunshine.enable = true;
     tailscale-funnel.services = {
       calibre-web = {
         enable = true;
