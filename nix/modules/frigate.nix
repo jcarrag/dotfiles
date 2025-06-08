@@ -1,13 +1,8 @@
 { ... }:
 
 {
+  # configure the PoE switch
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1; # don't drop packets meant for NAT'd subnet
-
-  # environment.systemPackages = with pkgs; [
-  #   # used for network bandwidth monitoring
-  #   nethogs
-  # ];
-
   services.dnsmasq = {
     enable = true;
     settings = {
@@ -21,11 +16,7 @@
       ];
     };
   };
-
   networking = {
-    firewall.interfaces.tailscale0.allowedTCPPorts = [
-      80 # frigate nginx
-    ];
     nat = {
       enable = true;
       externalInterface = "enp6s0"; # 🖧
@@ -43,8 +34,8 @@
     };
   };
 
+  # setup hardware
   hardware.coral.usb.enable = true;
-
   fileSystems."/var/lib/frigate" = {
     device = "/dev/disk/by-uuid/9a356958-a691-4287-b093-87d401ffc318"; # 256GB SSD
     fsType = "ext4";
@@ -53,7 +44,11 @@
     "z /var/lib/frigate 0755 frigate frigate"
   ];
 
-  # https://docs.frigate.video/configuration
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+    80 # frigate nginx
+  ];
+
+  # configure frigate
   services.frigate = {
     enable = true;
     hostname = "frigate.carragher.dev";
@@ -84,7 +79,7 @@
         enabled = true;
         email = "james@carragher.dev";
       };
-      # FIXME this needs nethogs, which isn't packaged, and adding it to PATH doesn't work
+      # TODO this needs nethogs, which isn't packaged, and adding it to environment.systemPackages doesn't work
       # telemetry.stats.network_bandwidth = true;
       record = {
         enabled = true;
