@@ -2,26 +2,26 @@
 
 {
   # configure the PoE switch
-  boot.kernel.sysctl."net.ipv4.ip_forward" = 1; # don't drop packets meant for NAT'd subnet
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1; # don't drop packets meant for NAT'd interface
   services.dnsmasq = {
+    # DNS is useful to let cameras discover & join network, but they will be given a static IP (for frigate to use)
     enable = true;
     settings = {
       port = 0; # disable DNS (to prevent :53 conflict with resolved)
-      interface = "enp6s0";
+      interface = "enp6s0"; # "2.5G LAN"
       bind-interfaces = true;
       dhcp-range = "192.168.1.100,192.168.1.200,12h"; # default dahua address is 192.168.1.108
       dhcp-option = [
         "3,192.168.1.1" # Gateway
-        "6,8.8.8.8,1.1.1.1" # DNS servers
       ];
     };
   };
   networking = {
     nat = {
       enable = true;
-      externalInterface = "enp6s0"; # 🖧
+      externalInterface = "eno1"; # 🖧
       internalInterfaces = [
-        "en01" # "2.5G LAN"
+        "enp6s0" # "2.5G LAN"
       ];
     };
     interfaces.enp6s0 = {
@@ -43,7 +43,6 @@
   systemd.tmpfiles.rules = [
     "z /var/lib/frigate 0755 frigate frigate"
   ];
-
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
     80 # frigate nginx
   ];
