@@ -24,7 +24,7 @@
 
   networking = {
     firewall.interfaces.tailscale0.allowedTCPPorts = [
-      5000 # frigate nginx
+      80 # frigate nginx
     ];
     nat = {
       enable = true;
@@ -44,6 +44,14 @@
   };
 
   hardware.coral.usb.enable = true;
+
+  fileSystems."/var/lib/frigate" = {
+    device = "/dev/disk/by-uuid/9a356958-a691-4287-b093-87d401ffc318"; # 256GB SSD
+    fsType = "ext4";
+  };
+  systemd.tmpfiles.rules = [
+    "z /var/lib/frigate 0755 frigate frigate"
+  ];
 
   # https://docs.frigate.video/configuration
   services.frigate = {
@@ -81,37 +89,43 @@
       record = {
         enabled = true;
         retain = {
-          # FIXME increase to correct retention duration
-          days = 1;
-          mode = "motion";
+          # FIXME once 4TB SSD installed (also update SSD mount config):
+          # ~3GB/h * 24h * 6d * 8 cameras -> 3456 GB
+          # days = 10;
+          # Until then (on 256GB SSD):
+          # ~3GB/h * 24h * 3d * 1 camera -> 216 GB
+          days = 3;
+          mode = "all";
         };
         alerts = {
           retain = {
             days = 30;
+            mode = "motion";
           };
         };
         detections = {
           retain = {
             days = 30;
+            mode = "motion";
           };
         };
       };
       camera_groups = {
         front = {
           cameras = [
-            "driveway_cam"
+            "front_porch_cam"
           ];
           icon = "LuCar";
           order = 0;
         };
       };
       cameras = {
-        # FIXME replace hostname & ip with camera's final location (also set on camera)
-        # FIXME configure new camera's encoding:
+        # FIXME replace hostname & ip with cameras' final locations (also set on cameras)
+        # FIXME configure new cameras' encoding:
         #   - http://192.168.1.108/#/index/camera/imgset
         #   - https://docs.frigate.video/frigate/camera_setup/#example-camera-configuration
         # hostname: HDW3549H
-        driveway_cam = {
+        front_porch_cam = {
           detect = {
             width = 1280;
             height = 720;
