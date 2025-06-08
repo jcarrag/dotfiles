@@ -83,7 +83,7 @@
       record = {
         enabled = true;
         retain = {
-          # FIXME once 4TB SSD installed (also update SSD mount config):
+          # TODO once 4TB SSD installed (also update SSD mount config):
           # ~3GB/h * 24h * 6d * 8 cameras -> 3456 GB
           # days = 10;
           # Until then (on 256GB SSD):
@@ -113,30 +113,29 @@
           order = 0;
         };
       };
+      # TODO replace hostname & ip with cameras' final locations (also set on cameras)
+      # TODO configure new cameras' encoding:
+      #   - http://192.168.1.108/#/index/camera/imgset
+      #   - https://docs.frigate.video/frigate/camera_setup/#example-camera-configuration
       cameras = {
-        # FIXME replace hostname & ip with cameras' final locations (also set on cameras)
-        # FIXME configure new cameras' encoding:
-        #   - http://192.168.1.108/#/index/camera/imgset
-        #   - https://docs.frigate.video/frigate/camera_setup/#example-camera-configuration
-        # hostname: HDW3549H
+        # hostname: 9H0F184PAG0D108
         front_porch_cam = {
           detect = {
             width = 1280;
             height = 720;
             fps = 5;
           };
-          # FIXME: use statically assigned IP (also set on camera)
           ffmpeg.inputs = [
             {
               # subtype=0 for higher resolution stream
-              path = "rtsp://frigate:U9W4pCfYZdHE@192.168.1.108:554/cam/realmonitor?channel=1&subtype=0&unicast=true";
+              path = "rtsp://frigate:U9W4pCfYZdHE@192.168.1.2:554/cam/realmonitor?channel=1&subtype=0&unicast=true";
               roles = [
                 "record"
               ];
             }
             {
               # subtype=1 for lower resolution stream
-              path = "rtsp://frigate:U9W4pCfYZdHE@192.168.1.108:554/cam/realmonitor?channel=1&subtype=1&unicast=true";
+              path = "rtsp://frigate:U9W4pCfYZdHE@192.168.1.2:554/cam/realmonitor?channel=1&subtype=1&unicast=true";
               roles = [
                 "detect"
               ];
@@ -146,8 +145,7 @@
             # ignore timestamp overlay
             "0.55,0.034,0.551,0.088,0.957,0.088,0.956,0.034"
           ];
-          # FIXME replace w/ static ip
-          webui_url = "http://192.168.1.108";
+          webui_url = "http://192.168.1.2";
         };
       };
     };
