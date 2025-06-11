@@ -1,7 +1,6 @@
 # EliteMini HM90
 {
   pkgs,
-  config,
   lib,
   ...
 }:
@@ -11,7 +10,6 @@
     ../../modules/emby-server.nix
     ../../modules/frigate.nix
     ../../modules/sunshine.nix
-    ../../modules/tailscale-funnel.nix
   ];
 
   environment.sessionVariables = {
@@ -27,13 +25,6 @@
       configDir = "/home/james/.config/ynab-updater";
     };
     sunshine.enable = true;
-    tailscale-funnel.services = {
-      calibre-web = {
-        enable = true;
-        port = config.services.calibre-web.listen.port;
-        path = "/";
-      };
-    };
   };
 
   networking = {
@@ -55,7 +46,7 @@
   services = {
     calibre-web = {
       enable = true;
-      listen.ip = "0.0.0.0";
+      listen.ip = "100.65.97.33";
       options = {
         enableBookUploading = true;
         calibreLibrary = "/home/james/Calibre Library";
@@ -150,6 +141,10 @@
     services.storyteller.wants = lib.mkForce [
       "network-online.target"
       "tailscaled.service"
+    ];
+    # wait for tailscale for bind
+    services.calibre-web.serviceConfig.ExecStartPre = lib.mkForce [
+      "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
     ];
   };
 
