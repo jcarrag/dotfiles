@@ -210,10 +210,15 @@ in
     graphics = {
       enable = true;
       enable32Bit = true;
-      extraPackages = [
-        pkgs.intel-media-driver
-        pkgs.vaapiIntel
+      extraPackages = with unstable; [
+        intel-media-driver
+        vaapiIntel
+        vulkan-loader
+        vulkan-validation-layers
+        vulkan-extension-layer
       ];
+      package = unstable.mesa;
+      package32 = unstable.pkgsi686Linux.mesa;
     };
   };
 
