@@ -12,10 +12,6 @@
     ../../modules/sunshine.nix
   ];
 
-  environment.sessionVariables = {
-    LIBVA_DRIVER_NAME = "iHD";
-  };
-
   nix.gc.automatic = true;
 
   programs = {
