@@ -51,6 +51,12 @@ require("lspconfig").lua_ls.setup({
 	settings = { Lua = {} },
 })
 
+require('lspconfig').clangd.setup {
+  cmd = { "clangd" },
+  filetypes = { "c", "cpp", "objc", "objcpp" },
+  root_dir = require('lspconfig.util').root_pattern("compile_commands.json", "compile_flags.txt", ".git"),
+}
+
 -- Assumes `autocmd BufEnter *.ers  setlocal filetype=rustscript` or similar
 vim.filetype.add({ extension = { ers = "rustscript" } })
 local lsp_configs = require("lspconfig.configs")
