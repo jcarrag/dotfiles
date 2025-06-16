@@ -31,12 +31,10 @@ in
     };
     systemd.services.sunshine = {
       description = "Sunshine self-hosted game stream host for Moonlight";
-      after = [
+      wantedBy = [
         "network-online.target"
-        "tailscaled.service"
       ];
-      wants = [
-        "network-online.target"
+      after = [
         "tailscaled.service"
       ];
       startLimitBurst = 5;
