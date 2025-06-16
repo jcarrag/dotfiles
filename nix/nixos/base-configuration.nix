@@ -381,6 +381,7 @@ in
     };
     hyprlock.enable = true;
     light.enable = true;
+    mosh.enable = true; # MObile SHell - network resilient SSH
     nix-ld = {
       enable = true;
       libraries = with pkgs; [
