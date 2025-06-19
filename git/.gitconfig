@@ -21,6 +21,7 @@
         changelog = "!git log --reverse --pretty=format:'* %s' \"$1\"..\"$2\" #"
         prodlog = "!git tag -l --sort=creatordate --format='%(refname:short)' | grep production | tail -2 | tr '\n' ' ' | xargs -n2 sh -c 'printf \"$0..$1\n\n\"; git changelog $0 $1' #"
         needsdeploy = "!git tag -l --sort=creatordate --format='%(refname:short)' | grep production | tail -1 | xargs -n1 sh -c 'printf \"$0..HEAD\n\n\"; git changelog $0 HEAD' #"
+	root = rev-parse --show-toplevel
 [submodule]
 	recurse = true
 [pull]

@@ -22,7 +22,7 @@ in
       # TODO: copy https://github.com/zmre/pwnvim/blob/main/pwnvim/plugins.lua
       configure =
         let
-          inlinePlugins = with pkgs.unstable; [
+          inlinePlugins = [
             ## Theme
             {
               plugin = pkgs.vimPlugins.lualine-nvim;
