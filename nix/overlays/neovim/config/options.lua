@@ -26,6 +26,7 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.relativenumber = true
 vim.opt.clipboard = "unnamedplus"
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 -- enable mouse highlighting with Mouse Reporting
 vim.opt.mouse = "a"
 -- Always show the signcolumn, otherwise it would shift the text each time
