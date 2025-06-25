@@ -648,6 +648,7 @@ in
 
   users.extraUsers.james = {
     createHome = true;
+    homeMode = "751";
     extraGroups = [
       "wheel"
       "users"
