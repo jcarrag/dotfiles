@@ -5,6 +5,14 @@
 [push]
        default = simple
 	autoSetupRemote = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	rebaseMerges = true # == no-rebase-cousins
+	updateRefs = true
+[rerere]
+	enabled = true
+	autoupdate = true
 [core]
        editor = nvim
        excludesfile = ~/.gitignore
