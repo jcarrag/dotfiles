@@ -147,6 +147,7 @@ in
       bat
       binutils-unwrapped
       briss # pdf crop
+      busybox
       # k2pdfopt # pdf crop for kindle [broken]
       cntr
       dig
@@ -176,8 +177,6 @@ in
       stow
       tldr
       tree
-      unrar
-      unzip
       usbutils
       watchexec
       which
