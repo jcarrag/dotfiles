@@ -56,7 +56,6 @@
         LIBVA_DRIVER_NAME = "radeonsi";
       };
       auth = {
-        cookie_secure = true;
         refresh_time = 2700000; # ~1 month
         failed_login_rate_limit = "1/second;5/minute;20/hour";
       };
