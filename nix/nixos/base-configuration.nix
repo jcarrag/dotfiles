@@ -60,11 +60,13 @@ in
       unstable.rust-script
       unstable.rustfmt
       ## Javascript
-      nix-npm-install
       nodejs
       nodePackages.node2nix
       prettierd
       ## Nix
+      nix-tree # closure inspector
+      nix-index
+      nix-prefetch-scripts
       ## Python
       python3Minimal
       ## Scala
@@ -106,8 +108,6 @@ in
       hicolor-icon-theme
       libsecret
       lm_sensors
-      nix-index
-      nix-prefetch-scripts
       openvpn
       pulseaudioFull
       paprefs # pulseaudio preferences
