@@ -6,8 +6,6 @@ in
 {
 
   imports = [
-    #../modules/neovim.nix
-    # ../overlays/neovim
     ../modules/anki.nix
   ];
 
