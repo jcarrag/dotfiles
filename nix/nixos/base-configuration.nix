@@ -18,7 +18,6 @@ in
   environment.systemPackages =
     with pkgs;
     [
-      screen
       ### Communication
       unstable.discord
       unstable.signal-desktop-bin
@@ -78,6 +77,7 @@ in
       wireguard-tools
       tmate-connect
       _1password-gui
+      screen
       tmux
       ### Networking
       socat
