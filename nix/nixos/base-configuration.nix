@@ -7,7 +7,7 @@ in
 
   imports = [
     #../modules/neovim.nix
-    ../overlays/neovim
+    # ../overlays/neovim
     ../modules/anki.nix
   ];
 
@@ -20,15 +20,7 @@ in
   environment.systemPackages =
     with pkgs;
     [
-      # _neovim
-      vim-language-server
-      lua-language-server
-      stylua
-      unstable.vscode-langservers-extracted # JSON lsp
-      nodePackages.typescript-language-server
-      dockerfile-language-server-nodejs
       screen
-      pyright
       ### Communication
       unstable.discord
       unstable.signal-desktop-bin
@@ -59,34 +51,27 @@ in
       vlc
       ### Programming
       unstable.go
-      unstable.gopls
       pkg-config
       (openssl.dev)
       unstable.saleae-logic-2
       unstable.treefmt
       ## C++
-      ccls
       gcc
       ## Rust
-      unstable.rust-analyzer
       unstable.cargo
       unstable.rustc
       unstable.rust-script
       unstable.rustfmt
-      rscls
       ## Javascript
       nix-npm-install
       nodejs
       nodePackages.node2nix
       prettierd
       ## Nix
-      unstable.nixd
-      unstable.nixfmt-rfc-style
       ## Python
       python3Minimal
       ## Scala
       sbt
-      unstable.metals
       coursier
       ### Services
       unstable.awscli

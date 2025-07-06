@@ -8,6 +8,10 @@
     xremap.url = "github:xremap/nix-flake";
     # ynab-updater.url = "git+file:///home/james/dev/my/ynab_updater";
     ynab-updater.url = "github:jcarrag/ynab-updater";
+    neovim = {
+      url = "github:jcarrag/neovim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     kolide-launcher = {
       url = "github:/kolide/nix-agent/main";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -71,6 +75,7 @@
               {
                 environment.systemPackages = [
                   rebuild
+                  inputs.neovim.packages.${system}.neovim
                 ];
                 networking.hostName = hostname;
                 nixpkgs.overlays = [
@@ -90,7 +95,7 @@
     in
     flake-utils.lib.eachDefaultSystem (system: {
       packages = flake-utils.lib.flattenTree {
-        neovim = (mkNixos "nixos" system [ ] [ ]).options.programs.neovim.finalPackage.value;
+        neovim = inputs.neovim.packages.${system}.neovim;
         tmate =
           (import nixpkgs {
             inherit system;
