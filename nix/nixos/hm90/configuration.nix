@@ -12,6 +12,25 @@
     ../../modules/sunshine.nix
   ];
 
+  environment.systemPackages = [
+    pkgs.mergerfs
+  ];
+
+  fileSystems."/home/james/emby-library" = {
+    depends = [
+      "/home/james/emby-library_not_mergerfs"
+      "/mnt/2TBm2enclosure"
+    ];
+    device = "/mnt/2TBm2enclosure:/home/james/emby-library_not_mergerfs";
+    fsType = "mergerfs";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=5s"
+      "defaults"
+      "fsname=mergerfs-emby-library"
+    ];
+  };
+
   nix.gc.automatic = true;
 
   programs = {

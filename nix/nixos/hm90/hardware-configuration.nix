@@ -36,6 +36,24 @@
     fsType = "vfat";
   };
 
+  fileSystems."/mnt/1TBsandisk" = {
+    device = "/dev/disk/by-uuid/04015623-c598-41f8-9857-82426044ed8d";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=5s"
+    ];
+  };
+
+  fileSystems."/mnt/2TBm2enclosure" = {
+    device = "/dev/disk/by-uuid/06c0172b-3513-4cd9-9445-204b56b34689";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=5s"
+    ];
+  };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

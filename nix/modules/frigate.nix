@@ -39,6 +39,10 @@
   fileSystems."/var/lib/frigate" = {
     device = "/dev/disk/by-uuid/9a356958-a691-4287-b093-87d401ffc318"; # 256GB SSD
     fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=5s"
+    ];
   };
   systemd.tmpfiles.rules = [
     "z /var/lib/frigate 0755 frigate frigate"
