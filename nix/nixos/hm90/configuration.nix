@@ -121,6 +121,7 @@
           };
           "storyteller" = {
             path = "/home/james/storyteller";
+            type = "sendonly";
             versioning = {
               type = "simple";
               params.keep = "1";
@@ -142,9 +143,6 @@
   };
 
   systemd = pkgs.systemd-services // {
-    # override the systemd service's $user so storyteller runs as so it can be targeted syncthing
-    services.storyteller.serviceConfig.User = lib.mkForce "james";
-    services.storyteller.serviceConfig.Group = lib.mkForce "users";
     # wait for tailscale for bind
     services.storyteller.serviceConfig.ExecStartPre = lib.mkForce [
       "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
@@ -163,8 +161,15 @@
     ];
   };
 
+  users.extraUsers.james.extraGroups = [ "podman" ];
+  virtualisation.containers.enable = true;
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    defaultNetwork.settings.dns_enabled = true;
+  };
   virtualisation.oci-containers = {
-    backend = "docker";
+    backend = "podman";
     containers = {
       storyteller = {
         serviceName = "storyteller";
@@ -179,6 +184,9 @@
         environment = {
           STORYTELLER_SECRET_KEY_FILE = "/run/secrets/secret_key";
         };
+        extraOptions = [
+          "--cidfile=/home/james/storyteller.ctr-id"
+        ];
       };
     };
   };
