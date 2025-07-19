@@ -418,6 +418,7 @@ in
     fwupd.enable = true;
     geoclue2.enableDemoAgent = true;
     gnome.gnome-keyring.enable = true;
+    gvfs.enable = true;
     hardware.bolt.enable = true;
     libinput = {
       enable = true;
@@ -494,6 +495,7 @@ in
       '';
     };
     switcherooControl.enable = true;
+    tumbler.enable = true;
     tzupdate.enable = true;
     udev = {
       # https://yulistic.gitlab.io/2017/12/linux-keymapping-with-udev-hwdb
