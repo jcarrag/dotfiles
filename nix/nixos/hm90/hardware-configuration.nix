@@ -4,7 +4,6 @@
 {
   config,
   lib,
-  pkgs,
   modulesPath,
   ...
 }:
@@ -47,6 +46,15 @@
 
   fileSystems."/mnt/2TBm2enclosure" = {
     device = "/dev/disk/by-uuid/06c0172b-3513-4cd9-9445-204b56b34689";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=5s"
+    ];
+  };
+
+  fileSystems."/mnt/256GBssd" = {
+    device = "/dev/disk/by-uuid/9a356958-a691-4287-b093-87d401ffc318"; # 256GB SSD
     fsType = "ext4";
     options = [
       "nofail"

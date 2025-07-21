@@ -1,8 +1,13 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   # configure the PoE switch
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1; # don't drop packets meant for NAT'd interface
+
+  environment.systemPackages = [
+    pkgs.mergerfs
+  ];
+
   services.dnsmasq = {
     # DNS is useful to let cameras discover & join network, but they will be given a static IP (for frigate to use)
     enable = true;
@@ -36,12 +41,18 @@
 
   # setup hardware
   hardware.coral.usb.enable = true;
-  fileSystems."/var/lib/frigate" = {
-    device = "/dev/disk/by-uuid/9a356958-a691-4287-b093-87d401ffc318"; # 256GB SSD
-    fsType = "ext4";
+  fileSystems."/var/lib/frigate/recordings" = {
+    depends = [
+      "/mnt/256GBssd"
+      "/mnt/1TBsandisk"
+    ];
+    device = "/mnt/256GBssd:/mnt/1TBsandisk";
+    fsType = "mergerfs";
     options = [
       "nofail"
       "x-systemd.device-timeout=5s"
+      "defaults"
+      "fsname=mergerfs-frigate-recordings"
     ];
   };
   systemd.tmpfiles.rules = [
@@ -91,12 +102,8 @@
       record = {
         enabled = true;
         retain = {
-          # TODO once 4TB SSD installed (also update SSD mount config):
-          # ~3GB/h * 24h * 6d * 8 cameras -> 3456 GB
-          # days = 10;
-          # Until then (on 256GB SSD):
-          # ~3GB/h * 24h * 3d * 1 camera -> 216 GB
-          days = 3;
+          # ~5GB/h * 24h * 9d * 1 camera -> 1080 GB
+          days = 9;
           mode = "all";
         };
         alerts = {
