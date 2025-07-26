@@ -94,6 +94,7 @@ in
       comma # run any program without installation
       dnsmasq
       file
+      hexyl # binary viewer
       adwaita-icon-theme
       zenity
       gnupg
@@ -150,7 +151,6 @@ in
       lsof
       mitmproxy
       ncdu # directory size tui
-      yarn # needed for coc.nvim's post-install step
       p7zip
       pciutils
       powertop
