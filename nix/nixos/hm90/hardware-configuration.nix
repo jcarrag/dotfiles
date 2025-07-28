@@ -54,7 +54,16 @@
   };
 
   fileSystems."/mnt/256GBssd" = {
-    device = "/dev/disk/by-uuid/9a356958-a691-4287-b093-87d401ffc318"; # 256GB SSD
+    device = "/dev/disk/by-uuid/9a356958-a691-4287-b093-87d401ffc318";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=5s"
+    ];
+  };
+
+  fileSystems."/mnt/600GBssd" = {
+    device = "/dev/disk/by-uuid/36429e70-f7b9-4cfe-971c-3add36dab205";
     fsType = "ext4";
     options = [
       "nofail"

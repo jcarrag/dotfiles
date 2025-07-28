@@ -45,8 +45,9 @@
     depends = [
       "/mnt/256GBssd"
       "/mnt/1TBsandisk"
+      "/mnt/600GBssd"
     ];
-    device = "/mnt/256GBssd:/mnt/1TBsandisk";
+    device = "/mnt/256GBssd:/mnt/1TBsandisk:/mnt/600GBssd";
     fsType = "mergerfs";
     options = [
       "nofail"
