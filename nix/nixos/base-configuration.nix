@@ -679,5 +679,5 @@ in
     QT_IM_MODULE = "fcitx";
   };
 
-  system.stateVersion = "20.09";
+  system.stateVersion = "25.05";
 }
