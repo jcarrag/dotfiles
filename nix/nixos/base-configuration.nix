@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   unstable = pkgs.unstable;
@@ -192,15 +197,11 @@ in
     graphics = {
       enable = true;
       enable32Bit = true;
-      extraPackages = with unstable; [
-        intel-media-driver
-        vaapiIntel
+      extraPackages = with pkgs; [
         vulkan-loader
         vulkan-validation-layers
         vulkan-extension-layer
       ];
-      package = unstable.mesa;
-      package32 = unstable.pkgsi686Linux.mesa;
     };
   };
 
@@ -668,7 +669,6 @@ in
 
   environment.sessionVariables = {
     # hyprland/wayland
-    WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
     # hyprcursors, also run (for consistent cursor theme/size across apps):
     #   dconf write /org/gnome/desktop/interface/cursor-theme "'catppuccin-mocha-mauve-cursors'"
