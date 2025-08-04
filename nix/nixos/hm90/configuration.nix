@@ -143,6 +143,11 @@
   };
 
   systemd = pkgs.systemd-services // {
+    # rootless DOCKER_HOST is created as /run/user/1000/docker.sock but services
+    # using docker expect it to be at /run/docker.sock (e.g. storyteller)
+    tmpfiles.rules = [
+      "L /run/docker.sock - - - - /run/user/1000/docker.sock"
+    ];
     # wait for tailscale for bind
     services.storyteller.serviceConfig.ExecStartPre = lib.mkForce [
       "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
@@ -161,32 +166,40 @@
     ];
   };
 
-  users.extraUsers.james.extraGroups = [ "podman" ];
-  virtualisation.containers.enable = true;
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      storyteller = {
-        serviceName = "storyteller";
-        image = "registry.gitlab.com/storyteller-platform/storyteller:latest";
-        ports = [
-          "100.65.97.33:8001:8001"
-        ];
-        volumes = [
-          "/home/james/storyteller:/data:rw"
-          "/home/james/secrets/storyteller:/run/secrets/secret_key"
-        ];
-        environment = {
-          STORYTELLER_SECRET_KEY_FILE = "/run/secrets/secret_key";
+  virtualisation = {
+    containers.enable = true;
+    docker = {
+      enable = lib.mkForce false;
+      rootless = {
+        enable = true;
+        setSocketVariable = true;
+        daemon.settings = {
+          dns = [
+            "1.1.1.1"
+            "8.8.8.8"
+          ];
+          registry-mirrors = [ "https://mirror.gcr.io" ];
         };
-        extraOptions = [
-          "--cidfile=/home/james/storyteller.ctr-id"
-        ];
+
+      };
+    };
+    oci-containers = {
+      backend = "docker";
+      containers = {
+        storyteller = {
+          serviceName = "storyteller";
+          image = "registry.gitlab.com/storyteller-platform/storyteller:latest";
+          ports = [
+            "100.65.97.33:8001:8001"
+          ];
+          volumes = [
+            "/home/james/storyteller:/data:rw"
+            "/home/james/secrets/storyteller:/run/secrets/secret_key"
+          ];
+          environment = {
+            STORYTELLER_SECRET_KEY_FILE = "/run/secrets/secret_key";
+          };
+        };
       };
     };
   };
