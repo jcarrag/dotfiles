@@ -106,7 +106,7 @@ in
       gparted
       grim # wayland screenshots
       hfsprogs # gparted dep
-      hyprshade # hyprland blue light filter
+      hyprsunset # hyprland blue light filter
       inotify-tools
       unstable.lurk
       ntfsprogs # gparted dep
