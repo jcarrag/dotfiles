@@ -1,6 +1,7 @@
 # Framework 13 7040
 {
   pkgs,
+  lib,
   ...
 }:
 
@@ -74,7 +75,16 @@
     };
   };
 
-  systemd = pkgs.systemd-services;
+  systemd = pkgs.systemd-services // {
+    services.harmonia.serviceConfig.ExecStartPre = lib.mkForce [
+      "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
+    ];
+    services.harmonia.after = lib.mkForce [
+      "network-online.target"
+      "tailscaled.service"
+    ];
+
+  };
 
   virtualisation.docker.enable = true;
 }
