@@ -52,6 +52,7 @@ in
       unstable.telegram-desktop
       vlc
       ### Programming
+      gdb
       unstable.go
       pkg-config
       (openssl.dev)
@@ -174,16 +175,19 @@ in
     ]
     ++ scripts;
 
-  fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-emoji
-    noto-fonts-cjk-sans
-    font-awesome
-    feather-font
-    powerline-fonts
-    powerline-symbols
-    adwaita-icon-theme
-  ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
+  fonts.packages =
+    with pkgs;
+    [
+      noto-fonts
+      noto-fonts-emoji
+      noto-fonts-cjk-sans
+      font-awesome
+      feather-font
+      powerline-fonts
+      powerline-symbols
+      adwaita-icon-theme
+    ]
+    ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
 
   hardware = {
     saleae-logic.enable = true;
@@ -432,6 +436,7 @@ in
       HandlePowerKey=ignore
       HandleLidSwitch=suspend-then-hibernate
     '';
+    nixseparatedebuginfod.enable = true;
     openssh.enable = true;
     openvpn = {
       servers = {
