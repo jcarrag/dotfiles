@@ -60,7 +60,6 @@
               --flake /home/james/dotfiles#${hostname} \
               --accept-flake-config \
               --log-format internal-json \
-              --verbose \
               ''${EXTRA_ARGS} \
               |& ${nix-output-monitor}/bin/nom --json"
             '';
@@ -68,29 +67,31 @@
         in
         nixosSystem {
           system = system;
-          modules =
-            [
-              inputs.xremap.nixosModules.default
-              (import ./nix/nixos/base-configuration.nix)
-              {
-                environment.systemPackages = [
-                  rebuild
-                  inputs.neovim.packages.${system}.neovim
-                ];
-                networking.hostName = hostname;
-                nixpkgs.overlays = [
+          modules = [
+            inputs.xremap.nixosModules.default
+            (import ./nix/nixos/base-configuration.nix)
+            {
+              environment.systemPackages = [
+                rebuild
+                inputs.neovim.packages.${system}.neovim
+              ];
+              networking.hostName = hostname;
+              nixpkgs = {
+                config.allowUnfree = true;
+                overlays = [
                   extrasOverlay
                   packageOverlays
                 ];
-                nix.registry = {
-                  self.flake = self;
-                  nixpkgs.flake = nixpkgs;
-                  unstable.flake = unstable;
-                };
-              }
-            ]
-            ++ modules
-            ++ (map import importModules);
+              };
+              nix.registry = {
+                self.flake = self;
+                nixpkgs.flake = nixpkgs;
+                unstable.flake = unstable;
+              };
+            }
+          ]
+          ++ modules
+          ++ (map import importModules);
         };
     in
     flake-utils.lib.eachDefaultSystem (system: {

@@ -84,7 +84,6 @@ in
       unstable.tailscale
       wireguard-tools
       tmate-connect
-      _1password-gui
       screen
       tmux
       ### Networking
@@ -319,6 +318,7 @@ in
   };
 
   programs = {
+    _1password-gui.enable = true;
     anki = {
       enable = true;
       addons = [

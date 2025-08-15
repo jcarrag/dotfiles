@@ -6,7 +6,7 @@ let
     [
       (self: super: {
         brave = super.brave.override {
-          commandLineArgs = "--enable-wayland-ime";
+          commandLineArgs = "--enable-wayland-ime --password-store=basic";
         };
       })
     ]
