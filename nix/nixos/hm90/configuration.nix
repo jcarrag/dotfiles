@@ -156,6 +156,10 @@
       "network-online.target"
       "tailscaled.service"
     ];
+    services.harmonia.wants = lib.mkForce [
+      "network-online.target"
+      "tailscaled.service"
+    ];
     services.storyteller.serviceConfig.ExecStartPre = lib.mkForce [
       "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
     ];

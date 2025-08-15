@@ -83,7 +83,10 @@
       "network-online.target"
       "tailscaled.service"
     ];
-
+    services.harmonia.wants = lib.mkForce [
+      "network-online.target"
+      "tailscaled.service"
+    ];
   };
 
   virtualisation.docker.enable = true;
