@@ -22,8 +22,10 @@ export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 export FZF_ALT_C_COMMAND="fd --type directory --hidden"
 # Jump Edge
 je() {
-  cd ~/dev/lunar/gridshare-edge
-  cd $(fd . --type directory | fzf)
+  local -r DIR=$(fd . --type directory --base-directory ~/dev/lunar/gridshare-edge | fzf)
+  if [[ -n "$DIR" ]]; then
+    cd ~/dev/lunar/gridshare-edge/"$DIR"
+  fi
 }
 
 eval "$(direnv hook bash)"
