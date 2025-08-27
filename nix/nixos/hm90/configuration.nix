@@ -50,7 +50,7 @@
           21027 # syncthing
         ];
         allowedTCPPorts = [
-          5001 # harmonia
+          5555 # harmonia
           8384 # syncthing
           22000 # syncthing
         ];
@@ -78,7 +78,7 @@
       # nix-store --generate-binary-cache-key hm90.tail7f031.ts.net harmonia.pem harmonia.pub
       signKeyPaths = [ "/home/james/secrets/harmonia.pem" ];
       settings = {
-        bind = "100.65.97.33:5001";
+        bind = "100.65.97.33:5555";
       };
     };
     syncthing = {

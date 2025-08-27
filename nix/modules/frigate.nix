@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # configure the PoE switch
@@ -62,6 +62,10 @@
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
     80 # frigate nginx
   ];
+
+  # nginx lacks permission to read the recordings directory otherwise
+  systemd.services.nginx.serviceConfig.User = lib.mkForce "frigate";
+  systemd.services.nginx.serviceConfig.Group = lib.mkForce "frigate";
 
   # configure frigate
   services.frigate = {

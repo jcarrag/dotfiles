@@ -26,7 +26,7 @@
       8081 # metro
       9001 # metro
       9002 # metro
-      5001 # harmonia
+      5555 # harmonia
       8384 # syncthing
       22000 # syncthing
     ];
@@ -42,7 +42,7 @@
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
       signKeyPaths = [ "/home/james/secrets/harmonia.pem" ];
       settings = {
-        bind = "100.124.115.79:5001";
+        bind = "100.124.115.79:5555";
       };
     };
     syncthing = {

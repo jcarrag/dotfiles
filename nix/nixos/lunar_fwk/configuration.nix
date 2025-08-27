@@ -29,13 +29,9 @@
     firewall = {
       allowedUDPPorts = [
       ];
-      interfaces.tailscale0.allowedTCPPorts =
-        if config.services.harmonia.enable then
-          [
-            5001 # harmonia
-          ]
-        else
-          [ ];
+      interfaces.tailscale0.allowedTCPPorts = [
+        5555 # harmonia
+      ];
     };
   };
 
@@ -50,7 +46,7 @@
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
       signKeyPaths = [ "/home/james/secrets/harmonia.pem" ];
       settings = {
-        bind = "100.102.227.124:5001";
+        bind = "100.102.227.124:5555";
       };
     };
     syncthing = {
