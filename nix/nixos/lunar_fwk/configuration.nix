@@ -69,6 +69,10 @@
             id = "LE2NRU6-MD4PBOO-VEOTVRO-6GUGP53-2C2LL3L-WHU6MFN-2L3657P-MZHN2Q4";
             autoAcceptFolders = true;
           };
+          ios12 = {
+            id = "QVK42FI-XKHXEV3-5OZXZXG-RX6Z2N7-4ATD6DW-UVKPYRO-ICLP2PR-PBEUXAY";
+            autoAcceptFolders = true;
+          };
         };
       };
     };

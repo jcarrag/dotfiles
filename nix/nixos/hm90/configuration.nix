@@ -105,6 +105,10 @@
             id = "Z6RHLYN-DXGQCL2-O4LT7AA-6SVG4KF-2OQDN36-M5D7RCT-S6EM6VS-KSGTDQ7";
             autoAcceptFolders = true;
           };
+          ios12 = {
+            id = "QVK42FI-XKHXEV3-5OZXZXG-RX6Z2N7-4ATD6DW-UVKPYRO-ICLP2PR-PBEUXAY";
+            autoAcceptFolders = true;
+          };
         };
         folders = {
           "Calibre Library" = {
@@ -140,6 +144,7 @@
             devices = [
               "fwk"
               "lunar-fwk"
+              "ios12"
             ];
           };
         };
