@@ -149,6 +149,7 @@ in
       git-crypt
       glances
       gnome-connections # vnc client
+      btop
       htop
       fd
       libnotify
