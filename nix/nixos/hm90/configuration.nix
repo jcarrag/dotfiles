@@ -131,6 +131,17 @@
               "lunar-fwk"
             ];
           };
+          "notes" = {
+            path = "/home/james/notes";
+            versioning = {
+              type = "simple";
+              params.keep = "5";
+            };
+            devices = [
+              "fwk"
+              "lunar-fwk"
+            ];
+          };
         };
       };
     };
