@@ -175,19 +175,20 @@ in
     ]
     ++ scripts;
 
-  fonts.packages =
+  fonts = {
+    enableDefaultPackages = true;
+    packages =
     with pkgs;
     [
       noto-fonts
-      noto-fonts-emoji
       noto-fonts-cjk-sans
       font-awesome
-      feather-font
       powerline-fonts
       powerline-symbols
       adwaita-icon-theme
     ]
     ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
+  };
 
   hardware = {
     saleae-logic.enable = true;
