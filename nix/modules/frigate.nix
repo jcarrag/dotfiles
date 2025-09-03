@@ -138,7 +138,8 @@
       #   - http://192.168.1.108/#/index/camera/imgset
       #   - https://docs.frigate.video/frigate/camera_setup/#example-camera-configuration
       cameras = {
-        # hostname: 9H0F184PAG0D108
+        # hostname: 9H0F184PAG0D108, ip: 192.168.1.2
+        # $ ssh -L 8080:192.168.1.2:80 hm90
         front_porch_cam = {
           detect = {
             width = 1280;
