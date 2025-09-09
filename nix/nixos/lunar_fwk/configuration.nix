@@ -24,6 +24,9 @@
 
   # AMD RX 5700 XT
   boot.initrd.kernelModules = [ "amdgpu" ];
+  boot.kernelParams = [
+    "amdgpu.dcdebugmask=0x10" # https://bbs.archlinux.org/viewtopic.php?id=302499
+  ];
 
   networking = {
     firewall = {
