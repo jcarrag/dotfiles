@@ -35,6 +35,26 @@ with self.pkgs; {
         };
       };
     };
-    user.services = { };
+    user.services = {
+      gammastep = {
+        description = "Display colour temperature adjustment";
+        partOf = [ "graphical-session.target" ];
+        after = [ "graphical-session.target" ];
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${gammastep}/bin/gammastep -v";
+          Restart = "on-failure";
+        };
+      };
+      gammastep-indicator = {
+        description = "Indicator for display colour temperature adjustment";
+        after = [ "gammastep.service" ];
+        wantedBy = [ "gammastep.service" ];
+        serviceConfig = {
+          ExecStart = "${gammastep}/bin/gammastep-indicator";
+          Restart = "on-failure";
+        };
+      };
+    };
   };
 }
