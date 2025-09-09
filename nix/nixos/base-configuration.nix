@@ -177,16 +177,16 @@ in
   fonts = {
     enableDefaultPackages = true;
     packages =
-    with pkgs;
-    [
-      noto-fonts
-      noto-fonts-cjk-sans
-      font-awesome
-      powerline-fonts
-      powerline-symbols
-      adwaita-icon-theme
-    ]
-    ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
+      with pkgs;
+      [
+        noto-fonts
+        noto-fonts-cjk-sans
+        font-awesome
+        powerline-fonts
+        powerline-symbols
+        adwaita-icon-theme
+      ]
+      ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
   };
 
   hardware = {
