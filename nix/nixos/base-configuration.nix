@@ -564,7 +564,7 @@ in
       '';
     };
     xremap = {
-      debug = true;
+      debug = false;
       watch = true;
       serviceMode = "user";
       userName = "james";
