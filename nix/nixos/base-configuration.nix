@@ -412,6 +412,7 @@ in
         };
       };
     };
+    automatic-timezoned.enable = true;
     avahi = {
       enable = true;
       nssmdns4 = true;
@@ -422,7 +423,10 @@ in
     dbus.enable = true;
     envfs.enable = true;
     fwupd.enable = true;
-    geoclue2.enableDemoAgent = true;
+    geoclue2 = {
+      enable = true;
+      enableDemoAgent = true;
+    };
     gnome.gnome-keyring.enable = true;
     gvfs.enable = true;
     hardware.bolt.enable = true;
