@@ -158,39 +158,17 @@
     };
   };
 
-  systemd = pkgs.systemd-services // {
+  systemd = lib.attrsets.recursiveUpdate pkgs.systemd-services {
     # rootless DOCKER_HOST is created as /run/user/1000/docker.sock but services
     # using docker expect it to be at /run/docker.sock (e.g. storyteller)
     tmpfiles.rules = [
       "L /run/docker.sock - - - - /run/user/1000/docker.sock"
     ];
-    # wait for tailscale for bind
-    services.harmonia.serviceConfig.ExecStartPre = lib.mkForce [
-      "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
-    ];
-    services.harmonia.after = lib.mkForce [
-      "network-online.target"
-      "tailscaled.service"
-    ];
-    services.harmonia.wants = lib.mkForce [
-      "network-online.target"
-      "tailscaled.service"
-    ];
-    services.storyteller.serviceConfig.ExecStartPre = lib.mkForce [
-      "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
-    ];
-    services.storyteller.after = lib.mkForce [
-      "network-online.target"
-      "tailscaled.service"
-    ];
-    services.storyteller.wants = lib.mkForce [
-      "network-online.target"
-      "tailscaled.service"
-    ];
-    # wait for tailscale for bind
-    services.calibre-web.serviceConfig.ExecStartPre = lib.mkForce [
-      "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
-    ];
+    services.storyteller.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+    services.storyteller.after = pkgs.tailscaleAfter;
+    services.storyteller.wants = pkgs.tailscaleWants;
+
+    services.calibre-web.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
   };
 
   virtualisation = {

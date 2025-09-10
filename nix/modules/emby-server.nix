@@ -87,9 +87,7 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStartPre = [
-          "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
-        ];
+        ExecStartPre = pkgs.tailscaleWaitOnline;
         ExecStart = "${cfg.package}/bin/emby-server";
         Restart = "on-failure";
         User = cfg.user;

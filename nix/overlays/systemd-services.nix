@@ -1,39 +1,33 @@
 self: super:
 
 with self.pkgs; {
+  tailscaleWaitOnline = lib.mkForce [
+    "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
+  ];
+  tailscaleAfter = lib.mkForce [
+    "network-online.target"
+    "tailscaled.service"
+  ];
+  tailscaleWants = lib.mkForce [
+    "network-online.target"
+    "tailscaled.service"
+  ];
   systemd-services = {
     services = {
-      duck-dns = {
-        description = "Update Duck DNS";
-        serviceConfig = {
-          Type = "exec";
-          ExecStart = ''
-            ${bashInteractive}/bin/bash -c '${curl}/bin/curl -k \"https://www.duckdns.org/update?domains=$$(${nettools}/bin/hostname)-0x00&token=$$(cat /home/james/secrets/duckdns/duck_dns_token)&ip=\"'
-          '';
-        };
-      };
+      # wait for tailscale for bind
+      harmonia.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+      # The hardened service's RestrictAddressFamilies is breaking the tailscale lookup (via AF_NETLINK)
+      # https://github.com/NixOS/nixpkgs/blob/nixos-25.05/nixos/modules/services/networking/harmonia.nix#L112
+      harmonia.serviceConfig.RestrictAddressFamilies = lib.mkForce "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
       # delay syncthing starting until tailscale binds
-      syncthing.serviceConfig.ExecStartPre = lib.mkForce [
-        "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
-      ];
-      syncthing.after = lib.mkForce [
-        "network-online.target"
-        "tailscaled.service"
-      ];
-      syncthing.wants = lib.mkForce [
-        "network-online.target"
-        "tailscaled.service"
-      ];
+      harmonia.after = pkgs.tailscaleAfter;
+      harmonia.wants = pkgs.tailscaleWants;
+
+      syncthing.serviceConfig.ExecStartPre = self.pkgs.tailscaleWaitOnline;
+      syncthing.after = pkgs.tailscaleAfter;
+      syncthing.wants = pkgs.tailscaleWants;
     };
     timers = {
-      duck-dns = {
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnBootSec = "10s";
-          OnUnitActiveSec = "5m";
-          Unit = "duck-dns.service";
-        };
-      };
     };
     user.services = {
       gammastep = {
