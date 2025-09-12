@@ -40,9 +40,10 @@
       mkNixos =
         hostname: system: modules: importModules:
         let
+          pkgs = nixpkgs.legacyPackages.${system};
           extrasOverlay = _: _: {
             unstable = import unstable {
-              system = system;
+              inherit system;
               config = {
                 allowUnfree = true;
                 segger-jlink.acceptLicense = true;
@@ -51,21 +52,18 @@
             };
             _self = self;
           };
-          rebuild =
-            with (import nixpkgs { inherit system; });
-            writeShellScriptBin "rebuild" ''
-              set -x
-              EXTRA_ARGS="$@"
-              sudo sh -c "nixos-rebuild switch \
-              --flake /home/james/dotfiles#${hostname} \
-              --accept-flake-config \
-              --log-format internal-json \
-              ''${EXTRA_ARGS} \
-              |& ${nix-output-monitor}/bin/nom --json"
-            '';
-          nixosSystem = import (nixpkgs + "/nixos/lib/eval-config.nix");
+          rebuild = pkgs.writeShellScriptBin "rebuild" ''
+            set -x
+            EXTRA_ARGS="$@"
+            sudo sh -c "nixos-rebuild switch \
+            --flake /home/james/dotfiles#${hostname} \
+            --accept-flake-config \
+            --log-format internal-json \
+            ''${EXTRA_ARGS} \
+            |& ${pkgs.nix-output-monitor}/bin/nom --json"
+          '';
         in
-        nixosSystem {
+        nixpkgs.lib.nixosSystem {
           system = system;
           modules = [
             inputs.xremap.nixosModules.default
