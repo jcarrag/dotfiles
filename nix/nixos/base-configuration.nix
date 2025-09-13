@@ -98,6 +98,8 @@ in
       catppuccin-cursors.mochaMauve
       comma # run any program without installation
       dnsmasq
+      unstable.sunsetr
+      hyprsunset
       file
       hexyl # binary viewer
       adwaita-icon-theme
