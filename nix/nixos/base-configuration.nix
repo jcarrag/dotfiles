@@ -15,7 +15,8 @@ in
   ];
 
   boot = {
-    kernelPackages = unstable.linuxPackages_latest;
+    # kernelPackages = unstable.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_6_16;
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
