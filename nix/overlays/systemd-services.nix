@@ -8,7 +8,7 @@ with self.pkgs; {
     "network-online.target"
     "tailscaled.service"
   ];
-  tailscaleWants = lib.mkForce [
+  tailscaleWantedBy = lib.mkForce [
     "network-online.target"
     "tailscaled.service"
   ];
@@ -21,7 +21,7 @@ with self.pkgs; {
       harmonia.serviceConfig.RestrictAddressFamilies = lib.mkForce "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
       # delay syncthing starting until tailscale binds
       harmonia.after = pkgs.tailscaleAfter;
-      harmonia.wants = pkgs.tailscaleWants;
+      harmonia.wantedBy = pkgs.tailscaleWantedBy;
 
       syncthing.serviceConfig.ExecStartPre = self.pkgs.tailscaleWaitOnline;
       syncthing.after = pkgs.tailscaleAfter;

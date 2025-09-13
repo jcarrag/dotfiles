@@ -150,7 +150,7 @@
     ];
     services.storyteller.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     services.storyteller.after = pkgs.tailscaleAfter;
-    services.storyteller.wants = pkgs.tailscaleWants;
+    services.storyteller.wantedBy = pkgs.tailscaleWantedBy;
 
     services.calibre-web.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
   };
