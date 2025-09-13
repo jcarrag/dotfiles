@@ -25,7 +25,7 @@ with self.pkgs; {
 
       syncthing.serviceConfig.ExecStartPre = self.pkgs.tailscaleWaitOnline;
       syncthing.after = pkgs.tailscaleAfter;
-      syncthing.wants = pkgs.tailscaleWants;
+      syncthing.wantedBy = pkgs.tailscaleWantedBy;
     };
     timers = {
     };
