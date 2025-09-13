@@ -40,9 +40,6 @@
   programs.sunshine.enable = true;
 
   services = {
-    # the SDD is LUKS encrypted so a password is already required
-    getty.autologinUser = "james";
-    displayManager.autoLogin.user = "james";
     harmonia = {
       enable = true;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub

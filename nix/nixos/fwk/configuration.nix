@@ -35,8 +35,6 @@
   programs.sunshine.enable = true;
 
   services = {
-    getty.autologinUser = "james";
-    displayManager.autoLogin.user = "james";
     harmonia = {
       enable = true;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub

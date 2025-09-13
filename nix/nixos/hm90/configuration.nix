@@ -69,10 +69,6 @@
       user = "james";
       group = "users";
     };
-    displayManager.autoLogin = {
-      enable = true;
-      user = "james";
-    };
     harmonia = {
       enable = true;
       # nix-store --generate-binary-cache-key hm90.tail7f031.ts.net harmonia.pem harmonia.pub
