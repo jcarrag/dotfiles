@@ -64,8 +64,8 @@
   ];
 
   # nginx lacks permission to read the recordings directory otherwise
-  systemd.services.nginx.serviceConfig.User = lib.mkForce "frigate";
-  systemd.services.nginx.serviceConfig.Group = lib.mkForce "frigate";
+  users.extraUsers.frigate.extraGroups = [ "nginx" ];
+  users.extraUsers.nginx.extraGroups = [ "frigate" ];
 
   # configure frigate
   services.frigate = {
