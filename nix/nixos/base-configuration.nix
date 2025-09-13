@@ -41,7 +41,6 @@ in
       unstable.chiaki
       entr
       evince
-      firefox
       google-chrome
       mpv # needed for anki
       numbat
@@ -354,6 +353,15 @@ in
     bash.completion.enable = true;
     command-not-found.dbPath = "/home/james/.cache/nix-index/files";
     direnv.enable = true;
+    firefox = {
+      enable = true;
+      preferences = {
+        # don't hide URL bar & bookmarks in fullscreen
+        "browser.fullscreen.autohide" = true;
+        # when firefox goes fullscreen fit to window size
+        "full-screen-api.ignore-widgets" = true;
+      };
+    };
     fzf = {
       keybindings = true;
       fuzzyCompletion = true;
