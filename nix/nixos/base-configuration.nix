@@ -364,6 +364,18 @@ in
         # when firefox goes fullscreen fit to window size
         "full-screen-api.ignore-widgets" = true;
       };
+      policies = {
+        Containers = {
+          Default = [
+            # there's no way to provide the socks config via a policy so add manually
+            {
+              name = "mozillavpn";
+              icon = "chill";
+              color = "turquoise";
+            }
+          ];
+        };
+      };
     };
     fzf = {
       keybindings = true;
