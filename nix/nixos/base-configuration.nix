@@ -16,7 +16,7 @@ in
 
   boot = {
     # kernelPackages = unstable.linuxPackages_latest;
-    kernelPackages = pkgs.linuxPackages_6_16;
+    kernelPackages = pkgs.linuxPackages_latest;
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
@@ -131,6 +131,8 @@ in
       update-resolv-conf
       waybar
       xclip
+      vulkan-tools
+      nvtopPackages.amd
       ### Util
       asciicharts
       bandwhich
@@ -198,6 +200,12 @@ in
       package = pkgs.bluez.overrideAttrs (oldAttrs: {
         configureFlags = oldAttrs.configureFlags ++ [ "--enable-sixaxis" ];
       });
+      settings = {
+        General = {
+          Experimental = true;
+          FastConnectable = true;
+        };
+      };
     };
     brillo.enable = true;
     graphics = {
@@ -229,9 +237,9 @@ in
   location.provider = "geoclue2";
 
   networking = {
-    enableIPv6 = false;
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
     firewall = {
+      enable = false;
       allowedTCPPorts = [
         5000 # airplay
         5001 # airplay
@@ -387,7 +395,8 @@ in
     };
     hyprland = {
       enable = true;
-      portalPackage = pkgs.xdg-desktop-portal-wlr;
+      package = unstable.hyprland;
+      portalPackage = unstable.xdg-desktop-portal-wlr;
       xwayland.enable = true;
     };
     hyprlock.enable = true;
@@ -407,7 +416,27 @@ in
     noisetorch.enable = true;
     steam = {
       enable = true;
-      gamescopeSession.enable = true;
+      gamescopeSession = {
+        enable = true;
+        env = {
+          WLR_DRM_DEVICES = "/dev/dri/amd-rx9070xt";
+        };
+        args = [
+          # "--backend"
+          # "sdl" # github.com/ValveSoftware/gamescope/issues/1825
+          "--prefer-vk-device"
+          "1002:7550" # rx9070xt `lspci -nn | grep -E 'VGA'`
+          "--force-grab-cursor"
+          "--expose-wayland"
+          "--hdr-enabled"
+          "--adaptive-sync" # variable refresh rate
+          "-r 60" # refresh rate
+          "-w 3840" # render width
+          "-h 2160" # render width
+          "-W 3840" # display width
+          "-H 2160" # display width
+        ];
+      };
       remotePlay.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
     };
@@ -488,6 +517,7 @@ in
       HandlePowerKey=ignore
       HandleLidSwitch=suspend-then-hibernate
     '';
+    mozillavpn.enable = true;
     nixseparatedebuginfod.enable = true;
     openssh.enable = true;
     openvpn = {
@@ -599,6 +629,9 @@ in
 
         # Keymapp Flashing rules for the Voyager
         SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", MODE:="0666", SYMLINK+="ignition_dfu"
+        # TODO: move to fwk + lunar-fwk
+        KERNEL=="card*", KERNELS=="0000:07:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
+        KERNEL=="card*", KERNELS=="0000:c1:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
       '';
     };
     xserver = {
@@ -659,6 +692,7 @@ in
           device.only = [ "ZSA Technology Labs Voyager" ];
           application.only = [
             ".gamescope-wrapped"
+            "gamescope"
             "dota2"
             "com.moonlight_stream.Moonlight"
           ];
@@ -672,6 +706,7 @@ in
           device.only = [ "ZSA Technology Labs Voyager" ];
           application.only = [
             ".gamescope-wrapped"
+            "gamescope"
             "dota2"
             "com.moonlight_stream.Moonlight"
           ];
