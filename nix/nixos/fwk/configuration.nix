@@ -14,8 +14,6 @@
   # https://forum.level1techs.com/t/nixos-vfio-pcie-passthrough/130916
   boot.kernelParams = [ "intel_iommu=on" ];
 
-  nix.gc.automatic = true;
-
   networking.firewall.interfaces.tailscale0 = {
     allowedUDPPorts = [
       22000 # syncthing

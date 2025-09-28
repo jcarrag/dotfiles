@@ -31,8 +31,6 @@
     ];
   };
 
-  nix.gc.automatic = true;
-
   programs = {
     emby-server.enable = true;
     ynab-updater = {
