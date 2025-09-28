@@ -414,23 +414,31 @@ in
       indicator = true;
     };
     noisetorch.enable = true;
+    gamescope = {
+      enable = true;
+      capSysNice = true;
+    };
     steam = {
       enable = true;
       gamescopeSession = {
         enable = true;
-        env = {
-          WLR_DRM_DEVICES = "/dev/dri/amd-rx9070xt";
-        };
+        # env = {
+        #   # doesn't do anything?
+        #   WLR_DRM_DEVICES = "/dev/dri/amd-rx9070xt";
+        # };
         args = [
-          # "--backend"
-          # "sdl" # github.com/ValveSoftware/gamescope/issues/1825
-          "--prefer-vk-device"
-          "1002:7550" # rx9070xt `lspci -nn | grep -E 'VGA'`
+          #  with over 2 lines
+          #  gamescope --steam --prefer-vk-device 1002:7550 --force-grab-cursor --expose-wayland --hdr-enabled --adaptive-sync -r 60 -s 3 -w 3840 -h 2160 -W 3840 -H 2160 -- steam -tenfoot -pipewire-dmabuf
+          #  gamescope --steam --prefer-vk-device 1002:7550 --force-grab-cursor --expose-wayland --hdr-enabled --adaptive-sync -r 60 -s 3 -w 3840 -h 2160 -W 3840 -H 2160 -- steam -tenfoot -pipewire-dmabuf
+          # "--prefer-vk-device" # rx9070xt `lspci -nn | grep -E 'VGA'`
+          # "1002:7550" # must be over 2 lines? `cat $(which steam-gamescope)`
+          "--prefer-vk-device 1002:7550" # rx9070xt `lspci -nn | grep -E 'VGA'`
           "--force-grab-cursor"
           "--expose-wayland"
           "--hdr-enabled"
           "--adaptive-sync" # variable refresh rate
           "-r 60" # refresh rate
+          "-s 3" # mouse sensitvity
           "-w 3840" # render width
           "-h 2160" # render width
           "-W 3840" # display width
@@ -632,6 +640,9 @@ in
         # TODO: move to fwk + lunar-fwk
         KERNEL=="card*", KERNELS=="0000:07:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
         KERNEL=="card*", KERNELS=="0000:c1:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
+        # TODO: move to nuc
+        KERNEL=="card*", KERNELS=="0000:00:02.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/nuc-intel-igpu"
+        KERNEL=="card*", KERNELS=="0000:09:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
       '';
     };
     xserver = {
@@ -745,6 +756,7 @@ in
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHMKP2hPhz+L3GJ2eoj4DTtZbdgSm5cS+RVtV9lY7fpB james@carragher.dev" # fwk
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID+kfnnvuaVqRuhUPpPlUY4s7UPMkoI9vGskJxep0ZPa james@carragher.dev" # lunar-fwk
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIwJ3qvOGZRCgxKwe9TghG03MyM2eYWLy3wmjVK23T+M james@carragher.dev" # hm90
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIDYOnn9LIrT0JxNV4sRe9BWtMn+3FHT+VV8gIuJ9mQq james@carragher.dev" # nuc
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPPbut1H1yzwurlRFjIZX/RRxXqMy27jIrccuBX2Fbrb james.carragher@moixa.com" # c07ht12qq6p0
     ];
   };

@@ -18,6 +18,7 @@
     "xhci_pci"
     "ahci"
     "nvme"
+    "thunderbolt"
     "usbhid"
     "usb_storage"
     "sd_mod"
@@ -27,16 +28,16 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/678bb763-956b-4d3f-89a2-5544f1fb3733";
+    device = "/dev/disk/by-uuid/097dc7e4-a377-4d09-9caa-dddb97237433";
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/9512-3F15";
+    device = "/dev/disk/by-uuid/F3B7-E7DD";
     fsType = "vfat";
   };
 
-  swapDevices = [ { device = "/dev/disk/by-uuid/f0d0dc51-5943-41ee-992d-9e3eb8398702"; } ];
+  swapDevices = [ { device = "/dev/disk/by-uuid/15e2a75e-1559-4609-a1cd-d283948bc40d"; } ];
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  #powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }
