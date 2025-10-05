@@ -1,6 +1,7 @@
 # Framework 13 7040
 {
   pkgs,
+  config,
   lib,
   ...
 }:
@@ -40,6 +41,20 @@
   programs.sunshine.enable = true;
 
   services = {
+    greetd.settings =
+      let
+        # don't use pkgs.hyprland in case there's a debug build
+        hyprland = "${config.programs.hyprland.package}/bin/Hyprland";
+      in
+      {
+        initial_session = {
+          command = hyprland;
+          user = "james";
+        };
+        default_session = {
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --asterisks --remember --remember-user-session --time --cmd ${hyprland}";
+        };
+      };
     harmonia = {
       enable = true;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub

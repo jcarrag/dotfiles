@@ -1,5 +1,10 @@
 # NUC9i7QNX
-{ lib, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -7,6 +12,20 @@
   ];
 
   services = {
+    greetd.settings =
+      let
+        # don't use pkgs.hyprland in case there's a debug build
+        hyprland = "${config.programs.hyprland.package}/bin/Hyprland";
+      in
+      {
+        initial_session = {
+          command = hyprland;
+          user = "james";
+        };
+        default_session = {
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --asterisks --remember --remember-user-session --time --cmd ${hyprland}";
+        };
+      };
     tailscale = {
       enable = true;
       package = pkgs.unstable.tailscale;
