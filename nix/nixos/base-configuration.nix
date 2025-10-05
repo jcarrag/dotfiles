@@ -154,6 +154,7 @@ in
       gnome-connections # vnc client
       btop
       htop
+      nvtopPackages.amd
       fd
       libnotify
       lshw
@@ -194,6 +195,7 @@ in
   };
 
   hardware = {
+    enableRedistributableFirmware = true;
     saleae-logic.enable = true;
     bluetooth = {
       enable = true;
