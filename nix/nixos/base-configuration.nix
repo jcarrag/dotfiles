@@ -437,7 +437,7 @@ in
           "--prefer-vk-device 1002:7550" # rx9070xt `lspci -nn | grep -E 'VGA'`
           "--force-grab-cursor"
           "--expose-wayland"
-          "--hdr-enabled"
+          # "--hdr-enabled" # disable until hyprland support is better
           "--adaptive-sync" # variable refresh rate
           "-r 60" # refresh rate
           "-s 3" # mouse sensitvity
