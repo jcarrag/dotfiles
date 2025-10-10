@@ -420,6 +420,7 @@ in
       enable = true;
       capSysNice = true;
     };
+    seahorse.enable = true;
     steam = {
       enable = true;
       gamescopeSession = {
