@@ -628,6 +628,9 @@ in
         # TODO: move to nuc
         KERNEL=="card*", KERNELS=="0000:00:02.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/nuc-intel-igpu"
         KERNEL=="card*", KERNELS=="0000:09:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
+        # TODO: move to hm90
+        KERNEL=="card*", KERNELS=="0000:03:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-5700xt"
+        KERNEL=="card*", KERNELS=="0000:08:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
       '';
     };
     xserver = {
