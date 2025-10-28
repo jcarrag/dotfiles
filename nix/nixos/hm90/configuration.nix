@@ -162,7 +162,13 @@
       "L /run/docker.sock - - - - /run/user/1000/docker.sock"
     ];
     services.storyteller.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
-    services.storyteller.after = pkgs.tailscaleAfter;
+    services.storyteller.after = lib.mkForce (
+      pkgs.tailscaleAfter.content
+      ++ [
+        "docker.service"
+        "docker.socket"
+      ]
+    );
     services.storyteller.wantedBy = pkgs.tailscaleWantedBy;
 
     services.calibre-web.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
