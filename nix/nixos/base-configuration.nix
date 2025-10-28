@@ -172,6 +172,7 @@ in
       tree
       usbutils
       watchexec
+      wf-recorder # screen record: `wf-recorder -g "$(slurp) --audio --file=recording_with_audio.mp4"`
       which
       wl-clipboard # wayland clipboard
       wlogout
