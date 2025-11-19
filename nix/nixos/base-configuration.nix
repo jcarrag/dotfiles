@@ -624,14 +624,14 @@ in
         # Keymapp Flashing rules for the Voyager
         SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", MODE:="0666", SYMLINK+="ignition_dfu"
         # TODO: move to fwk + lunar-fwk
-        KERNEL=="card*", KERNELS=="0000:07:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
-        KERNEL=="card*", KERNELS=="0000:c1:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
+        KERNEL=="card*", KERNELS=="0000:07:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
+        KERNEL=="card*", KERNELS=="0000:c1:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x15bf", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
         # TODO: move to nuc
         KERNEL=="card*", KERNELS=="0000:00:02.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/nuc-intel-igpu"
-        KERNEL=="card*", KERNELS=="0000:09:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
+        KERNEL=="card*", KERNELS=="0000:09:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
         # TODO: move to hm90
-        KERNEL=="card*", KERNELS=="0000:03:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-5700xt"
-        KERNEL=="card*", KERNELS=="0000:08:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
+        KERNEL=="card*", KERNELS=="0000:03:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="731f", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-5700xt"
+        KERNEL=="card*", KERNELS=="0000:08:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="731f", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
       '';
     };
     xserver = {
