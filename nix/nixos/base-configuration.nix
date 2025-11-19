@@ -30,7 +30,7 @@ in
       unstable.slack
       ### eGPU
       unstable.intel-gpu-tools
-      unstable.glxinfo
+      unstable.mesa-demos
       unstable.radeontop
       unstable.vulkan-tools
       ### Misc
