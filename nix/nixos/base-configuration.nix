@@ -374,6 +374,9 @@ in
         "browser.fullscreen.autohide" = true;
         # when firefox goes fullscreen fit to window size
         "full-screen-api.ignore-widgets" = true;
+        # pin location (https://news.ycombinator.com/item?id=45986097)
+        "geo.provider.network.url" =
+          ''data:application/json,{"location": {"lat": 51.47, "lng": 0.01}, "accuracy": 128.0}'';
       };
       policies = {
         Containers = {
