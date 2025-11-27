@@ -162,21 +162,16 @@
       "L /run/docker.sock - - - - /run/user/1000/docker.sock"
     ];
     services.storyteller.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
-    services.storyteller.after = lib.mkMerge [
-      pkgs.tailscaleAfter
-      [
-        "docker.service"
-        "docker.socket"
-      ]
-    ];
+    # services.storyteller.serviceConfig.ExecStartPre = lib.mkMerge [
+    #   (lib.mkBefore pkgs.tailscaleWaitOnline)
+    #   # rootless docker is a user system service, so cannot be specified in this
+    #   # service's After. Instead just wait the 30s it takes for docker to start.
+    #   "${pkgs.bash}/bin/bash -c 'sleep 30;'"
+    # ];
+    services.storyteller.after = pkgs.tailscaleAfter;
     services.storyteller.wantedBy = pkgs.tailscaleWantedBy;
-    services.storyteller.requires = lib.mkMerge [
-      pkgs.tailscaleRequires
-      [
-        "docker.service"
-        "docker.socket"
-      ]
-    ];
+    services.storyteller.requires = pkgs.tailscaleRequires;
+    services.storyteller.serviceConfig.StartLimitBurst = 0;
 
     services.calibre-web.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     services.calibre-web.after = pkgs.tailscaleAfter;

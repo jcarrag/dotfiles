@@ -1,12 +1,11 @@
 self: super:
 
 with self.pkgs; {
-  # wait for tailscale for bind
-  tailscaleWaitOnline = lib.mkAfter [
-    "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 1; done'"
+  # wait for tailscale to bind
+  tailscaleWaitOnline = lib.mkBefore [
+    "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 5; done'"
   ];
   tailscaleAfter = lib.mkAfter [
-    "network-online.target"
     "tailscaled.service"
   ];
   tailscaleRequires = lib.mkAfter [
@@ -14,7 +13,6 @@ with self.pkgs; {
   ];
   tailscaleWantedBy = lib.mkAfter [
     "network-online.target"
-    "tailscaled.service"
   ];
   systemd-services = {
     services = {
