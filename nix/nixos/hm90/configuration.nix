@@ -162,16 +162,26 @@
       "L /run/docker.sock - - - - /run/user/1000/docker.sock"
     ];
     services.storyteller.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
-    services.storyteller.after = lib.mkForce (
-      pkgs.tailscaleAfter.content
-      ++ [
+    services.storyteller.after = lib.mkMerge [
+      pkgs.tailscaleAfter
+      [
         "docker.service"
         "docker.socket"
       ]
-    );
+    ];
     services.storyteller.wantedBy = pkgs.tailscaleWantedBy;
+    services.storyteller.requires = lib.mkMerge [
+      pkgs.tailscaleRequires
+      [
+        "docker.service"
+        "docker.socket"
+      ]
+    ];
 
     services.calibre-web.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+    services.calibre-web.after = pkgs.tailscaleAfter;
+    services.calibre-web.wantedBy = pkgs.tailscaleWantedBy;
+    services.calibre-web.requires = pkgs.tailscaleRequires;
   };
 
   virtualisation = {
