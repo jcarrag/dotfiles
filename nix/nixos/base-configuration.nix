@@ -58,6 +58,7 @@ in
       (openssl.dev)
       unstable.saleae-logic-2
       unstable.treefmt
+      tio # serial tool
       ## C++
       gcc
       ## Rust
