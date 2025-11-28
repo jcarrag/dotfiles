@@ -743,6 +743,7 @@ in
     ];
     group = "users";
     home = "/home/james";
+    linger = true; # to allow user systemd services & rootless docker services to persist
     isNormalUser = true;
     uid = 1000;
     openssh.authorizedKeys.keys = [

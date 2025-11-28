@@ -46,6 +46,7 @@ with self.pkgs; {
           description = "Wireproxy SOCKS server service";
           after = [ "network-online.target" ];
           wantedBy = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
           serviceConfig.ExecStart = run_wireproxy;
         };
     };

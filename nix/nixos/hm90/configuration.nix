@@ -159,7 +159,7 @@
     # rootless DOCKER_HOST is created as /run/user/1000/docker.sock but services
     # using docker expect it to be at /run/docker.sock (e.g. storyteller)
     tmpfiles.rules = [
-      "L /run/docker.sock - - - - /run/user/1000/docker.sock"
+      "L /run/docker.sock - james users - /run/user/1000/docker.sock"
     ];
     services.storyteller.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     # services.storyteller.serviceConfig.ExecStartPre = lib.mkMerge [
@@ -172,6 +172,7 @@
     services.storyteller.wantedBy = pkgs.tailscaleWantedBy;
     services.storyteller.requires = pkgs.tailscaleRequires;
     services.storyteller.serviceConfig.StartLimitBurst = 0;
+    services.storyteller.serviceConfig.RestartSec = 30;
 
     services.calibre-web.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     services.calibre-web.after = pkgs.tailscaleAfter;
