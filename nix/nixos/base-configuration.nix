@@ -124,7 +124,7 @@ in
       pwvucontrol # pipewire
       qpwgraph # pipewire
       helvum # pipewire
-      rofi-wayland
+      rofi
       slurp # wayland paste to stdout
       syncthingtray
       swaynotificationcenter
@@ -149,7 +149,7 @@ in
       fq
       jq
       jqp
-      gitAndTools.gitFull
+      gitFull
       git-crypt
       glances
       gnome-connections # vnc client
@@ -511,12 +511,12 @@ in
         accelSpeed = "0.0";
       };
     };
-    logind.extraConfig = ''
-      HandlePowerKey=ignore
-      HandleLidSwitch=suspend-then-hibernate
-    '';
+    logind.settings.Login = {
+      HandlePowerKey = "ignore";
+      HandleLidSwitch = "suspend-then-hibernate";
+    };
     mozillavpn.enable = true;
-    nixseparatedebuginfod.enable = true;
+    nixseparatedebuginfod2.enable = true;
     openssh.enable = true;
     openvpn = {
       servers = {

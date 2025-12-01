@@ -34,7 +34,7 @@
   programs.sunshine.enable = true;
 
   services = {
-    greetd.settings.default_session.command = "${pkgs.greetd.tuigreet}/bin/tuigreet --asterisks --remember --remember-user-session --time --cmd ${config.programs.hyprland.package}/bin/Hyprland";
+    greetd.settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --asterisks --remember --remember-user-session --time --cmd ${config.programs.hyprland.package}/bin/Hyprland";
     harmonia = {
       enable = true;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub

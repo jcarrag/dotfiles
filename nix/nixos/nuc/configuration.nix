@@ -23,7 +23,7 @@
           user = "james";
         };
         default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --asterisks --remember --remember-user-session --time --cmd ${hyprland}";
+          command = "${pkgs.tuigreet}/bin/tuigreet --asterisks --remember --remember-user-session --time --cmd ${hyprland}";
         };
       };
     tailscale = {
