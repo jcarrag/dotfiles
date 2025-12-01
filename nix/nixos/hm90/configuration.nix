@@ -11,6 +11,7 @@
     ../../modules/emby-server.nix
     ../../modules/frigate.nix
     ../../modules/sunshine.nix
+    # ../../modules/archivebox.nix
   ];
 
   environment.systemPackages = [
