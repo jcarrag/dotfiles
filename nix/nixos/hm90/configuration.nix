@@ -201,6 +201,7 @@
     oci-containers = {
       backend = "docker";
       containers = {
+        # docker pull registry.gitlab.com/storyteller-platform/storyteller:latest
         storyteller = {
           serviceName = "storyteller";
           image = "registry.gitlab.com/storyteller-platform/storyteller:latest";
