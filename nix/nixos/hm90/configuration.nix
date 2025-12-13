@@ -154,6 +154,25 @@
       extraSetFlags = [ "--accept-routes" ];
       useRoutingFeatures = "both";
     };
+    webdav = {
+      enable = true;
+      user = "james";
+      group = "users";
+      settings = {
+        address = "100.65.97.33";
+        port = 8765;
+        users = [
+          {
+            username = "tailscale";
+            password = "{bcrypt}$2a$10$IpwXDJqyZpUAjzNo4UFlwOblcZTU4BZjK/E23EYinOrzzZPYGH.ci";
+            permissions = "CRUD";
+            directory = "/home/james/bookmarks_sync/floccus_webdav";
+          }
+        ];
+
+      };
+    };
+
   };
 
   systemd = lib.attrsets.recursiveUpdate pkgs.systemd-services {
@@ -179,6 +198,10 @@
     services.calibre-web.after = pkgs.tailscaleAfter;
     services.calibre-web.wantedBy = pkgs.tailscaleWantedBy;
     services.calibre-web.requires = pkgs.tailscaleRequires;
+
+    services.webdav.after = pkgs.tailscaleAfter;
+    services.webdav.wantedBy = pkgs.tailscaleWantedBy;
+    services.webdav.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
   };
 
   virtualisation = {
