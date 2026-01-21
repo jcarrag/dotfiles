@@ -23,9 +23,35 @@
   # boot.kernelParams = [ "intel_iommu=on" ];
 
   # AMD RX 5700 XT
-  boot.initrd.kernelModules = [ "amdgpu" ];
+  boot.initrd.availableKernelModules = [
+    "vfio-pci"
+    "amdgpu"
+  ];
+  # boot.postBootCommands = ''
+  boot.initrd.preDeviceCommands = ''
+    # DEVS="0000:66:00.0 0000:66:00.1 0000:07:00.0 0000:07:00.1"
+    DEVS="0000:07:00.0 0000:07:00.1"
+    for DEV in $DEVS; do
+      echo "&&& WUT $DEV"
+      echo "vfio-pci" > /sys/bus/pci/devices/$DEV/driver_override
+    done
+    modprobe -i vfio-pci
+  '';
+  boot.kernelModules = [
+    # "vfio-pci"
+    # "amdgpu"
+
+    "kvm-amd"
+  ];
   boot.kernelParams = [
+    "amd_iommu=on"
+    "iommu=pt"
+    "vfio-pci.ids=1002:7550,1002:ab40"
     "amdgpu.dcdebugmask=0x10" # https://bbs.archlinux.org/viewtopic.php?id=302499
+    # This prevents the kernel from trying to power down the pcie link
+    "pcie_aspm=off"
+    # This splits the IOMMU groups artificially
+    "pcie_acs_override=downstream,multifunction"
   ];
 
   networking = {
@@ -95,7 +121,6 @@
       package = pkgs.unstable.tailscale;
       extraSetFlags = [ "--accept-routes" ];
     };
-    xserver.videoDrivers = [ "amdgpu" ];
   };
 
   systemd = lib.attrsets.recursiveUpdate pkgs.systemd-services {
