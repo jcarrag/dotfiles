@@ -80,7 +80,6 @@ in
       sbt
       coursier
       ### Services
-      unstable.awscli
       sshfs
       unstable.tailscale
       wireguard-tools
