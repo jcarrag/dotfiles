@@ -1,8 +1,7 @@
 #[Sunsetr configuration]
 backend = "auto"                # Backend to use: "auto", "hyprland" or "wayland"
-start_hyprsunset = true         # Set true if you're not using hyprsunset.service
-startup_transition = true       # Enable smooth transition when sunsetr starts
-startup_transition_duration = 1 # Duration of startup transition in seconds (1-60)
+smoothing = true
+startup_duration = 1 # Duration of startup transition in seconds (1-60)
 night_temp = 3300               # Color temperature after sunset (1000-20000) Kelvin
 day_temp = 6500                 # Color temperature during day (1000-20000) Kelvin
 night_gamma = 90                # Gamma percentage for night (10-100%)
