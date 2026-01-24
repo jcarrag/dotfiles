@@ -13,7 +13,12 @@
 
   # https://alexbakker.me/post/nixos-pci-passthrough-qemu-vfio.html
   # https://forum.level1techs.com/t/nixos-vfio-pcie-passthrough/130916
-  boot.kernelParams = [ "intel_iommu=on" ];
+  boot.kernelParams = [
+    "intel_iommu=on"
+    # https://bbs.archlinux.org/viewtopic.php?id=302499
+    # https://community.frame.work/t/fw13-amd-ui-freeze/64555/11
+    "amdgpu.dcdebugmask=0x10"
+  ];
 
   networking.firewall.interfaces.tailscale0 = {
     allowedUDPPorts = [

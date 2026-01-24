@@ -26,7 +26,9 @@
   # AMD RX 5700 XT
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelParams = [
-    "amdgpu.dcdebugmask=0x10" # https://bbs.archlinux.org/viewtopic.php?id=302499
+    # https://bbs.archlinux.org/viewtopic.php?id=302499
+    # https://community.frame.work/t/fw13-amd-ui-freeze/64555/11
+    "amdgpu.dcdebugmask=0x10"
   ];
 
   networking = {
