@@ -71,6 +71,7 @@ in
       nodePackages.node2nix
       prettierd
       ## Nix
+      nix-search # nixos-search offline
       nix-tree # closure inspector
       nix-index
       nix-prefetch-scripts
