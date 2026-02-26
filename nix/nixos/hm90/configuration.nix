@@ -141,6 +141,14 @@
               "lunar-fwk"
             ];
           };
+          "arr_backup" = {
+            path = "/home/james/arr_backup";
+            type = "sendonly";
+            devices = [
+              "fwk"
+              "lunar-fwk"
+            ];
+          };
         };
       };
     };

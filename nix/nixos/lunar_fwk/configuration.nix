@@ -103,6 +103,17 @@
               "hm90"
             ];
           };
+          "arr_backup" = {
+            path = "/home/james/arr_backup";
+            type = "receiveonly";
+            versioning = {
+              type = "simple";
+              params.keep = "1";
+            };
+            devices = [
+              "hm90"
+            ];
+          };
         };
       };
     };
