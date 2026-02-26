@@ -136,10 +136,6 @@
           "storyteller" = {
             path = "/home/james/storyteller";
             type = "sendonly";
-            versioning = {
-              type = "simple";
-              params.keep = "1";
-            };
             devices = [
               "fwk"
               "lunar-fwk"

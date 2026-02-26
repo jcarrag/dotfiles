@@ -91,6 +91,19 @@
             autoAcceptFolders = true;
           };
         };
+        folders = {
+          "storyteller" = {
+            path = "/home/james/storyteller";
+            type = "receiveonly";
+            versioning = {
+              type = "simple";
+              params.keep = "1";
+            };
+            devices = [
+              "hm90"
+            ];
+          };
+        };
       };
     };
     tailscale = {
