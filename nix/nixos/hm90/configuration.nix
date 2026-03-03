@@ -184,6 +184,10 @@
     # using docker expect it to be at /run/docker.sock (e.g. storyteller)
     tmpfiles.rules = [
       "L /run/docker.sock - james users - /run/user/1000/docker.sock"
+
+      "d /home/james/storyteller 0777 storyteller storyteller -"
+      "A+ /home/james/storyteller - - - - group:storyteller:rwx"
+      "a+ /home/james/storyteller - - - - default:group:storyteller:rwx"
     ];
     services.storyteller.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     # services.storyteller.serviceConfig.ExecStartPre = lib.mkMerge [
@@ -208,32 +212,36 @@
     services.webdav.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
   };
 
+  users.users.james.extraGroups = [
+    "storyteller"
+  ];
+  users.groups.storyteller = {
+    gid = 5000;
+  };
+  users.users.storyteller = {
+    isSystemUser = true;
+    uid = 5000;
+    group = "storyteller";
+    description = "Storyteller service user";
+    createHome = false;
+  };
   virtualisation = {
     containers.enable = true;
-    docker = {
-      enable = lib.mkForce false;
-      rootless = {
-        enable = true;
-        setSocketVariable = true;
-        daemon.settings = {
-          dns = [
-            "1.1.1.1"
-            "8.8.8.8"
-          ];
-          registry-mirrors = [ "https://mirror.gcr.io" ];
-        };
-
-      };
-    };
     oci-containers = {
-      backend = "docker";
+      backend = "podman";
       containers = {
-        # docker pull registry.gitlab.com/storyteller-platform/storyteller:latest
+        # to update:
+        # > sudo podman pull registry.gitlab.com/storyteller-platform/storyteller:latest
         storyteller = {
           serviceName = "storyteller";
           image = "registry.gitlab.com/storyteller-platform/storyteller:latest";
           ports = [
             "100.65.97.33:8001:8001"
+          ];
+          extraOptions = [
+            # map container's user (root) to host's user (storyteller)
+            "--uidmap=0:5000"
+            "--gidmap=0:5000"
           ];
           volumes = [
             "/home/james/storyteller:/data:rw"
