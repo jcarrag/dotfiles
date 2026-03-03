@@ -1,9 +1,5 @@
 PATH=$PATH:~/.npm-global:~/.cargo/bin
 
-TERM=xterm
-
-EDITOR=nvim
-
 alias cls='printf "\033c"'
 
 # emulatate pbcopy and paste on linux

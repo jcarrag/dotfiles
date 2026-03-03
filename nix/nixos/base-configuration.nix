@@ -773,6 +773,8 @@ in
   };
 
   environment.sessionVariables = {
+    TERM="xterm";
+    EDITOR = "nvim";
     # hyprland/wayland
     NIXOS_OZONE_WL = "1";
     # hyprcursors, also run (for consistent cursor theme/size across apps):
