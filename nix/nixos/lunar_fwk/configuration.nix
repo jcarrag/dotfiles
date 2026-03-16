@@ -41,8 +41,6 @@
     };
   };
 
-  programs.sunshine.enable = true;
-
   services = {
     # greetd.settings =
     #   let
@@ -65,6 +63,11 @@
       settings = {
         bind = "100.102.227.124:5555";
       };
+    };
+    _sunshine = {
+      enable = true;
+      bindAddress = "100.102.227.124";
+      adapterName = "/dev/dri/amd-igpu";
     };
     syncthing = {
       enable = true;

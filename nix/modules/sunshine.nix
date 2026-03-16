@@ -1,20 +1,36 @@
-# https://github.com/LongerHV/nixos-configuration/blob/b193c67526b8e02bb6e3078432b663c8c292d336/modules/nixos/sunshine.nix
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
 let
-  cfg = config.programs.sunshine;
+  cfg = config.services._sunshine;
 in
 {
-  options.programs.sunshine = with lib; {
-    enable = mkEnableOption "sunshine";
+  options.services = with lib; {
+    _sunshine = {
+      enable = mkEnableOption "_sunshine";
+      bindAddress = mkOption {
+        type = types.str;
+      };
+      adapterName = mkOption {
+        type = types.str;
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
+    services.sunshine = {
+      enable = true;
+      capSysAdmin = true;
+      settings = {
+        # https://github.com/LizardByte/Sunshine/pull/4481
+        bind_address = cfg.bindAddress;
+        encoder = "vaapi";
+        adapter_name = cfg.adapterName;
+      };
+    };
     networking.firewall.interfaces.tailscale0 = {
       allowedTCPPortRanges = [
         {
@@ -28,23 +44,6 @@ in
           to = 48010;
         }
       ];
-    };
-    systemd.services.sunshine = {
-      description = "Sunshine self-hosted game stream host for Moonlight";
-      wantedBy = [
-        "network-online.target"
-      ];
-      after = [
-        "tailscaled.service"
-      ];
-      startLimitBurst = 5;
-      startLimitIntervalSec = 500;
-      serviceConfig = {
-        ExecStartPre = pkgs.tailscaleWaitOnline;
-        ExecStart = "${pkgs.sunshine}/bin/sunshine";
-        Restart = "on-failure";
-        RestartSec = "5s";
-      };
     };
   };
 }

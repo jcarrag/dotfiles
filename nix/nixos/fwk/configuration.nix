@@ -36,8 +36,6 @@
     ];
   };
 
-  programs.sunshine.enable = true;
-
   services = {
     greetd.settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --asterisks --remember --remember-user-session --time --cmd ${config.programs.hyprland.package}/bin/Hyprland";
     harmonia = {
@@ -47,6 +45,11 @@
       settings = {
         bind = "100.124.115.79:5555";
       };
+    };
+    _sunshine = {
+      enable = true;
+      bindAddress = "100.124.115.79";
+      adapterName = "/dev/dri/amd-igpu";
     };
     syncthing = {
       enable = true;

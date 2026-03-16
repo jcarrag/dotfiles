@@ -29,6 +29,9 @@
       "nofail"
       "x-systemd.device-timeout=5s"
       "defaults"
+      "allow_other" # allow other users to read the mount
+      "category.create=ff" # fill drives in mount order
+      "minfreespace=50G"
       "fsname=mergerfs-emby-library"
     ];
   };
@@ -39,7 +42,6 @@
       enable = true;
       configDir = "/home/james/.config/ynab-updater";
     };
-    sunshine.enable = true;
   };
 
   networking = {
@@ -90,6 +92,11 @@
       settings = {
         bind = "100.65.97.33:5555";
       };
+    };
+    _sunshine = {
+      enable = true;
+      bindAddress = "100.65.97.33";
+      adapterName = "/dev/dri/amd-5700xt";
     };
     syncthing = {
       enable = true;
