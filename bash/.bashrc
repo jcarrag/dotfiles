@@ -35,7 +35,7 @@ eval "$(atuin init bash --disable-up-arrow)"
 
 FZF_THEME="--color='bg+:-1,fg+:-1,fg:#AEACAA,fg+:#FFFBF6'"
 export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --extended ${FZF_THEME}"
-export FZF_DEFAULT_COMMAND="fd --type file --hidden --follow --exclude .git"
+export FZF_DEFAULT_COMMAND="fd --type file --no-hidden --follow --exclude .git"
 export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 export FZF_CTRL_R_COMMAND=
 export FZF_ALT_C_COMMAND="fd --type directory --hidden"
