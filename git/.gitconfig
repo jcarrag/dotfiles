@@ -30,6 +30,8 @@
         prodlog = "!git tag -l --sort=creatordate --format='%(refname:short)' | grep production | tail -2 | tr '\n' ' ' | xargs -n2 sh -c 'printf \"$0..$1\n\n\"; git changelog $0 $1' #"
         needsdeploy = "!git tag -l --sort=creatordate --format='%(refname:short)' | grep production | tail -1 | xargs -n1 sh -c 'printf \"$0..HEAD\n\n\"; git changelog $0 HEAD' #"
 	root = rev-parse --show-toplevel
+	amend = commit --amend --no-edit
+	update = "!f() { git fetch --no-write-fetch-head origin \"+$1:$1\"; }; f"
 [submodule]
 	recurse = true
 [pull]

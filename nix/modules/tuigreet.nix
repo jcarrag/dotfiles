@@ -1,4 +1,4 @@
-# https://discourse.nixos.org/t/automatically-unlocking-the-gnome-keyring-using-luks-key-with-greetd-and-hyprland/54260/11?u=jcarrag
+# https://discourse.nixos.org/t/automatically-unlocking-the-gnome-keyring-using-luks-key-with-greetd-and-hyprland/54260/11
 { pkgs, lib, ... }:
 
 let
