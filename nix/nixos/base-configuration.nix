@@ -26,7 +26,7 @@ in
     [
       ### Communication
       unstable.discord
-      unstable.signal-desktop-bin
+      unstable.signal-desktop
       unstable.slack
       ### eGPU
       unstable.intel-gpu-tools
