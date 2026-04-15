@@ -14,6 +14,11 @@
     # ../../modules/archivebox.nix
   ];
 
+  boot.kernelParams = [
+    # Disable USB autosuspend (to fix SSD over USB becoming unreachable)
+    "usbcore.autosuspend=-1"
+  ];
+
   environment.systemPackages = [
     pkgs.mergerfs
   ];
