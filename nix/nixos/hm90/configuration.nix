@@ -17,6 +17,8 @@
   boot.kernelParams = [
     # Disable USB autosuspend (to fix SSD over USB becoming unreachable)
     "usbcore.autosuspend=-1"
+    # Use usb-storage instead of UASP (to fix Emby's /mnt/2TBm2enclosure over USB becoming unreachable)
+    "usbcore.quirks=0bda:9210:u"
   ];
 
   environment.systemPackages = [
