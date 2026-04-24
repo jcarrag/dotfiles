@@ -17,8 +17,11 @@
   boot.kernelParams = [
     # Disable USB autosuspend (to fix SSD over USB becoming unreachable)
     "usbcore.autosuspend=-1"
-    # Use usb-storage instead of UASP (to fix Emby's /mnt/2TBm2enclosure over USB becoming unreachable)
-    "usbcore.quirks=0bda:9210:u"
+    # Force BOT instead of UAS for the 2TB USB enclosure (Realtek 0bda:9210)
+    # to fix Emby's /mnt/2TBm2enclosure becoming unreachable under load.
+    # (usbcore.quirks uses a different flag namespace; the :u "ignore UAS"
+    # quirk belongs to usb-storage.)
+    "usb-storage.quirks=0bda:9210:u"
   ];
 
   environment.systemPackages = [
