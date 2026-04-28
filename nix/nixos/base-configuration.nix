@@ -178,6 +178,11 @@ in
       wl-clipboard # wayland clipboard
       wlogout
       zip
+      # ratatui
+      binsider # cli binary analysis
+      csvlens # cli csv viewer
+      oxker # cli docker viewer
+      doxx # cli docx viewer
     ]
     ++ scripts;
 
