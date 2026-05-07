@@ -107,7 +107,6 @@
       enable = true;
       enrollSecretDirectory = "/home/james/secrets/kolide-k2";
     };
-    passSecretService.enable = true;
     udev = {
       # work keyboards
       extraHwdb = ''
