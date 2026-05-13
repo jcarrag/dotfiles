@@ -9,6 +9,7 @@
 {
   imports = [
     ../../modules/sunshine.nix
+    ../../modules/tailscale-drive.nix
     ../../modules/tuigreet.nix
   ];
 

@@ -9,6 +9,7 @@
 {
   imports = [
     ../../modules/sunshine.nix
+    ../../modules/tailscale-drive.nix
   ];
 
   # https://alexbakker.me/post/nixos-pci-passthrough-qemu-vfio.html
