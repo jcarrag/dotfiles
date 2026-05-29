@@ -1,13 +1,13 @@
 # Framework 13 7040
 {
   pkgs,
-  config,
   lib,
   ...
 }:
 
 {
   imports = [
+    ../../modules/gdrive-sync.nix
     ../../modules/sunshine.nix
     ../../modules/tailscale-drive.nix
     ../../modules/tuigreet.nix
