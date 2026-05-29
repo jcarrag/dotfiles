@@ -1,4 +1,4 @@
-PATH=$PATH:~/.npm-global:~/.cargo/bin
+PATH=$PATH:~/.npm-global:~/.cargo/bin:~/bin:~/.local/bin
 
 alias cls='printf "\033c"'
 
@@ -11,7 +11,7 @@ fi
 
 # Jump Edge
 je() {
-  local -r DIR=$(fd . --type directory --base-directory ~/dev/lunar/gridshare-edge | fzf)
+  local -r DIR=$( (echo "."; fd . --type directory --base-directory ~/dev/lunar/gridshare-edge) | fzf)
   if [[ -n "$DIR" ]]; then
     cd ~/dev/lunar/gridshare-edge/"$DIR"
   fi

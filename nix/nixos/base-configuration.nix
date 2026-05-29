@@ -213,6 +213,8 @@ in
         General = {
           Experimental = true;
           FastConnectable = true;
+          # Stop bluez from tearing down idle links
+          IdleTimeout = 0;
         };
       };
     };
@@ -411,8 +413,9 @@ in
     };
     hyprland = {
       enable = true;
+      withUWSM = true;
       package = unstable.hyprland;
-      portalPackage = unstable.xdg-desktop-portal-wlr;
+      portalPackage = unstable.xdg-desktop-portal-hyprland;
       xwayland.enable = true;
     };
     hyprlock.enable = true;
@@ -596,7 +599,7 @@ in
       # https://yulistic.gitlab.io/2017/12/linux-keymapping-with-udev-hwdb
       # https://wiki.archlinux.org/title/map_scancodes_to_keycodes
       # (trailing newline between rules & all-caps in ids are needed)
-      extraHwdb = '''';
+      extraHwdb = "";
       extraRules = ''
         ATTRS{idVendor}=="239a", ATTRS{idProduct}=="8087", TAG+="uaccess"
 
@@ -778,7 +781,7 @@ in
   };
 
   environment.sessionVariables = {
-    TERM="xterm";
+    TERM = "xterm";
     EDITOR = "nvim";
     # hyprland/wayland
     NIXOS_OZONE_WL = "1";

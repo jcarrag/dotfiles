@@ -3,8 +3,7 @@
 
 let
   tuigreetBin = "${pkgs.tuigreet}/bin/tuigreet";
-  # session = "start-hyprland > /dev/null";
-  session = "systemd-cat -t hyprland ${lib.getExe pkgs.hyprland}";
+  session = "start-hyprland";
   username = "james"; # Change this to your username
 
   # Theme colors and spacing
