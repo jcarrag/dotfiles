@@ -151,6 +151,15 @@
               "sm-x510"
             ];
           };
+          "notes" = {
+            path = "/home/james/notes";
+            maxConflicts = 0;
+            devices = [
+              "ios12"
+              "fwk"
+              "lunar-fwk"
+            ];
+          };
           "storyteller" = {
             path = "/home/james/storyteller";
             type = "sendonly";

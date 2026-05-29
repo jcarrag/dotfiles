@@ -79,6 +79,15 @@
           };
         };
         folders = {
+          "notes" = {
+            path = "/home/james/notes";
+            maxConflicts = 0;
+            devices = [
+              "ios12"
+              "hm90"
+              "lunar-fwk"
+            ];
+          };
           "storyteller" = {
             path = "/home/james/storyteller";
             type = "receiveonly";
