@@ -8,6 +8,7 @@
 
 {
   imports = [
+    ../../modules/gdrive-sync.nix
     ../../modules/sunshine.nix
     ../../modules/tailscale-drive.nix
   ];
