@@ -40,7 +40,7 @@
 
   services = {
     greetd.settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --asterisks --remember --remember-user-session --time --cmd ${config.programs.hyprland.package}/bin/Hyprland";
-    harmonia = {
+    harmonia.cache = {
       enable = true;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
       signKeyPaths = [ "/home/james/secrets/harmonia.pem" ];

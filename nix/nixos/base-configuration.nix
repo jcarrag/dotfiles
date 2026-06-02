@@ -43,7 +43,7 @@ in
       entr
       evince
       google-chrome
-      mpv # needed for anki
+      # mpv # needed for anki
       numbat
       unstable.obsidian
       sunshine
@@ -68,7 +68,6 @@ in
       unstable.rustfmt
       ## Javascript
       nodejs
-      nodePackages.node2nix
       prettierd
       ## Nix
       nix-search # nixos-search offline
@@ -123,7 +122,7 @@ in
       pavucontrol # pulseaudio volume control
       pwvucontrol # pipewire
       qpwgraph # pipewire
-      helvum # pipewire
+      crosspipe # pipewire
       rofi
       slurp # wayland paste to stdout
       syncthingtray
@@ -202,6 +201,7 @@ in
   };
 
   hardware = {
+    acpilight.enable = true;
     enableRedistributableFirmware = true;
     saleae-logic.enable = true;
     bluetooth = {
@@ -323,10 +323,10 @@ in
       steam = pkgs.steam.override {
         extraPkgs =
           pkgs: with pkgs; [
-            xorg.libXcursor
-            xorg.libXi
-            xorg.libXinerama
-            xorg.libXScrnSaver
+            libxcursor
+            libxi
+            libxinerama
+            libxscrnsaver
             libpng
             libpulseaudio
             libvorbis
@@ -419,7 +419,6 @@ in
       xwayland.enable = true;
     };
     hyprlock.enable = true;
-    light.enable = true;
     mosh.enable = true; # MObile SHell - network resilient SSH
     nix-ld = {
       enable = true;
@@ -584,13 +583,13 @@ in
     };
     resolved = {
       enable = true;
-      domains = [
+      settings.Resolve.domains = [
         "8.8.8.8"
       ];
       # mDNS is provided by avahi
-      extraConfig = ''
-        MulticastDNS=no
-      '';
+      # settings = {
+      #   MulticastDNS = "no";
+      # };
     };
     switcherooControl.enable = true;
     tumbler.enable = true;

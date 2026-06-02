@@ -32,7 +32,6 @@ let
         SDL_AUDIODRIVER=pipewire ${unstable.moonlight-qt}/bin/moonlight
       '';
   toggleRotateScreen =
-    with xorg;
     writeScriptBin "toggleRotateScreen" # bash
       ''
         #!${stdenv.shell}
@@ -82,11 +81,11 @@ let
         XROT=`${xrandr}/bin/xrandr --current --verbose | grep primary | egrep -o ' (normal|left|inverted|right) '`
 
         if [ "$(head -n1 <<< $XROT)" = " normal " ]; then
-          ${xorg.xset}/bin/xset s off -dpms
+          ${xset}/bin/xset s off -dpms
           do_rotate $XDISPLAY "left"
           exit 0
         else
-          ${xorg.xset}/bin/xset s on +dpms
+          ${xset}/bin/xset s on +dpms
           do_rotate $XDISPLAY "normal"
           exit 0
         fi
