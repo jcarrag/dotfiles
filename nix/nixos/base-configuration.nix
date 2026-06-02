@@ -415,7 +415,7 @@ in
       enable = true;
       withUWSM = true;
       package = unstable.hyprland;
-      portalPackage = unstable.xdg-desktop-portal-hyprland;
+      portalPackage = unstable.xdg-desktop-portal-wlr;
       xwayland.enable = true;
     };
     hyprlock.enable = true;
