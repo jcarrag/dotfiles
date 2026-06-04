@@ -213,9 +213,14 @@ in
         General = {
           Experimental = true;
           FastConnectable = true;
-          # Stop bluez from tearing down idle links
-          IdleTimeout = 0;
         };
+        Policy = {
+          AutoEnable = true;
+        };
+      };
+      input.General = {
+        # Stop bluez from tearing down idle links
+        IdleTimeout = 0;
       };
     };
     brillo.enable = true;
