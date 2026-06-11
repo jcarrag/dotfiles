@@ -77,7 +77,7 @@
       listen.ip = "100.65.97.33";
       options = {
         enableBookUploading = true;
-        calibreLibrary = "/home/james/Calibre Library";
+        calibreLibrary = "/home/james/calibre_library";
       };
       user = "james";
       group = "users";
@@ -139,8 +139,8 @@
           };
         };
         folders = {
-          "Calibre Library" = {
-            path = "/home/james/Calibre Library";
+          "calibre-library" = {
+            path = "/home/james/calibre_library";
             versioning = {
               type = "simple";
               params.keep = "1";
@@ -230,6 +230,8 @@
     services.storyteller.serviceConfig.RestartSec = 30;
 
     services.calibre-web.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+    services.calibre-web.serviceConfig.BindPaths = [ "/home/james/calibre_library" ];
+    services.calibre-web.serviceConfig.ProtectHome = lib.mkForce "tmpfs";
     services.calibre-web.after = pkgs.tailscaleAfter;
     services.calibre-web.wantedBy = pkgs.tailscaleWantedBy;
     services.calibre-web.requires = pkgs.tailscaleRequires;
