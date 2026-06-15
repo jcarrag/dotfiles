@@ -1,6 +1,7 @@
 PATH=$PATH:~/.npm-global:~/.cargo/bin:~/bin:~/.local/bin
 
 alias cls='printf "\033c"'
+alias nvimlocal='/home/james/dev/my/neovim/result/bin/nvim'
 
 # emulatate pbcopy and paste on linux
 # depends on xclip package
