@@ -181,14 +181,14 @@ in
     description = "putioarr service user";
     createHome = false;
   };
-  systemd.services.putioarr = {
-    # serviceConfig = {
-    #   # prevent systemd from making StateDirectory 0700
-    #   UMask = lib.mkForce "0007";
-    #   StateDirectoryMode = lib.mkForce "0770";
-    # };
-
-    preStart =
+  # serviceConfig = {
+  #   # prevent systemd from making StateDirectory 0700
+  #   UMask = lib.mkForce "0007";
+  #   StateDirectoryMode = lib.mkForce "0770";
+  # };
+  system.activationScripts."putioarr_write_config" = {
+    deps = [ "users" ];
+    text =
       let
         putio-config = (pkgs.formats.toml { }).generate "config.toml" {
           username = "putioarr";
@@ -219,16 +219,18 @@ in
       pkgs.lib.mkForce ''
         mkdir -p /var/lib/putioarr
         cp ${putio-config} /var/lib/putioarr/config.toml
+        chown putioarr:putioarr /var/lib/putioarr/config.toml
+        chmod 400 /var/lib/putioarr/config.toml
       '';
   };
   virtualisation.oci-containers.containers.putioarr = {
     serviceName = "putioarr";
     # To update:
     # > sudo podman pull putioarr:latest
-    image = "ghcr.io/wouterdebie/putioarr:latest";
     # To run from local:
-    # sudo podman build -t putioarr-local -f docker/Dockerfile .
+    # > sudo podman build -t putioarr-local -f docker/Dockerfile .
     # image = "localhost/putioarr-local:latest";
+    image = "ghcr.io/wouterdebie/putioarr:latest";
     extraOptions = [
       "--network=host"
     ];
@@ -262,7 +264,10 @@ in
     ];
   };
   users.groups.bazarr = { };
-  systemd.services.bazarr = arrPermissions "bazarr";
+  systemd.services.bazarr = arrPermissions "bazarr" // {
+    serviceConfig.BindPaths = [ "/home/james/emby-library" ];
+    serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+  };
 
   ##
   ##
@@ -277,7 +282,10 @@ in
   ];
   # by default UMask is 0022 which prevents group members from writing, but bazarr needs to write to sonarr dirs in emby-server/
   # systemd.services.sonarr.serviceConfig.UMask = lib.mkForce "0002";
-  systemd.services.sonarr = arrPermissions "sonarr";
+  systemd.services.sonarr = arrPermissions "sonarr" // {
+    serviceConfig.BindPaths = [ "/home/james/emby-library" ];
+    serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+  };
 
   # by default sonarr/bazarr/radarr group members cannot access dataDir, change so that syncthing can access
   systemd.tmpfiles.rules = [
@@ -317,7 +325,10 @@ in
   ];
   # by default UMask is 0022 which prevents group members from writing, but bazarr needs to write to radarr dirs in emby-server/
   # systemd.services.radarr.serviceConfig.UMask = lib.mkForce "0002";
-  systemd.services.radarr = arrPermissions "radarr";
+  systemd.services.radarr = arrPermissions "radarr" // {
+    serviceConfig.BindPaths = [ "/home/james/emby-library" ];
+    serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+  };
 
   ##
   ##

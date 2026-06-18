@@ -110,18 +110,22 @@ in
       {
         name = "putioarr_pass";
         sedConfigFile = "/var/lib/putioarr/config.toml";
+        deps = [ "putioarr_write_config" ];
       }
       {
         name = "putio_api_key";
         sedConfigFile = "/var/lib/putioarr/config.toml";
+        deps = [ "putioarr_write_config" ];
       }
       {
         name = "sonarr_api_key";
         sedConfigFile = "/var/lib/putioarr/config.toml";
+        deps = [ "putioarr_write_config" ];
       }
       {
         name = "radarr_api_key";
         sedConfigFile = "/var/lib/putioarr/config.toml";
+        deps = [ "putioarr_write_config" ];
       }
       {
         name = "sabnzbd_api_key";
