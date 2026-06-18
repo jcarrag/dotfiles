@@ -10,6 +10,7 @@
   imports = [
     ../../modules/emby-server.nix
     ../../modules/frigate.nix
+    ../../modules/sabnzbd.nix
     ../../modules/sunshine.nix
     # ../../modules/archivebox.nix
   ];
@@ -161,7 +162,7 @@
             ];
           };
           "storyteller" = {
-            path = "/home/james/storyteller";
+            path = "/var/lib/storyteller";
             type = "sendonly";
             devices = [
               "fwk"
@@ -209,12 +210,13 @@
   systemd = lib.attrsets.recursiveUpdate pkgs.systemd-services {
     # rootless DOCKER_HOST is created as /run/user/1000/docker.sock but services
     # using docker expect it to be at /run/docker.sock (e.g. storyteller)
+    # FIXME remove
+    # "L /run/docker.sock - james users - /run/user/1000/docker.sock"
     tmpfiles.rules = [
-      "L /run/docker.sock - james users - /run/user/1000/docker.sock"
 
-      "d /home/james/storyteller 0777 storyteller storyteller -"
-      "A+ /home/james/storyteller - - - - group:storyteller:rwx"
-      "a+ /home/james/storyteller - - - - default:group:storyteller:rwx"
+      "Z  /var/lib/storyteller 0770 storyteller storyteller -"
+      "A+ /var/lib/storyteller - - - - group:storyteller:rwx"
+      "a+ /var/lib/storyteller - - - - default:group:storyteller:rwx"
     ];
     services.storyteller.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     # services.storyteller.serviceConfig.ExecStartPre = lib.mkMerge [
@@ -273,7 +275,7 @@
             "--gidmap=0:5000"
           ];
           volumes = [
-            "/home/james/storyteller:/data:rw"
+            "/var/lib/storyteller/data:/data:rw"
             "/home/james/secrets/storyteller:/run/secrets/secret_key"
           ];
           environment = {

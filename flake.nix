@@ -5,6 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    agenix.url = "github:ryantm/agenix";
     xremap.url = "github:xremap/nix-flake";
     # ynab-updater.url = "git+file:///home/james/dev/my/ynab_updater";
     ynab-updater.url = "github:jcarrag/ynab-updater";
@@ -51,6 +52,7 @@
               nixpkgs.overlays = [ packageOverlays ];
             };
             _self = self;
+            sshPublicKeys = import ./nix/sshPublicKeys.nix;
           };
           rebuild = pkgs.writeShellScriptBin "rebuild" ''
             set -x
@@ -68,10 +70,13 @@
           modules = [
             inputs.xremap.nixosModules.default
             (import ./nix/nixos/base-configuration.nix)
+            (import ./nix/modules/secrets.nix)
+            inputs.agenix.nixosModules.default
             {
               environment.systemPackages = [
                 rebuild
                 inputs.neovim.packages.${system}.neovim
+                inputs.agenix.packages.${system}.default
               ];
               networking.hostName = hostname;
               nixpkgs = {
