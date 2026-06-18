@@ -11,12 +11,16 @@ let
       name,
       owner,
       group ? owner,
+      mode ? "",
     }:
     {
       inherit name;
       value = {
         inherit owner group;
         file = ../secrets/${name}.age;
+      }
+      // lib.optionalAttrs (mode != "") {
+        inherit mode;
       };
     };
   mk-activation =
@@ -95,6 +99,7 @@ in
         {
           name = "deluge_ssh_config";
           owner = "root";
+          mode = "0444";
         }
       ]
     );
