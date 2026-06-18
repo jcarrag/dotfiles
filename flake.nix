@@ -70,7 +70,6 @@
           modules = [
             inputs.xremap.nixosModules.default
             (import ./nix/nixos/base-configuration.nix)
-            (import ./nix/modules/secrets.nix)
             inputs.agenix.nixosModules.default
             {
               environment.systemPackages = [
@@ -131,6 +130,7 @@
             [
               ./nix/nixos/hm90/hardware-configuration.nix
               ./nix/nixos/hm90/configuration.nix
+              ./nix/modules/secrets.nix
             ];
         fwk =
           mkNixos "fwk" "x86_64-linux"
