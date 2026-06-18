@@ -1,34 +1,41 @@
 { pkgs, lib, ... }:
 
 {
-  # configure the PoE switch
-  boot.kernel.sysctl."net.ipv4.ip_forward" = 1; # don't drop packets meant for NAT'd interface
+  # Allow services to bind to IPs (like Tailscale) before the interface is fully up
+  boot.kernel.sysctl."net.ipv4.ip_nonlocal_bind" = 1;
 
   environment.systemPackages = [
     pkgs.mergerfs
   ];
 
-  services.dnsmasq = {
-    # DNS is useful to let cameras discover & join network, but they will be given a static IP (for frigate to use)
-    enable = true;
-    settings = {
-      port = 0; # disable DNS (to prevent :53 conflict with resolved)
-      interface = "enp6s0"; # "2.5G LAN"
-      bind-interfaces = true;
-      dhcp-range = "192.168.1.100,192.168.1.200,12h"; # default dahua address is 192.168.1.108
-      dhcp-option = [
-        "3,192.168.1.1" # Gateway
-      ];
+  services = {
+    chrony = {
+      enable = true;
+      # Allow devices on the camera subnet to query this NTP server
+      extraConfig = ''
+        allow 192.168.1.0/24
+      '';
+    };
+    dnsmasq = {
+      enable = true;
+      settings = {
+        port = 0; # disable DNS (to prevent :53 conflict with resolved)
+        interface = "enp6s0"; # label: 2.5G LAN (vs. label: 🖧 )
+        bind-interfaces = true;
+        dhcp-range = "192.168.1.100,192.168.1.200,12h"; # default dahua address is 192.168.1.108
+        dhcp-option = [
+          # "3,192.168.1.1" # Gateway (commented to deny the camera internet access)
+          "42,192.168.1.1" # NTP
+        ];
+        # to access the webui: ssh -L 8080:192.168.1.2:80 hm90
+        dhcp-host = "fc:5f:49:41:9b:4e,192.168.1.2,front_porch_cam,infinite";
+      };
     };
   };
   networking = {
-    nat = {
-      enable = true;
-      externalInterface = "eno1"; # 🖧
-      internalInterfaces = [
-        "enp6s0" # "2.5G LAN"
-      ];
-    };
+    firewall.interfaces.enp6s0.allowedUDPPorts = [
+      123 # NTP
+    ];
     interfaces.enp6s0 = {
       ipv4.addresses = [
         {
