@@ -121,37 +121,30 @@ in
       {
         name = "sabnzbd_api_key";
         sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-        # deps = [ "sabnzbd_write_config" ];
       }
       {
         name = "sabnzbd_frugal_user";
         sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-        # deps = [ "sabnzbd_write_config" ];
       }
       {
         name = "sabnzbd_frugal_pass";
         sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-        # deps = [ "sabnzbd_write_config" ];
       }
       {
         name = "sabnzbd_eweka_user";
         sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-        # deps = [ "sabnzbd_write_config" ];
       }
       {
         name = "sabnzbd_eweka_pass";
         sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-        # deps = [ "sabnzbd_write_config" ];
       }
       {
         name = "sabnzbd_blocknews_user";
         sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-        # deps = [ "sabnzbd_write_config" ];
       }
       {
         name = "sabnzbd_blocknews_pass";
         sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-        # deps = [ "sabnzbd_write_config" ];
       }
     ]
   );
