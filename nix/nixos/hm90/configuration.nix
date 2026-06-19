@@ -213,7 +213,6 @@
     # FIXME remove
     # "L /run/docker.sock - james users - /run/user/1000/docker.sock"
     tmpfiles.rules = [
-
       "Z  /var/lib/storyteller 0770 storyteller storyteller -"
       "A+ /var/lib/storyteller - - - - group:storyteller:rwx"
       "a+ /var/lib/storyteller - - - - default:group:storyteller:rwx"
@@ -253,8 +252,22 @@
     isSystemUser = true;
     uid = 5000;
     group = "storyteller";
+    home = "/var/lib/storyteller";
     description = "Storyteller service user";
     createHome = false;
+    linger = true;
+    subUidRanges = [
+      {
+        startUid = 10000;
+        count = 15000;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 10000;
+        count = 15000;
+      }
+    ];
   };
   virtualisation = {
     containers.enable = true;
@@ -264,22 +277,20 @@
         # to update:
         # > sudo podman pull registry.gitlab.com/storyteller-platform/storyteller:latest
         storyteller = {
+          podman.user = "storyteller";
           serviceName = "storyteller";
           image = "registry.gitlab.com/storyteller-platform/storyteller:latest";
           ports = [
             "100.65.97.33:8001:8001"
           ];
-          extraOptions = [
-            # map container's user (root) to host's user (storyteller)
-            "--uidmap=0:5000"
-            "--gidmap=0:5000"
-          ];
           volumes = [
-            "/var/lib/storyteller/data:/data:rw"
-            "/home/james/secrets/storyteller:/run/secrets/secret_key"
+            "/var/lib/storyteller/data:/data:U"
+            "/home/james/secrets/storyteller:/run/secrets/secret_key:ro"
           ];
           environment = {
             STORYTELLER_SECRET_KEY_FILE = "/run/secrets/secret_key";
+            PUID = "0";
+            PGID = "0";
           };
         };
       };
