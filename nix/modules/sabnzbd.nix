@@ -25,7 +25,7 @@ in
     "bazarr"
     "radarr"
     "sonarr"
-    "jellyseerr"
+    "seerr"
     "readarr"
     "audiobookshelf"
     "audiobookrequest"
@@ -95,13 +95,12 @@ in
   services.seerr = {
     enable = true;
   };
-  # jellyseerr uses nobody:nogroup by default, so set a user:group so syncthing can be added to group
-  users.users.jellyseerr = {
+  users.users.seerr = {
     isSystemUser = true;
-    group = "jellyseerr";
+    group = "seerr";
   };
-  users.groups.jellyseerr = { };
-  systemd.services.jellyseerr = arrPermissions "jellyseerr";
+  users.groups.seerr = { };
+  systemd.services.seerr = arrPermissions "seerr";
 
   ##
   ##
