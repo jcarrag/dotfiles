@@ -21,6 +21,7 @@ in
   ##
   #### Syncthing backup (runs as james)
   users.users.james.extraGroups = [
+    "immich"
     "putioarr"
     "bazarr"
     "radarr"
@@ -36,6 +37,11 @@ in
     # TODO add putioarr
     # TODO add audiobookrequest
     # TODO add audiobookshelf
+    "/home/james/arr_backup/immich" = {
+      device = "/var/lib/immich";
+      options = [ "bind" ];
+      fsType = "none";
+    };
     "/home/james/arr_backup/bazarr/backup" = {
       device = "/var/lib/bazarr";
       options = [ "bind" ];
@@ -64,6 +70,21 @@ in
     "radarr" # to read radarr files
     "readarr" # to read readarr files
   ];
+
+  ##
+  ##
+  #### Immich
+  services.immich = {
+    enable = true;
+    host = "100.65.97.33";
+    settings = {
+      server.externalDomain = "https://ipp.carragher.dev";
+    };
+  };
+  services.immich-public-proxy = {
+    enable = true;
+    immichUrl = "http://100.65.97.33:2283";
+  };
 
   ##
   ##
@@ -288,6 +309,8 @@ in
 
   # by default sonarr/bazarr/radarr group members cannot access dataDir, change so that syncthing can access
   systemd.tmpfiles.rules = [
+    "Z  /var/lib/immich 0750 immich immich - -"
+
     "Z  /var/lib/putioarr 0770 putioarr putioarr - -"
 
     "A+ /var/lib/bazarr - - - - group:bazarr:r-x"
