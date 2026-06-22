@@ -144,7 +144,11 @@
             path = "/home/james/calibre_library";
             versioning = {
               type = "simple";
-              params.keep = "1";
+              cleanupIntervalS = 60;
+              params = {
+                keep = "1";
+                cleanoutDays = "30";
+              };
             };
             devices = [
               "fwk"
