@@ -25,6 +25,7 @@
           echo "No bisync state found, running initial --resync"
           ${pkgs.rclone}/bin/rclone bisync "$LOCAL" "$REMOTE" \
             --resync \
+            --resync-mode newer \
             --conflict-resolve newer \
             --conflict-loser num \
             --create-empty-src-dirs \
@@ -34,6 +35,8 @@
             --conflict-resolve newer \
             --conflict-loser num \
             --create-empty-src-dirs \
+            --resilient
+            --recover
             --verbose
         fi
       '';
