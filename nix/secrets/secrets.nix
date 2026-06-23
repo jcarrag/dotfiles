@@ -12,6 +12,10 @@ let
   ];
 in
 {
+  "dawarich_db_pass.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
   "putioarr_pass.age" = {
     publicKeys = trusted-systems;
     armor = true;

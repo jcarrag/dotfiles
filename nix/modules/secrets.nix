@@ -53,6 +53,10 @@ in
     secrets = builtins.listToAttrs (
       map mk-age [
         {
+          name = "dawarich_db_pass";
+          owner = "dawarich";
+        }
+        {
           name = "putioarr_pass";
           owner = "putioarr";
         }

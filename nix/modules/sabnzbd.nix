@@ -21,6 +21,7 @@ in
   ##
   #### Syncthing backup (runs as james)
   users.users.james.extraGroups = [
+    "dawarich"
     "immich"
     "putioarr"
     "bazarr"
@@ -70,6 +71,25 @@ in
     "radarr" # to read radarr files
     "readarr" # to read readarr files
   ];
+
+  ##
+  ##
+  #### Dawarich
+  services.dawarich = {
+    enable = true;
+    configureNginx = false;
+    database.passwordFile = config.age.secrets.dawarich_db_pass.path;
+    localDomain = "dawarich.carragher.dev";
+    webPort = 3001;
+    environment = {
+      APPLICATION_HOSTS = "100.65.97.33,hm90,hm90.tail7f031.ts.net,dawarich.carragher.dev";
+      PHOTON_API_HOST = "photon.komoot.io";
+      PHOTON_API_USE_HTTPS = "true";
+      STORE_GEODATA = "true";
+      # https://github.com/Freika/dawarich/issues/2570
+      JWT_SECRET_KEY = "NOOP";
+    };
+  };
 
   ##
   ##

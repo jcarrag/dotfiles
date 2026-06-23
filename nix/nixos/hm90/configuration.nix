@@ -8,6 +8,7 @@
 
 {
   imports = [
+    ../../modules/gdrive-sync.nix
     ../../modules/emby-server.nix
     ../../modules/frigate.nix
     ../../modules/sabnzbd.nix
