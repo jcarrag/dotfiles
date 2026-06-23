@@ -33,10 +33,7 @@ in
     "audiobookrequest"
   ];
   fileSystems = {
-    # TODO add emby-server
     # TODO add readarr
-    # TODO add putioarr
-    # TODO add audiobookrequest
     # TODO add audiobookshelf
     "/home/james/arr_backup/immich" = {
       device = "/var/lib/immich";
