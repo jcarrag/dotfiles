@@ -6,6 +6,7 @@
 }:
 
 let
+  hostName = config.networking.hostName;
   mk-age =
     {
       name,
@@ -51,114 +52,143 @@ in
       "/etc/ssh/ssh_host_ed25519_key"
     ];
     secrets = builtins.listToAttrs (
-      map mk-age [
-        {
-          name = "dawarich_db_pass";
-          owner = "dawarich";
-        }
-        {
-          name = "putioarr_pass";
-          owner = "putioarr";
-        }
-        {
-          name = "putio_api_key";
-          owner = "putioarr";
-        }
-        {
-          name = "sonarr_api_key";
-          owner = "putioarr";
-        }
-        {
-          name = "radarr_api_key";
-          owner = "putioarr";
-        }
-        {
-          name = "sabnzbd_api_key";
-          owner = "sabnzbd";
-        }
-        {
-          name = "sabnzbd_frugal_user";
-          owner = "sabnzbd";
-        }
-        {
-          name = "sabnzbd_frugal_pass";
-          owner = "sabnzbd";
-        }
-        {
-          name = "sabnzbd_eweka_user";
-          owner = "sabnzbd";
-        }
-        {
-          name = "sabnzbd_eweka_pass";
-          owner = "sabnzbd";
-        }
-        {
-          name = "sabnzbd_blocknews_user";
-          owner = "sabnzbd";
-        }
-        {
-          name = "sabnzbd_blocknews_pass";
-          owner = "sabnzbd";
-        }
-        {
-          name = "deluge_ssh_config";
-          owner = "root";
-          mode = "0444";
-        }
-      ]
+      map mk-age (
+        if hostName == "hm90" then
+          [
+            {
+              name = "dawarich_db_pass";
+              owner = "dawarich";
+            }
+            {
+              name = "putioarr_pass";
+              owner = "putioarr";
+            }
+            {
+              name = "putio_api_key";
+              owner = "putioarr";
+            }
+            {
+              name = "sonarr_api_key";
+              owner = "putioarr";
+            }
+            {
+              name = "radarr_api_key";
+              owner = "putioarr";
+            }
+            {
+              name = "sabnzbd_api_key";
+              owner = "sabnzbd";
+            }
+            {
+              name = "sabnzbd_frugal_user";
+              owner = "sabnzbd";
+            }
+            {
+              name = "sabnzbd_frugal_pass";
+              owner = "sabnzbd";
+            }
+            {
+              name = "sabnzbd_eweka_user";
+              owner = "sabnzbd";
+            }
+            {
+              name = "sabnzbd_eweka_pass";
+              owner = "sabnzbd";
+            }
+            {
+              name = "sabnzbd_blocknews_user";
+              owner = "sabnzbd";
+            }
+            {
+              name = "sabnzbd_blocknews_pass";
+              owner = "sabnzbd";
+            }
+            {
+              name = "deluge_ssh_config";
+              owner = "root";
+              mode = "0444";
+            }
+          ]
+        else if hostName == "lunar-fwk" || hostName == "fwk" then
+          [
+
+            {
+              name = "pushover_user";
+              owner = "james";
+              group = "users";
+            }
+            {
+              name = "pushover_api_key";
+              owner = "james";
+              group = "users";
+            }
+            {
+              name = "immich_api_key";
+              owner = "james";
+              group = "users";
+            }
+          ]
+        else
+          [ ]
+      )
     );
   };
   # These sometimes need two `nixos-rebuild switch` to run
   system.activationScripts = builtins.listToAttrs (
-    map mk-activation [
-      {
-        name = "putioarr_pass";
-        sedConfigFile = "/var/lib/putioarr/config.toml";
-        deps = [ "putioarr_write_config" ];
-      }
-      {
-        name = "putio_api_key";
-        sedConfigFile = "/var/lib/putioarr/config.toml";
-        deps = [ "putioarr_write_config" ];
-      }
-      {
-        name = "sonarr_api_key";
-        sedConfigFile = "/var/lib/putioarr/config.toml";
-        deps = [ "putioarr_write_config" ];
-      }
-      {
-        name = "radarr_api_key";
-        sedConfigFile = "/var/lib/putioarr/config.toml";
-        deps = [ "putioarr_write_config" ];
-      }
-      {
-        name = "sabnzbd_api_key";
-        sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-      }
-      {
-        name = "sabnzbd_frugal_user";
-        sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-      }
-      {
-        name = "sabnzbd_frugal_pass";
-        sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-      }
-      {
-        name = "sabnzbd_eweka_user";
-        sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-      }
-      {
-        name = "sabnzbd_eweka_pass";
-        sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-      }
-      {
-        name = "sabnzbd_blocknews_user";
-        sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-      }
-      {
-        name = "sabnzbd_blocknews_pass";
-        sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
-      }
-    ]
+    map mk-activation (
+      if hostName == "hm90" then
+        [
+          {
+            name = "putioarr_pass";
+            sedConfigFile = "/var/lib/putioarr/config.toml";
+            deps = [ "putioarr_write_config" ];
+          }
+          {
+            name = "putio_api_key";
+            sedConfigFile = "/var/lib/putioarr/config.toml";
+            deps = [ "putioarr_write_config" ];
+          }
+          {
+            name = "sonarr_api_key";
+            sedConfigFile = "/var/lib/putioarr/config.toml";
+            deps = [ "putioarr_write_config" ];
+          }
+          {
+            name = "radarr_api_key";
+            sedConfigFile = "/var/lib/putioarr/config.toml";
+            deps = [ "putioarr_write_config" ];
+          }
+          {
+            name = "sabnzbd_api_key";
+            sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
+          }
+          {
+            name = "sabnzbd_frugal_user";
+            sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
+          }
+          {
+            name = "sabnzbd_frugal_pass";
+            sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
+          }
+          {
+            name = "sabnzbd_eweka_user";
+            sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
+          }
+          {
+            name = "sabnzbd_eweka_pass";
+            sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
+          }
+          {
+            name = "sabnzbd_blocknews_user";
+            sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
+          }
+          {
+            name = "sabnzbd_blocknews_pass";
+            sedConfigFile = "/var/lib/sabnzbd/sabnzbd.ini";
+          }
+        ]
+      else
+        [ ]
+    )
   );
 }

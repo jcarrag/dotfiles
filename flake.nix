@@ -150,6 +150,7 @@
               ./nix/nixos/lunar_fwk/hardware-configuration.nix
               ./nix/nixos/lunar_fwk/configuration.nix
               ./nix/modules/moixa.nix
+              ./nix/modules/secrets.nix
             ];
       };
     };

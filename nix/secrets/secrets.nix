@@ -16,6 +16,18 @@ in
     publicKeys = trusted-systems;
     armor = true;
   };
+  "pushover_user.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
+  "pushover_api_key.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
+  "immich_api_key.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
   "putioarr_pass.age" = {
     publicKeys = trusted-systems;
     armor = true;
