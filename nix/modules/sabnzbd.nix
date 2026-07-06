@@ -372,6 +372,20 @@ in
   ##
   ##
   #### Sabnzbd
+  systemd.services.sabnzbd = {
+    after = [
+      "network-online.target"
+      "tailscaled.service"
+    ];
+    wants = [
+      "network-online.target"
+      "tailscaled.service"
+    ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStartPre = pkgs.tailscaleWaitOnline;
+    };
+  };
   services.sabnzbd = {
     enable = true;
     settings = {
