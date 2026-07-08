@@ -108,10 +108,24 @@ in
               owner = "root";
               mode = "0444";
             }
+            {
+              name = "pushover_user";
+              owner = "james";
+              group = "users";
+            }
+            {
+              name = "pushover_api_key";
+              owner = "james";
+              group = "users";
+            }
+            {
+              name = "immich_api_key";
+              owner = "james";
+              group = "users";
+            }
           ]
         else if hostName == "lunar-fwk" || hostName == "fwk" then
           [
-
             {
               name = "pushover_user";
               owner = "james";

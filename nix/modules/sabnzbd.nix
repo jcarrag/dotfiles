@@ -102,6 +102,8 @@ in
     enable = true;
     immichUrl = "http://100.65.97.33:2283";
   };
+  systemd.services.immich-server.serviceConfig.UMask = lib.mkForce "0027";
+  systemd.services.immich-machine-learning.serviceConfig.UMask = lib.mkForce "0027";
 
   ##
   ##

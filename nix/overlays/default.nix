@@ -15,6 +15,7 @@ let
       ./anki.nix
       ./asciichart.nix
       ./emby-server.nix
+      ./immich-upload-google-takeout.nix
       ./feather-font/feather-font.nix
       ./ferdi.nix
       ./rscls.nix

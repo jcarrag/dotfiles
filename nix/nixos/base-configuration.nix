@@ -134,6 +134,7 @@ in
       vulkan-tools
       nvtopPackages.amd
       ### Util
+      immich-upload-google-takeout
       asciicharts
       bandwhich
       bat
