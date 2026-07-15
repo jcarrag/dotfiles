@@ -395,6 +395,8 @@ in
         # pin location (https://news.ycombinator.com/item?id=45986097)
         "geo.provider.network.url" =
           ''data:application/json,{"location": {"lat": 51.47, "lng": 0.01}, "accuracy": 128.0}'';
+        # extensions' menus are blurry & oversized in wayland
+        "widget.wayland.fractional-scale.enabled" = false;
       };
       policies = {
         Containers = {
