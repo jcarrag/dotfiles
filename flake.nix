@@ -140,6 +140,7 @@
             [
               ./nix/nixos/fwk/hardware-configuration.nix
               ./nix/nixos/fwk/configuration.nix
+              ./nix/modules/secrets.nix
             ];
         lunar-fwk =
           mkNixos "lunar-fwk" "x86_64-linux"
