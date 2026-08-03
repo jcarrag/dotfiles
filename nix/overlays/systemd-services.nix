@@ -47,6 +47,8 @@ with self.pkgs; {
         # The hardened service's RestrictAddressFamilies is breaking the tailscale lookup (via AF_NETLINK)
         # https://github.com/NixOS/nixpkgs/blob/nixos-25.05/nixos/modules/services/networking/harmonia.nix#L112
         harmonia.serviceConfig.RestrictAddressFamilies = lib.mkForce "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+        harmonia.serviceConfig.PrivateNetwork = lib.mkForce false;
+        harmonia.serviceConfig.IPAddressDeny = lib.mkForce "";
 
         syncthing.serviceConfig.ExecStartPre = self.pkgs.tailscaleWaitOnline;
         syncthing.after = pkgs.tailscaleAfter;
