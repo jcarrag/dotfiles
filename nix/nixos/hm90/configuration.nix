@@ -34,6 +34,7 @@
     depends = [
       "/home/james/emby-library_not_mergerfs"
       "/mnt/2TBm2enclosure"
+      "/mnt/256GBssd_m2_caz"
     ];
     device = "/mnt/2TBm2enclosure:/home/james/emby-library_not_mergerfs";
     fsType = "mergerfs";

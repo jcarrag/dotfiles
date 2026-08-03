@@ -62,6 +62,15 @@
     ];
   };
 
+  fileSystems."/mnt/256GBssd_m2_caz" = {
+    device = "/dev/disk/by-uuid/f5a408d0-ed16-4da6-a9b9-c7d8fdeac868";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=5s"
+    ];
+  };
+
   fileSystems."/mnt/600GBssd" = {
     device = "/dev/disk/by-uuid/36429e70-f7b9-4cfe-971c-3add36dab205";
     fsType = "ext4";
