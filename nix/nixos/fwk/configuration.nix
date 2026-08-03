@@ -1,7 +1,6 @@
 # Framework 13 7040
 {
   pkgs,
-  config,
   lib,
   ...
 }:
@@ -21,6 +20,9 @@
     # https://bbs.archlinux.org/viewtopic.php?id=302499
     # https://community.frame.work/t/fw13-amd-ui-freeze/64555/11
     "amdgpu.dcdebugmask=0x10"
+
+    "pcie_ports=native"
+    "pci=assign-busses,hpbussize=0x33,realloc,hpmmiosize=128M,hpmmioprefsize=16G"
   ];
 
   networking.firewall.interfaces.tailscale0 = {
