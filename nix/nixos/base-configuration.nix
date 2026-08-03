@@ -423,7 +423,8 @@ in
       enable = true;
       withUWSM = true;
       package = unstable.hyprland;
-      portalPackage = unstable.xdg-desktop-portal-wlr;
+      # portalPackage = unstable.xdg-desktop-portal-wlr;
+      portalPackage = unstable.xdg-desktop-portal-hyprland;
       xwayland.enable = true;
     };
     hyprlock.enable = true;
@@ -509,11 +510,6 @@ in
     blueman.enable = true;
     dbus.enable = true;
     # TODO: enroll fingerprint button/yubikey?
-    displayManager.autoLogin = {
-      enable = true;
-      user = "james";
-    };
-    greetd.enable = true;
     envfs.enable = true;
     fwupd.enable = true;
     geoclue2 = {

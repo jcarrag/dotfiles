@@ -11,7 +11,6 @@
     ../../modules/gdrive-sync.nix
     ../../modules/sunshine.nix
     ../../modules/tailscale-drive.nix
-    ../../modules/tuigreet.nix
   ];
 
   # Bootloader.
@@ -44,20 +43,10 @@
   };
 
   services = {
-    # greetd.settings =
-    #   let
-    #     # don't use pkgs.hyprland in case there's a debug build
-    #     hyprland = "${config.programs.hyprland.package}/bin/Hyprland";
-    #   in
-    #   {
-    #     initial_session = {
-    #       command = hyprland;
-    #       user = "james";
-    #     };
-    #     default_session = {
-    #       command = "${pkgs.tuigreet}/bin/tuigreet --asterisks --remember --remember-user-session --time --cmd ${hyprland}";
-    #     };
-    #   };
+    displayManager.autoLogin = {
+      enable = true;
+      user = "james";
+    };
     harmonia.cache = {
       enable = true;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
