@@ -34,7 +34,6 @@
     depends = [
       "/home/james/emby-library_not_mergerfs"
       "/mnt/2TBm2enclosure"
-      "/mnt/256GBssd_m2_caz"
     ];
     device = "/mnt/2TBm2enclosure:/home/james/emby-library_not_mergerfs";
     fsType = "mergerfs";
@@ -45,6 +44,23 @@
       "allow_other" # allow other users to read the mount
       "category.create=ff" # fill drives in mount order
       "minfreespace=50G"
+      "fsname=mergerfs-emby-library"
+    ];
+  };
+
+  fileSystems."/home/james/music-library" = {
+    depends = [
+      "/mnt/256GBssd_m2_caz"
+    ];
+    device = "/mnt/256GBssd_m2_caz";
+    fsType = "mergerfs";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=5s"
+      "defaults"
+      "allow_other" # allow other users to read the mount
+      "category.create=ff" # fill drives in mount order
+      "minfreespace=1G"
       "fsname=mergerfs-emby-library"
     ];
   };

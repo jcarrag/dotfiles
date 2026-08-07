@@ -81,4 +81,13 @@ in
     publicKeys = trusted-systems;
     armor = true;
   };
+  # Contains:
+  # Host linode
+  #     HostName $LINODE_HOST
+  #     User $LINODE_USER
+  #     IdentityFile /home/james/.ssh/id_ed25519
+  "linode_ssh_config.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
 }

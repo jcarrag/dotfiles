@@ -17,12 +17,15 @@ let
   };
 in
 {
+  # TODO authelia
   ##
   ##
   #### Syncthing backup (runs as james)
   users.users.james.extraGroups = [
     "dawarich"
     "immich"
+    "lidarr"
+    "aurral"
     "putioarr"
     "bazarr"
     "radarr"
@@ -33,6 +36,7 @@ in
     "audiobookrequest"
   ];
   fileSystems = {
+    # TODO add lidarr
     # TODO add readarr
     # TODO add audiobookshelf
     "/home/james/arr_backup/immich" = {
@@ -107,10 +111,148 @@ in
 
   ##
   ##
+  #### Lidarr
+  # TODO navidrome
+  # TODO tubifarry - youtube DL
+  # TODO aurral
+  #### Remote linode access
+  fileSystems."/mnt/linode_downloads" = {
+    device = "linode:/var/lib/slskd/downloads";
+    fsType = "fuse.sshfs";
+    options = [
+      # don't hang the boot process waiting for the network
+      "x-systemd.automount"
+      "_netdev"
+      # allow the lidarr users to see and read the files
+      "allow_other"
+      # map client-side file ownership to lidarr:lidarr
+      # nb server-side uses the SSH user to validate perms, so linode#james must be in :slskd
+      "uid=306,gid=306"
+      # automatically accept the VPS host key on first connection
+      "StrictHostKeyChecking=accept-new"
+      # keep the connection alive and reconnect if the internet drops
+      "ServerAliveInterval=15"
+      "reconnect"
+    ];
+  };
+  users.groups.lidarr = {
+    gid = 306;
+  };
+  users.users.lidarr = {
+    isSystemUser = true;
+    uid = 306;
+    group = "lidarr";
+  };
+  virtualisation.oci-containers.containers.lidarr = {
+    serviceName = "lidarr";
+    # To update:
+    # > sudo podman pull lidarr:nightly
+    # To run from local:
+    # > sudo podman build -t lidarr-local -f docker/Dockerfile .
+    # image = "localhost/lidarr-local:nightly";
+    image = "lscr.io/linuxserver/lidarr:nightly";
+    extraOptions = [
+      "--network=host"
+    ];
+    volumes = [
+      "/var/lib/lidarr:/config"
+      "/home/james/music-library/music:/data/music"
+      "/mnt/linode_downloads:/linode_downloads"
+    ];
+    environment = {
+      PUID = "306";
+      PGID = "306";
+    };
+  };
+  systemd.services.lidarr = arrPermissions "lidarr" // {
+    serviceConfig.BindPaths = [ "/home/james/music-library/music" ];
+    serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+  };
+
+  ##
+  ##
+  #### Aurral
+  users.groups.aurral = {
+    gid = 5003;
+  };
+  users.users.aurral = {
+    isSystemUser = true;
+    uid = 5003;
+    group = "aurral";
+    home = "/var/lib/aurral";
+    description = "Aurral service user";
+    createHome = true;
+    # TODO configure access to SABnzbd
+    # nb this only affects host-side processes running as aurral. podman gives the
+    # container no supplementary groups at all, so it does nothing for the container
+    # itself - that needs extraOptions = [ "--group-add=306" ] below.
+    extraGroups = [
+      "lidarr" # so that aurral can access music/ and also /mnt/linode_downloads
+    ];
+  };
+  virtualisation.oci-containers.containers.aurral = {
+    serviceName = "aurral";
+    image = "ghcr.io/lklynet/aurral:latest";
+    ports = [
+      "100.65.97.33:3003:3001"
+      # FIXME use non-admin user for aurral
+    ];
+    volumes = [
+      "/var/lib/aurral:/config"
+      "/home/james/music-library:/data"
+      "/mnt/linode_downloads:/data/downloads/slskd/complete"
+    ];
+    environment = {
+      PUID = "5003";
+      PGID = "5003";
+    };
+  };
+  # podman creates missing bind-mount targets itself, as root:root 01755 - and
+  # /data/downloads/slskd/complete is nested inside the /data mount, so those dirs get
+  # created on the host. Pre-create them owned by aurral so podman leaves them alone.
+  # systemd.tmpfiles can't do this: it refuses to chase /home/james (james) ->
+  # music-library (non-james) as an unsafe path transition.
+  systemd.services.aurral = {
+    unitConfig.RequiresMountsFor = "/home/james/music-library";
+    serviceConfig.ExecStartPre = lib.mkBefore [
+      (pkgs.writeShellScript "aurral-prepare-dirs" ''
+        ${pkgs.coreutils}/bin/install -d -o aurral -g aurral -m 2775 \
+          /home/james/music-library/downloads \
+          /home/james/music-library/downloads/aurral \
+          /home/james/music-library/downloads/slskd \
+          /home/james/music-library/downloads/slskd/complete
+      '').outPath
+    ];
+  };
+
+  ##
+  ##
+  #### Navidrome
+  services.navidrome = {
+    enable = true;
+    settings = {
+      Address = "100.65.97.33";
+      MusicFolder = "/home/james/music-library/music";
+    };
+  };
+  users.users.navidrome = {
+    isSystemUser = true;
+    group = "navidrome";
+  };
+  # TODO add PasswordEncryptionKey (https://www.navidrome.org/docs/usage/admin/security/)
+  users.groups.navidrome = { };
+  systemd.services.navidrome = arrPermissions "navidrome" // {
+    serviceConfig.BindPaths = [ "/home/james/music-library/music" ];
+    serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+  };
+
+  ##
+  ##
   #### Remote deluge access
   programs.fuse.userAllowOther = true;
   programs.ssh.extraConfig = ''
     Include ${config.age.secrets.deluge_ssh_config.path}
+    Include ${config.age.secrets.linode_ssh_config.path}
   '';
   fileSystems."/mnt/vps_downloads" = {
     device = "deluge:/home10/venbede/downloads/deluge/done";
@@ -183,7 +325,7 @@ in
     uid = 5001;
     group = "audiobookrequest";
     description = "AudioBookRequest service user";
-    createHome = false;
+    createHome = true;
   };
   virtualisation.oci-containers.containers.audiobookrequest = {
     serviceName = "audiobookrequest";

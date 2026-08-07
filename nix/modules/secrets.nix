@@ -109,6 +109,11 @@ in
               mode = "0444";
             }
             {
+              name = "linode_ssh_config";
+              owner = "root";
+              mode = "0444";
+            }
+            {
               name = "pushover_user";
               owner = "james";
               group = "users";
