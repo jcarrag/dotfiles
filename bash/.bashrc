@@ -1,5 +1,7 @@
 PATH=$PATH:~/.npm-global:~/.cargo/bin:~/bin:~/.local/bin
 
+alias sudo='sudo '
+alias l='ls -lah'
 alias cls='printf "\033c"'
 alias nvimlocal='/home/james/dev/my/neovim/result/bin/nvim'
 
