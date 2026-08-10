@@ -61,6 +61,20 @@
       "x-systemd.device-timeout=5s"
       "defaults"
       "fsname=mergerfs-frigate-recordings"
+      # mergerfs refuses to create files on a branch with less than minfreespace
+      # free, but statvfs on the pool still reports that reserve as free space.
+      # At the 4G default, all 3 branches park at 4G free and every write fails
+      # with ENOSPC while frigate's storage maintainer sees 3*4G=12G free, decides
+      # there is over an hour of headroom, and never runs a cleanup. Frigate only
+      # cleans up below ~1h of recording (~5GB), so keep 3*minfreespace under that
+      # to guarantee frigate reclaims space before mergerfs starts rejecting writes.
+      "minfreespace=1G"
+      # on ENOSPC mid-write, relocate the file to the branch with the most free
+      # space and retry rather than failing the write
+      "moveonenospc=mfs"
+      # default epmfs only considers branches where the parent dir already exists,
+      # which fills branches unevenly; mfs always picks the emptiest branch
+      "category.create=mfs"
     ];
   };
   systemd.tmpfiles.rules = [
@@ -113,21 +127,57 @@
       # telemetry.stats.network_bandwidth = true;
       record = {
         enabled = true;
+        # Retention must be the constraint that bounds disk usage, NOT frigate's
+        # out-of-space cleanup: that cleanup compares statvfs free space against 1h
+        # of bandwidth, and on a mergerfs pool the per-branch minfreespace reserve
+        # makes the pool look non-full even when writes are already failing. Size
+        # these so steady-state usage leaves real headroom on the 1.85TB pool.
+        #
+        # 9d/30d previously requested ~1.79TB against a 1.85TB pool -> permanently
+        # wedged at 100% full. 7d/21d gives ~1.3TB, leaving ~25% headroom for the
+        # bitrate variance that comes with scene activity.
         retain = {
-          # ~5GB/h * 24h * 9d * 1 camera -> 1080 GB
-          days = 9;
+          # ~5GB/h * 24h * 7d * 1 camera -> 840 GB
+          days = 7;
           mode = "all";
         };
+        # 14 days beyond the continuous window, motion segments only -> ~480 GB
         alerts = {
           retain = {
-            days = 30;
+            days = 21;
             mode = "motion";
           };
         };
         detections = {
           retain = {
-            days = 30;
+            days = 21;
             mode = "motion";
+          };
+        };
+        # Retention only deletes files that have a row in the recordings table, so
+        # anything orphaned (db rebuilt, files moved between branches, unclean
+        # shutdown) is never reclaimed and silently eats the pool. This reconciles
+        # both directions -- db rows with no file, and files with no db row -- fully
+        # on startup, then over the last 36h daily at 03:00.
+        sync_recordings = true;
+      };
+      # Snapshots save to /var/lib/frigate/clips on the root filesystem (not on the
+      # mergerfs recordings pool)
+      snapshots = {
+        enabled = true;
+        # unannotated copy written alongside the boxed one -- overlays land on top
+        # of whatever you are trying to read
+        clean_copy = true;
+        bounding_box = true;
+        timestamp = false;
+        # keep the whole frame; cropping to the object throws away the context
+        # needed to tell what actually happened
+        crop = false;
+        quality = 95;
+        retain = {
+          default = 30;
+          objects = {
+            car = 60;
           };
         };
       };
