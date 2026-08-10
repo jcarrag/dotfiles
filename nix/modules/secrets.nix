@@ -104,6 +104,10 @@ in
               owner = "sabnzbd";
             }
             {
+              name = "slskd_env";
+              owner = "slskd";
+            }
+            {
               name = "deluge_ssh_config";
               owner = "root";
               mode = "0444";

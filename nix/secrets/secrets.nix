@@ -72,6 +72,10 @@ in
     publicKeys = trusted-systems;
     armor = true;
   };
+  "slskd_env.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
   # Contains:
   # Host deluge
   #     HostName $DELUGE_HOST

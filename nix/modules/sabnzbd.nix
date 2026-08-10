@@ -111,30 +111,94 @@ in
 
   ##
   ##
-  #### Lidarr
-  # TODO navidrome
-  # TODO tubifarry - youtube DL
-  # TODO aurral
-  #### Remote linode access
-  fileSystems."/mnt/linode_downloads" = {
-    device = "linode:/var/lib/slskd/downloads";
-    fsType = "fuse.sshfs";
-    options = [
-      # don't hang the boot process waiting for the network
-      "x-systemd.automount"
-      "_netdev"
-      # allow the lidarr users to see and read the files
-      "allow_other"
-      # map client-side file ownership to lidarr:lidarr
-      # nb server-side uses the SSH user to validate perms, so linode#james must be in :slskd
-      "uid=306,gid=306"
-      # automatically accept the VPS host key on first connection
-      "StrictHostKeyChecking=accept-new"
-      # keep the connection alive and reconnect if the internet drops
-      "ServerAliveInterval=15"
-      "reconnect"
-    ];
+  #### slskd
+  # FIXME give write access to lidarr to delete files in /var/lib/slskd/downloads
+  services.slskd = {
+    enable = true;
+    domain = null;
+    environmentFile = config.age.secrets.slskd_env.path;
+    settings = {
+      # start - deprecated in newer version
+      global.upload.speed_limit = 1000; # KB
+      permissions.file.mode = 775; # replaced with transfers.download.destination.permissions.mode
+      # end - deprecated in newer version
+      web = {
+        ip_address = "100.65.97.33";
+      };
+      shares.directories = [
+        "[music]/home/james/music-library/music"
+      ];
+      soulseek = {
+        listen_port = 50300;
+        connection.proxy = {
+          enabled = true;
+          address = "100.107.156.1";
+          port = 1080;
+        };
+      };
+      transfers = {
+        upload = {
+          slots = 1;
+          speed_limit = 1000; # KB
+        };
+        download = {
+          slots = 1;
+          speed_limit = 1000; # KB
+          destination.permissions.mode = 775; # lidarr:slskd needs to delete files
+        };
+      };
+      retention = {
+        search = 10080; # 7 days, in minutes
+        transfers = {
+          upload = {
+            succeeded = 1440; # 1 day, in minutes
+            errored = 30;
+            cancelled = 5;
+            failed = 180; # any unsuccessful transfer, including errored and cancelled
+          };
+          download = {
+            succeeded = 1440; # 1 day, in minutes
+            errored = 20160; # 2 weeks, in minutes
+            cancelled = 5;
+            failed = 180; # any unsuccessful transfer, including errored and cancelled
+          };
+        };
+        files = {
+          complete = 20160; # 2 weeks, in minutes
+          incomplete = 43200; # 30 days, in minutes
+        };
+      };
+    };
   };
+  systemd.services.slskd = arrPermissions "slskd" // {
+    serviceConfig.BindPaths = [ "/home/james/music-library/music" ];
+    serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+    serviceConfig.UMask = lib.mkForce "0002";
+  };
+
+  ##
+  ##
+  #### Lidarr
+  #### Remote linode access
+  # fileSystems."/mnt/linode_downloads" = {
+  #   device = "linode:/var/lib/slskd/downloads";
+  #   fsType = "fuse.sshfs";
+  #   options = [
+  #     # don't hang the boot process waiting for the network
+  #     "x-systemd.automount"
+  #     "_netdev"
+  #     # allow the lidarr users to see and read the files
+  #     "allow_other"
+  #     # map client-side file ownership to lidarr:lidarr
+  #     # nb server-side uses the SSH user to validate perms, so linode#james must be in :slskd
+  #     "uid=306,gid=306"
+  #     # automatically accept the VPS host key on first connection
+  #     "StrictHostKeyChecking=accept-new"
+  #     # keep the connection alive and reconnect if the internet drops
+  #     "ServerAliveInterval=15"
+  #     "reconnect"
+  #   ];
+  # };
   users.groups.lidarr = {
     gid = 306;
   };
@@ -142,6 +206,9 @@ in
     isSystemUser = true;
     uid = 306;
     group = "lidarr";
+    extraGroups = [
+      "slskd"
+    ];
   };
   virtualisation.oci-containers.containers.lidarr = {
     serviceName = "lidarr";
@@ -157,7 +224,8 @@ in
     volumes = [
       "/var/lib/lidarr:/config"
       "/home/james/music-library/music:/data/music"
-      "/mnt/linode_downloads:/linode_downloads"
+      # "/mnt/linode_downloads:/linode_downloads"
+      "/var/lib/slskd/downloads:/var/lib/slskd/downloads"
     ];
     environment = {
       PUID = "306";
@@ -167,6 +235,7 @@ in
   systemd.services.lidarr = arrPermissions "lidarr" // {
     serviceConfig.BindPaths = [ "/home/james/music-library/music" ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+    serviceConfig.UMask = lib.mkForce "0000";
   };
 
   ##
@@ -187,7 +256,7 @@ in
     # container no supplementary groups at all, so it does nothing for the container
     # itself - that needs extraOptions = [ "--group-add=306" ] below.
     extraGroups = [
-      "lidarr" # so that aurral can access music/ and also /mnt/linode_downloads
+      "lidarr" # so that aurral can access music/
     ];
   };
   virtualisation.oci-containers.containers.aurral = {
@@ -200,7 +269,8 @@ in
     volumes = [
       "/var/lib/aurral:/config"
       "/home/james/music-library:/data"
-      "/mnt/linode_downloads:/data/downloads/slskd/complete"
+      # "/mnt/linode_downloads:/data/downloads/slskd/complete"
+      # "/var/lib/slskd/downloads:/var/lib/slskd/downloads"
     ];
     environment = {
       PUID = "5003";
@@ -473,6 +543,8 @@ in
     "Z  /var/lib/immich 0750 immich immich - -"
 
     "Z  /var/lib/putioarr 0770 putioarr putioarr - -"
+
+    "Z /var/lib/slskd/downloads 2775 slskd lidarr - -" # ensure lidarr can delete from slskd download dir
 
     "A+ /var/lib/bazarr - - - - group:bazarr:r-x"
     "a+ /var/lib/bazarr - - - - group:bazarr:r-x"
