@@ -1,4 +1,7 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  ...
+}:
 
 {
   # Allow services to bind to IPs (like Tailscale) before the interface is fully up
@@ -199,6 +202,7 @@
         # $ ssh -L 8080:192.168.1.2:80 hm90
         front_porch_cam = {
           detect = {
+            enabled = true;
             width = 1280;
             height = 720;
             fps = 5;
