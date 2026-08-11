@@ -1,5 +1,7 @@
 {
   pkgs,
+  lib,
+  config,
   ...
 }:
 
@@ -125,6 +127,15 @@
       notifications = {
         enabled = true;
         email = "james@carragher.dev";
+        cooldown = 10;
+      };
+      lpr = {
+        enabled = true;
+        min_area = 4000;
+        match_distance = 2;
+        known_plates = {
+          "@frigate_number_plates@" = [ ];
+        };
       };
       # TODO this needs nethogs, which isn't packaged, and adding it to environment.systemPackages doesn't work
       # telemetry.stats.network_bandwidth = true;
@@ -242,4 +253,14 @@
       };
     };
   };
+
+  # not a systemActivation script because frigate.service writes config at start
+  systemd.services.frigate.serviceConfig.ExecStartPre = lib.mkAfter [
+    (pkgs.writeShellScript "frigate-inject-number-plates" ''
+      ${pkgs.gnused}/bin/sed -i \
+        -e "/@frigate_number_plates@/{r ${config.age.secrets.frigate_number_plates.path}" \
+        -e "d}" \
+        /run/frigate/frigate.yml
+    '')
+  ];
 }

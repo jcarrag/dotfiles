@@ -132,6 +132,11 @@ in
               owner = "james";
               group = "users";
             }
+            {
+              name = "frigate_number_plates";
+              owner = "frigate";
+              group = "frigate";
+            }
           ]
         else if hostName == "lunar-fwk" || hostName == "fwk" then
           [

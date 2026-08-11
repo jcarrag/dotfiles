@@ -76,6 +76,10 @@ in
     publicKeys = trusted-systems;
     armor = true;
   };
+  "frigate_number_plates.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
   # Contains:
   # Host deluge
   #     HostName $DELUGE_HOST
