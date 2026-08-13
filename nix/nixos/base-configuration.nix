@@ -415,6 +415,88 @@ in
       keybindings = true;
       fuzzyCompletion = true;
     };
+    git = {
+      enable = true;
+      config = [
+        {
+          user = {
+            name = "James Carragher";
+            email = "james@carragher.dev";
+          };
+        }
+        {
+          push = {
+            default = "simple";
+            autoSetupRemote = true;
+          };
+        }
+        {
+          rebase = {
+            autoSquash = true;
+            autoStash = true;
+            rebaseMerges = true; # == no-rebase-cousins
+            updateRefs = true;
+          };
+        }
+        {
+          rerere = {
+            enabled = true;
+            autoupdate = true;
+          };
+        }
+        {
+          core = {
+            editor = "nvim";
+            excludesfile = pkgs.writeText "gitignore" ''
+              .direnv/
+              result
+              Session.vim
+              .claude/
+            '';
+          };
+        }
+        {
+          alias = {
+            co = "checkout";
+            br = "branch";
+            ci = "commit";
+            st = "status";
+            logs = "!git log --oneline | fzf --multi --preview 'git show {+1}'";
+            last = "log -1 HEAD";
+            tree = "log --graph --decorate --pretty=oneline --abbrev-commit";
+            changelog = "!git log --reverse --pretty=format:'* %s' \"$1\"..\"$2\" #";
+            prodlog = "!git tag -l --sort=creatordate --format='%(refname:short)' | grep production | tail -2 | tr '\n' ' ' | xargs -n2 sh -c 'printf \"$0..$1\n\n\"; git changelog $0 $1' #";
+            needsdeploy = "!git tag -l --sort=creatordate --format='%(refname:short)' | grep production | tail -1 | xargs -n1 sh -c 'printf \"$0..HEAD\n\n\"; git changelog $0 HEAD' #";
+            root = "rev-parse --show-toplevel";
+            amend = "commit --amend --no-edit";
+            update = "!f() { git fetch --no-write-fetch-head origin \"+$1:$1\"; }; f";
+          };
+        }
+        {
+          submodule = {
+            recurse = true;
+          };
+        }
+        {
+          pull = {
+            ff = "only";
+          };
+        }
+        {
+          init = {
+            defaultBranch = "master";
+          };
+        }
+        {
+          "filter \"lfs\"" = {
+            process = "git-lfs filter-process";
+            required = "true";
+            clean = "git-lfs clean -- %f";
+            smudge = "git-lfs smudge -- %f";
+          };
+        }
+      ];
+    };
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
