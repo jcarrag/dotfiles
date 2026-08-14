@@ -98,8 +98,15 @@
         enableBookUploading = true;
         calibreLibrary = "/home/james/calibre_library";
       };
-      user = "james";
-      group = "users";
+      group = "calibre";
+    };
+    calibre-server = {
+      enable = true;
+      host = "100.65.97.33";
+      group = "calibre"; # shared calibre group so both calibre-web & calibre-server can access
+      libraries = [
+        "/home/james/calibre_library"
+      ];
     };
     displayManager.autoLogin = {
       enable = true;
@@ -249,12 +256,23 @@
     services.calibre-web.wantedBy = pkgs.tailscaleWantedBy;
     services.calibre-web.requires = pkgs.tailscaleRequires;
 
+    services.calibre-server.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+    services.calibre-server.serviceConfig.BindPaths = [ "/home/james/calibre_library" ];
+    services.calibre-server.serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+    services.calibre-server.after = pkgs.tailscaleAfter;
+    services.calibre-server.wantedBy = pkgs.tailscaleWantedBy;
+    services.calibre-server.requires = pkgs.tailscaleRequires;
+
     services.webdav.after = pkgs.tailscaleAfter;
     services.webdav.wantedBy = pkgs.tailscaleWantedBy;
     services.webdav.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
   };
 
+  users.groups.calibre = { };
+  users.users.calibre-server.extraGroups = [ "calibre" ];
+  users.users.calibre-web.extraGroups = [ "calibre" ];
   users.users.james.extraGroups = [
+    "calibre"
     "storyteller"
   ];
   users.groups.storyteller = {
