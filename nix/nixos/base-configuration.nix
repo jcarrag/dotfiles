@@ -447,12 +447,30 @@ in
         {
           core = {
             editor = "nvim";
+            pager = "${pkgs.delta}/bin/delta";
             excludesfile = pkgs.writeText "gitignore" ''
               .direnv/
               result
               Session.vim
               .claude/
             '';
+          };
+        }
+        {
+          interactive = {
+            diffFilter = "${pkgs.delta}/bin/delta --color-only";
+          };
+        }
+        {
+          delta = {
+            navigate = true;
+            line-numbers = true;
+            hyperlinks = true;
+          };
+        }
+        {
+          merge = {
+            conflictStyle = "zdiff3";
           };
         }
         {
@@ -471,6 +489,8 @@ in
             amend = "commit --amend --no-edit";
             update = "!f() { git fetch --no-write-fetch-head origin \"+$1:$1\"; }; f";
             bdiff = ''!f(){ git diff $(git merge-base $1 $2) $2 "''${@:3}"; }; f'';
+            diff-side-by-side = "-c delta.features=side-by-side diff";
+            bdiff-side-by-side = "-c delta.features=side-by-side bdiff";
           };
         }
         {
