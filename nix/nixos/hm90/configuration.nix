@@ -181,7 +181,7 @@
             ];
           };
           "storyteller" = {
-            path = "/var/lib/storyteller";
+            path = "/var/lib/storyteller/data";
             type = "sendonly";
             devices = [
               "fwk"
