@@ -470,6 +470,7 @@ in
             root = "rev-parse --show-toplevel";
             amend = "commit --amend --no-edit";
             update = "!f() { git fetch --no-write-fetch-head origin \"+$1:$1\"; }; f";
+            bdiff = ''!f(){ git diff $(git merge-base $1 $2) $2 "''${@:3}"; }; f'';
           };
         }
         {
