@@ -397,6 +397,8 @@ in
           ''data:application/json,{"location": {"lat": 51.47, "lng": 0.01}, "accuracy": 128.0}'';
         # extensions' menus are blurry & oversized in wayland
         "widget.wayland.fractional-scale.enabled" = false;
+        # defer to 1password
+        "browser.formfill.enable" = false;
       };
       policies = {
         Containers = {
