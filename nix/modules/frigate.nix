@@ -151,10 +151,9 @@
         # 9d/30d previously requested ~1.79TB against a 1.85TB pool -> permanently
         # wedged at 100% full. 7d/21d gives ~1.3TB, leaving ~25% headroom for the
         # bitrate variance that comes with scene activity.
-        retain = {
+        continuous = {
           # ~5GB/h * 24h * 7d * 1 camera -> 840 GB
           days = 7;
-          mode = "all";
         };
         # 14 days beyond the continuous window, motion segments only -> ~480 GB
         alerts = {
