@@ -99,14 +99,12 @@ in
           ];
       };
 
-      anki-bin = pkgs.unstable.anki-bin;
-
       anki = pkgs.writeShellScriptBin "anki" ''
         cp -r ${addons}/* /home/james/.local/share/Anki2/addons21/
 
         chmod -R +w /home/james/.local/share/Anki2/addons21/
 
-        ${anki-bin}/bin/anki
+        ${pkgs.anki}/bin/anki
       '';
     in
     {

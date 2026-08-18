@@ -43,7 +43,6 @@ in
       entr
       evince
       google-chrome
-      # mpv # needed for anki
       numbat
       unstable.obsidian
       sunshine
