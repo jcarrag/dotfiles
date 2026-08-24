@@ -8,6 +8,11 @@ let
         commandLineArgs = "--enable-wayland-ime --password-store=basic";
       };
 
+      hyprland = super.hyprland.overrideAttrs (oldAttrs: {
+        debug = true;
+        separateDebugInfo = true;
+      });
+
       checkOverlayObsolete =
         upstreamPkg: targetVersion: overlaidPkg:
         if builtins.compareVersions upstreamPkg.version targetVersion >= 0 then

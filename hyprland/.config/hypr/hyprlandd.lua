@@ -85,7 +85,8 @@ hl.env("XCURSOR_SIZE", "24")
 -- explicitly set the GPUs available to Hyprland to prevent the dGPU from being selected so that
 -- the dGPU can be unbound after being initialised by amdgpu (necessary for VFIO to work)
 -- FIXME: try moving to nixos config to define per host
-hl.env("AQ_DRM_DEVICES", "/dev/dri/amd-rx9070xt:/dev/dri/amd-5700xt:/dev/dri/amd-igpu:/dev/dri/nuc-intel-igpu")
+-- hl.env("AQ_DRM_DEVICES", "/dev/dri/amd-5700xt:/dev/dri/amd-igpu:/dev/dri/nuc-intel-igpu")
+-- hl.env("AQ_DRM_DEVICES", "/dev/dri/amd-rx9070xt:/dev/dri/amd-5700xt:/dev/dri/amd-igpu:/dev/dri/nuc-intel-igpu")
 
 -----------------------
 ---- LOOK AND FEEL ----

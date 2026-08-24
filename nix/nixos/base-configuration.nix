@@ -398,6 +398,8 @@ in
         "widget.wayland.fractional-scale.enabled" = false;
         # defer to 1password
         "browser.formfill.enable" = false;
+        "browser.display.os-zoom-behavior" = 10;
+        # "ui.textScaleFactor" = 200;
       };
       policies = {
         Containers = {
