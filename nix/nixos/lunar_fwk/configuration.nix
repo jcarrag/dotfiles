@@ -42,6 +42,8 @@
     };
   };
 
+  programs.bash.hyprland-notifier.enable = true;
+
   services = {
     displayManager.autoLogin = {
       enable = true;
