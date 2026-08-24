@@ -28,3 +28,8 @@ mods = "Control|Super"
 
 [scrolling]
 history = 50000
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"

@@ -549,7 +549,6 @@ in
       enable = true;
       capSysNice = true;
     };
-    seahorse.enable = true;
     steam = {
       enable = true;
       gamescopeSession = {
@@ -748,10 +747,13 @@ in
         SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", MODE:="0666", SYMLINK+="ignition_dfu"
 
         # Rules for mapping GPUs
-        # > udevadm info --attribute-walk --name /dev/dri/by-path/pci-0000:c1:00.0-card
-        # TODO: move to fwk + lunar-fwk
+        # > udevadm info --attribute-walk --name /dev/dri/by-path/pci-0002:c1:00.0-card
+        # TODO: move to lunar-fwk
         KERNEL=="card*", KERNELS=="0000:07:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
         KERNEL=="card*", KERNELS=="0000:c1:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x15bf", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
+        # TODO: move to fwk
+        KERNEL=="card*", KERNELS=="0000:07:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
+        KERNEL=="card*", KERNELS=="0000:69:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x15bf", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
         # TODO: move to nuc
         KERNEL=="card*", KERNELS=="0000:00:02.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/nuc-intel-igpu"
         KERNEL=="card*", KERNELS=="0000:09:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
