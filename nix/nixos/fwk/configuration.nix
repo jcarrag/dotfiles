@@ -23,7 +23,7 @@
     "amdgpu.dcdebugmask=0x10"
 
     "pcie_ports=native"
-    "pci=assign-busses,hpbussize=0x33,realloc,hpmmiosize=128M,hpmmioprefsize=16G"
+    "pci=realloc,hpmmiosize=128M,hpmmioprefsize=16G"
   ];
 
   networking.firewall.interfaces.tailscale0 = {

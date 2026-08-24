@@ -780,8 +780,7 @@ in
       config.modmap = [
         {
           name = "ctrl=caps_lock";
-          # this is configured on the kbd itself
-          device.not = [ "ZSA Technology Labs Voyager" ];
+          device.only = [ "AT Translated Set 2 keyboard" ];
           remap = {
             "CapsLock" = {
               held = "Ctrl_L";
@@ -792,8 +791,7 @@ in
         }
         {
           name = "swap alt_l / meta_l";
-          # this is configured on the kbd itself
-          device.not = [ "ZSA Technology Labs Voyager" ];
+          device.only = [ "AT Translated Set 2 keyboard" ];
           application.not = [
             ".gamescope-wrapped"
             "com.moonlight_stream.Moonlight"
@@ -804,8 +802,7 @@ in
         }
         {
           name = "swap meta_l / alt_l";
-          # this is configured on the kbd itself
-          device.not = [ "ZSA Technology Labs Voyager" ];
+          device.only = [ "AT Translated Set 2 keyboard" ];
           application.not = [
             ".gamescope-wrapped"
             "com.moonlight_stream.Moonlight"
