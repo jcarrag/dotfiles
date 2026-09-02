@@ -6,15 +6,17 @@
 }:
 
 let
-  arrPermissions = name: {
-    serviceConfig = {
-      User = name;
-      Group = name;
-      # prevent systemd from making StateDirectory 0700
-      UMask = lib.mkForce "0027";
-      StateDirectoryMode = lib.mkForce "0750";
-    };
-  };
+  mergeArrPermissions =
+    name: attrs:
+    lib.recursiveUpdate {
+      serviceConfig = {
+        User = name;
+        Group = name;
+        # prevent systemd from making StateDirectory 0700
+        UMask = lib.mkForce "0027";
+        StateDirectoryMode = lib.mkForce "0750";
+      };
+    } attrs;
 in
 {
   # TODO authelia
@@ -170,7 +172,7 @@ in
       };
     };
   };
-  systemd.services.slskd = arrPermissions "slskd" // {
+  systemd.services.slskd = mergeArrPermissions "slskd" {
     serviceConfig.BindPaths = [ "/home/james/music-library/music" ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
     serviceConfig.UMask = lib.mkForce "0002";
@@ -232,7 +234,9 @@ in
       PGID = "306";
     };
   };
-  systemd.services.lidarr = arrPermissions "lidarr" // {
+  # nb no mergeArrPermissions here: this is a podman unit that has to run as root, and the
+  # container maps itself to lidarr via PUID/PGID above.
+  systemd.services.lidarr = {
     serviceConfig.BindPaths = [ "/home/james/music-library/music" ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
     serviceConfig.UMask = lib.mkForce "0000";
@@ -311,7 +315,7 @@ in
   };
   # TODO add PasswordEncryptionKey (https://www.navidrome.org/docs/usage/admin/security/)
   users.groups.navidrome = { };
-  systemd.services.navidrome = arrPermissions "navidrome" // {
+  systemd.services.navidrome = mergeArrPermissions "navidrome" {
     serviceConfig.BindPaths = [ "/home/james/music-library/music" ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
   };
@@ -352,7 +356,7 @@ in
     group = "seerr";
   };
   users.groups.seerr = { };
-  systemd.services.seerr = arrPermissions "seerr";
+  systemd.services.seerr = mergeArrPermissions "seerr" { };
 
   ##
   ##
@@ -365,7 +369,7 @@ in
     group = "prowlarr";
   };
   users.groups.prowlarr = { };
-  systemd.services.prowlarr = arrPermissions "prowlarr";
+  systemd.services.prowlarr = mergeArrPermissions "prowlarr" { };
 
   ##
   ##
@@ -515,9 +519,11 @@ in
     ];
   };
   users.groups.bazarr = { };
-  systemd.services.bazarr = arrPermissions "bazarr" // {
+  systemd.services.bazarr = mergeArrPermissions "bazarr" {
     serviceConfig.BindPaths = [ "/home/james/emby-library" ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+    # 0027 would strip group write from the subtitles bazarr writes into emby-library
+    serviceConfig.UMask = lib.mkForce "0002";
   };
 
   ##
@@ -531,11 +537,12 @@ in
     "sabnzbd" # access to sabnzbd downloads dir
     "putioarr" # access to putioarr downloads dir
   ];
-  # by default UMask is 0022 which prevents group members from writing, but bazarr needs to write to sonarr dirs in emby-server/
-  # systemd.services.sonarr.serviceConfig.UMask = lib.mkForce "0002";
-  systemd.services.sonarr = arrPermissions "sonarr" // {
+  systemd.services.sonarr = mergeArrPermissions "sonarr" {
     serviceConfig.BindPaths = [ "/home/james/emby-library" ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+    # deliberately looser than the 0027 above: both it and the 0022 default make new
+    # show/season dirs drwxr-sr-x, so bazarr cannot write subtitles next to the episodes
+    serviceConfig.UMask = lib.mkForce "0002";
   };
 
   # by default sonarr/bazarr/radarr group members cannot access dataDir, change so that syncthing can access
@@ -578,11 +585,12 @@ in
     "sabnzbd" # access to sabnzbd downloads dir
     "putioarr" # access to putioarr downloads dir
   ];
-  # by default UMask is 0022 which prevents group members from writing, but bazarr needs to write to radarr dirs in emby-server/
-  # systemd.services.radarr.serviceConfig.UMask = lib.mkForce "0002";
-  systemd.services.radarr = arrPermissions "radarr" // {
+  systemd.services.radarr = mergeArrPermissions "radarr" {
     serviceConfig.BindPaths = [ "/home/james/emby-library" ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+    # deliberately looser than the 0027 above: both it and the 0022 default make new
+    # show/season dirs drwxr-sr-x, so bazarr cannot write subtitles next to the episodes
+    serviceConfig.UMask = lib.mkForce "0002";
   };
 
   ##
