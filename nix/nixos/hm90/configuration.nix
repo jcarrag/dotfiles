@@ -92,7 +92,8 @@
   services = {
     calibre-web = {
       enable = true;
-      package = pkgs.unstable.calibre-web;
+      # package = pkgs.unstable.calibre-web;
+      package = pkgs.calibre-web_0-6-27;
       listen.ip = "100.65.97.33";
       options = {
         enableBookUploading = true;
