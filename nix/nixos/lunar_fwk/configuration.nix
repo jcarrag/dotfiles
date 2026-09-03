@@ -9,6 +9,7 @@
   imports = [
     ../../modules/immich-camera-sync.nix
     ../../modules/gdrive-sync.nix
+    ../../modules/hyprland-notifier.nix
     ../../modules/sunshine.nix
     ../../modules/tailscale-drive.nix
   ];
