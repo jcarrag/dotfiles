@@ -185,7 +185,7 @@
         bounding_box = true;
         timestamp = false;
         # keep the whole frame; cropping to the object throws away the context
-        # needed to tell what actually happened
+        # needed to tell what actually happeneg
         crop = false;
         quality = 95;
         retain = {
@@ -254,13 +254,45 @@
     };
   };
 
-  # not a systemActivation script because frigate.service writes config at start
-  systemd.services.frigate.serviceConfig.ExecStartPre = lib.mkAfter [
-    (pkgs.writeShellScript "frigate-inject-number-plates" ''
-      ${pkgs.gnused}/bin/sed -i \
-        -e "/@frigate_number_plates@/{r ${config.age.secrets.frigate_number_plates.path}" \
-        -e "d}" \
-        /run/frigate/frigate.yml
-    '')
-  ];
+  systemd.services.frigate = {
+    # The upstream module only orders frigate after network.target, which is up
+    # long before DNS resolves. semantic_search and lpr fetch their models from
+    # huggingface on first start, and on a cold boot every fetch fails with
+    # "Failed to resolve 'huggingface.co'". Frigate carries on with missing
+    # models, the embeddings process never becomes usable, and the tracked
+    # object processor blocks on it forever -- detected_frames_queue fills,
+    # every captured frame is dropped (skipped_fps == camera_fps), detection_fps
+    # goes to 0 and the recording maintainer discards segments it can never
+    # associate. Nothing exits, so Restart=on-failure never fires and the
+    # service sits "active (running)" while doing nothing.
+    #
+    # network-online.target alone is not enough here: NetworkManager-wait-online
+    # is disabled (see base-configuration.nix), so the target is reached
+    # trivially. Gate on tailscale actually holding an address instead -- if
+    # tailscaled has talked to the control plane, DNS works. `wants` rather than
+    # `requires` so a later tailscale hiccup never takes recording down.
+    after = [
+      "network-online.target"
+      "tailscaled.service"
+    ];
+    wants = [
+      "network-online.target"
+      "tailscaled.service"
+    ];
+
+    serviceConfig.ExecStartPre = lib.mkMerge [
+      # mkBefore, so this blocks ahead of the module's own ExecStartPre steps
+      pkgs.tailscaleWaitOnline
+
+      # not a systemActivation script because frigate.service writes config at start
+      (lib.mkAfter [
+        (pkgs.writeShellScript "frigate-inject-number-plates" ''
+          ${pkgs.gnused}/bin/sed -i \
+            -e "/@frigate_number_plates@/{r ${config.age.secrets.frigate_number_plates.path}" \
+            -e "d}" \
+            /run/frigate/frigate.yml
+        '')
+      ])
+    ];
+  };
 }
