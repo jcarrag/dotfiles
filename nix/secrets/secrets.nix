@@ -36,6 +36,14 @@ in
     publicKeys = trusted-systems;
     armor = true;
   };
+  "podsync_youtube_api_key.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
+  "podsync_playlist_id.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
   "sonarr_api_key.age" = {
     publicKeys = trusted-systems;
     armor = true;

@@ -36,6 +36,7 @@ in
     "readarr"
     "audiobookshelf"
     "audiobookrequest"
+    "podsync"
   ];
   fileSystems = {
     # TODO add lidarr
@@ -390,6 +391,21 @@ in
     "emby-server" # access to emby-library
     "readarr" # access to files created by readarr
   ];
+  # audiobookshelf refuses to fetch podcast feeds from non-unicast addresses (it wraps
+  # axios in ssrf-req-filter), and tailscale addresses are in the 100.64.0.0/10 CGNAT
+  # range - so adding the podsync feed fails with "Call to 100.65.97.33 is blocked".
+  # Whitelist just the hosts involved rather than DISABLE_SSRF_REQUEST_FILTER=1, which
+  # would turn the filter off for every URL.
+  # nb the enclosure URLs in the feed use podsync's server.hostname, and episode
+  # downloads go through the same filter - so that name has to be listed too, otherwise
+  # the feed parses but every episode download is blocked. Matching is on exact hostname.
+  systemd.services.audiobookshelf.environment.SSRF_REQUEST_FILTER_WHITELIST =
+    builtins.concatStringsSep ","
+      [
+        "100.65.97.33" # podsync feed url
+        "hm90.tail7f031.ts.net" # podsync server.hostname, used by the episode enclosures
+        "hm90"
+      ];
 
   users.groups.audiobookrequest = {
     gid = 5001;
@@ -419,6 +435,101 @@ in
     ];
     environment = {
       ABR_APP__PORT = "6464";
+      TZ = "Europe/London";
+    };
+  };
+
+  ##
+  ##
+  #### Podsync
+  users.groups.podsync = {
+    gid = 5004;
+  };
+  users.users.podsync = {
+    isSystemUser = true;
+    uid = 5004;
+    group = "podsync";
+    description = "podsync service user";
+    createHome = false;
+  };
+  system.activationScripts."podsync_write_config" = {
+    deps = [ "users" ];
+    text =
+      let
+        podsync-config = (pkgs.formats.toml { }).generate "config.toml" {
+          server = {
+            port = 9092;
+            bind_address = "100.65.97.33";
+            # episode enclosure links in the generated RSS point here, so it has to be
+            # an address the podcast client can reach - not localhost
+            hostname = "http://hm90.tail7f031.ts.net:9092";
+            web_ui = true;
+          };
+          storage = {
+            type = "local";
+            # container paths, see the volume mounts below
+            local.data_dir = "/app/data";
+          };
+          database.dir = "/app/db";
+          # https://developers.google.com/youtube/registering_an_application
+          tokens.youtube = "@podsync_youtube_api_key@";
+          downloader = {
+            # the image bundles a youtube-dl that goes stale (youtube then rejects the
+            # download with "content is not available on this app"), and its self_update
+            # rewrites /usr/local/bin inside the container - so the update is lost on
+            # every container recreate, and blocks startup re-downloading it. Pin the
+            # nixpkgs one instead; podsync turns self updates off for a custom binary.
+            # Bump with `nix flake update unstable` when youtube breaks extraction again.
+            custom_binary = "${pkgs.unstable.yt-dlp}/bin/yt-dlp";
+            timeout = 15; # minutes
+          };
+          # keep_last for feeds that don't set their own clean policy
+          cleanup.keep_last = 20;
+          feeds = {
+            audio_rss = {
+              url = "https://www.youtube.com/playlist?list=@podsync_playlist_id@";
+              private_feed = true;
+              page_size = 20;
+              update_period = "12h";
+              format = "audio";
+              quality = "high";
+              opml = true;
+              clean.keep_last = 100;
+            };
+          };
+        };
+      in
+      pkgs.lib.mkForce ''
+        mkdir -p /var/lib/podsync
+        cp ${podsync-config} /var/lib/podsync/config.toml
+        chown podsync:podsync /var/lib/podsync/config.toml
+        chmod 400 /var/lib/podsync/config.toml
+      '';
+  };
+  virtualisation.oci-containers.containers.podsync = {
+    serviceName = "podsync";
+    # To update:
+    # > sudo podman pull ghcr.io/mxpv/podsync:latest
+    image = "ghcr.io/mxpv/podsync:latest";
+    extraOptions = [
+      "--network=host"
+      # nb not a linuxserver image, so PUID/PGID do nothing here. The container runs as
+      # root, so map that to podsync on the host instead (same trick as audiobookrequest)
+      "--uidmap=0:5004"
+      "--gidmap=0:5004"
+    ];
+    volumes = [
+      "/var/lib/podsync/config.toml:/app/config.toml:ro"
+      "/var/lib/podsync/data:/app/data"
+      "/var/lib/podsync/db:/app/db"
+      # podsync downloads to /tmp before moving into data_dir, so without this the
+      # full-size media transits the container's overlay in /var/lib/containers
+      "/var/lib/podsync/tmp:/tmp"
+      # needed by downloader.custom_binary above - the nixpkgs yt-dlp is a wrapper
+      # script that execs bash/python out of the store
+      "/nix/store:/nix/store:ro"
+    ];
+    environment = {
       TZ = "Europe/London";
     };
   };
@@ -556,6 +667,11 @@ in
     "Z  /var/lib/immich 0750 immich immich - -"
 
     "Z  /var/lib/putioarr 0770 putioarr putioarr - -"
+
+    "d  /var/lib/podsync 0750 podsync podsync - -"
+    "d  /var/lib/podsync/data 0750 podsync podsync - -"
+    "d  /var/lib/podsync/db 0750 podsync podsync - -"
+    "d  /var/lib/podsync/tmp 0750 podsync podsync - -"
 
     "Z /var/lib/slskd/downloads 2775 slskd lidarr - -" # ensure lidarr can delete from slskd download dir
 

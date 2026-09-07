@@ -68,6 +68,14 @@ in
               owner = "putioarr";
             }
             {
+              name = "podsync_youtube_api_key";
+              owner = "podsync";
+            }
+            {
+              name = "podsync_playlist_id";
+              owner = "podsync";
+            }
+            {
               name = "sonarr_api_key";
               owner = "putioarr";
             }
@@ -175,6 +183,16 @@ in
             name = "putio_api_key";
             sedConfigFile = "/var/lib/putioarr/config.toml";
             deps = [ "putioarr_write_config" ];
+          }
+          {
+            name = "podsync_youtube_api_key";
+            sedConfigFile = "/var/lib/podsync/config.toml";
+            deps = [ "podsync_write_config" ];
+          }
+          {
+            name = "podsync_playlist_id";
+            sedConfigFile = "/var/lib/podsync/config.toml";
+            deps = [ "podsync_write_config" ];
           }
           {
             name = "sonarr_api_key";
