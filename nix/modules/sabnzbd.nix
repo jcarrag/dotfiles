@@ -448,7 +448,12 @@ in
         putio-config = (pkgs.formats.toml { }).generate "config.toml" {
           username = "putioarr";
           password = "@putioarr_pass@";
-          download_directory = "/downloads";
+          # nb this must be identical to the host path. putioarr decides a transfer has
+          # been imported by string-comparing its own download target against the
+          # droppedPath in the *arr history, and the *arr reports the host path. With
+          # container-only paths (/downloads/...) plus a remote path mapping the two
+          # never match, so putioarr waits out its import window and never cleans up.
+          download_directory = "/var/lib/putioarr/downloads";
           bind_address = "100.65.97.33";
           port = 9091;
           # debug settings
@@ -491,7 +496,8 @@ in
     ];
     volumes = [
       "/var/lib/putioarr:/config"
-      "/var/lib/putioarr/downloads:/downloads"
+      # mounted at the same path inside the container, see download_directory above
+      "/var/lib/putioarr/downloads:/var/lib/putioarr/downloads"
     ];
     environment = {
       PUID = "5002";
