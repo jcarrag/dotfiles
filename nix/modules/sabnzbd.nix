@@ -212,11 +212,36 @@ in
     extraGroups = [
       "slskd"
     ];
+    # Rootless podman needs a HOME for its per-user image store. It must NOT be
+    # /var/lib/lidarr: that whole dir is bind-mounted as /config, which would both
+    # expose the image store to the container and let the image's chown recurse into it.
+    home = "/var/lib/podman-lidarr";
+    createHome = true;
+    linger = true;
+    # Subuid/subgid starts are pinned to NixOS's own allocator grid (100000 + n*65536,
+    # where james already holds 100000). That matters: the allocator only skips start
+    # values it finds verbatim in /etc/subuid, and is blind to explicitly configured
+    # ranges - so an off-grid range here would eventually be handed out again to a new
+    # normal user, silently sharing subuids between two users and undoing the isolation.
+    subUidRanges = [
+      {
+        startUid = 165536;
+        count = 65536;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 165536;
+        count = 65536;
+      }
+    ];
   };
   virtualisation.oci-containers.containers.lidarr = {
+    podman.user = "lidarr";
     serviceName = "lidarr";
-    # To update:
-    # > sudo podman pull lidarr:nightly
+    # To update (rootless - the image store belongs to the lidarr user now):
+    # > sudo -u lidarr HOME=/var/lib/podman-lidarr XDG_RUNTIME_DIR=/run/user/306 \
+    #     podman pull lscr.io/linuxserver/lidarr:nightly
     # To run from local:
     # > sudo podman build -t lidarr-local -f docker/Dockerfile .
     # image = "localhost/lidarr-local:nightly";
@@ -231,12 +256,20 @@ in
       "/var/lib/slskd/downloads:/var/lib/slskd/downloads"
     ];
     environment = {
-      PUID = "306";
-      PGID = "306";
+      # Rootless: container uid 0 already maps to host uid 306 (lidarr), so run the
+      # app as container-root to keep host-side files owned by lidarr:lidarr. A
+      # non-zero PUID would land in the subuid range instead (306 -> 165841), breaking
+      # the shared music-library/slskd-downloads permissions.
+      PUID = "0";
+      PGID = "0";
     };
   };
-  # nb no mergeArrPermissions here: this is a podman unit that has to run as root, and the
-  # container maps itself to lidarr via PUID/PGID above.
+  # nb no mergeArrPermissions here: `podman.user` above already runs the unit as lidarr
+  # (Group unset, so systemd uses lidarr's primary group), and there is no StateDirectory
+  # for its StateDirectoryMode to apply to. Its UMask = mkForce "0027" would also collide
+  # with the mkForce "0000" below - equal priority, and serviceConfig entries merge with
+  # mergeEqualOption, so eval fails rather than one of them winning. The 0000 is
+  # deliberate: it keeps group write on the files shared with slskd and james.
   systemd.services.lidarr = {
     serviceConfig.BindPaths = [ "/home/james/music-library/music" ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
@@ -253,9 +286,23 @@ in
     isSystemUser = true;
     uid = 5003;
     group = "aurral";
-    home = "/var/lib/aurral";
+    # see the note on lidarr's home: keep the rootless image store out of /config
+    home = "/var/lib/podman-aurral";
     description = "Aurral service user";
     createHome = true;
+    linger = true;
+    subUidRanges = [
+      {
+        startUid = 231072;
+        count = 65536;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 231072;
+        count = 65536;
+      }
+    ];
     # TODO configure access to SABnzbd
     # nb this only affects host-side processes running as aurral. podman gives the
     # container no supplementary groups at all, so it does nothing for the container
@@ -265,6 +312,7 @@ in
     ];
   };
   virtualisation.oci-containers.containers.aurral = {
+    podman.user = "aurral";
     serviceName = "aurral";
     image = "ghcr.io/lklynet/aurral:latest";
     ports = [
@@ -278,8 +326,9 @@ in
       # "/var/lib/slskd/downloads:/var/lib/slskd/downloads"
     ];
     environment = {
-      PUID = "5003";
-      PGID = "5003";
+      # rootless: container uid 0 maps to host uid 5003 (aurral) - see lidarr
+      PUID = "0";
+      PGID = "0";
     };
   };
   # podman creates missing bind-mount targets itself, as root:root 01755 - and
@@ -288,7 +337,10 @@ in
   # systemd.tmpfiles can't do this: it refuses to chase /home/james (james) ->
   # music-library (non-james) as an unsafe path transition.
   systemd.services.aurral = {
-    unitConfig.RequiresMountsFor = "/home/james/music-library";
+    # mkForce + both paths: rootless oci-containers also wants
+    # RequiresMountsFor=/run/user/5003/containers, and a plain second definition of
+    # this option is a merge conflict rather than a union.
+    unitConfig.RequiresMountsFor = lib.mkForce "/home/james/music-library /run/user/5003/containers";
     serviceConfig.ExecStartPre = lib.mkBefore [
       (pkgs.writeShellScript "aurral-prepare-dirs" ''
         ${pkgs.coreutils}/bin/install -d -o aurral -g aurral -m 2775 \
@@ -415,9 +467,25 @@ in
     uid = 5001;
     group = "audiobookrequest";
     description = "AudioBookRequest service user";
+    # rootless podman image store; /var/lib/audiobookrequest is the /config volume
+    home = "/var/lib/podman-audiobookrequest";
     createHome = true;
+    linger = true;
+    subUidRanges = [
+      {
+        startUid = 362144;
+        count = 65536;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 362144;
+        count = 65536;
+      }
+    ];
   };
   virtualisation.oci-containers.containers.audiobookrequest = {
+    podman.user = "audiobookrequest";
     serviceName = "audiobookrequest";
     # experimental support for readarr
     # > git fetch origin pull/191/head:pr-191 && git checkout pr-191
@@ -426,9 +494,10 @@ in
     # image = "markbeep/audiobookrequest:latest";
     extraOptions = [
       "--network=host"
-      # map container's user (root) to host's user (audiobookrequest)
-      "--uidmap=0:5001"
-      "--gidmap=0:5001"
+      # The manual "--uidmap=0:5001"/"--gidmap=0:5001" pair is gone: under rootless
+      # podman container uid/gid 0 already maps to the running user (audiobookrequest,
+      # 5001), which is exactly what those flags were emulating. Keeping them would
+      # fail - a rootless uidmap target must fall inside the user's subuid range.
     ];
     volumes = [
       "/var/lib/audiobookrequest:/config"
@@ -450,7 +519,23 @@ in
     uid = 5004;
     group = "podsync";
     description = "podsync service user";
-    createHome = false;
+    # rootless podman image store; the container mounts individual /var/lib/podsync
+    # paths, so keep the store out of the way in its own directory
+    home = "/var/lib/podman-podsync";
+    createHome = true;
+    linger = true;
+    subUidRanges = [
+      {
+        startUid = 427680;
+        count = 65536;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 427680;
+        count = 65536;
+      }
+    ];
   };
   system.activationScripts."podsync_write_config" = {
     deps = [ "users" ];
@@ -507,23 +592,23 @@ in
       '';
   };
   virtualisation.oci-containers.containers.podsync = {
+    podman.user = "podsync";
     serviceName = "podsync";
-    # To update:
-    # > sudo podman pull ghcr.io/mxpv/podsync:latest
+    # To update (rootless - the image store belongs to the podsync user now):
+    # > sudo -u podsync HOME=/var/lib/podman-podsync XDG_RUNTIME_DIR=/run/user/5004 \
+    #     podman pull ghcr.io/mxpv/podsync:latest
     image = "ghcr.io/mxpv/podsync:latest";
     extraOptions = [
       "--network=host"
       # nb not a linuxserver image, so PUID/PGID do nothing here. The container runs as
-      # root, so map that to podsync on the host instead (same trick as audiobookrequest)
-      "--uidmap=0:5004"
-      "--gidmap=0:5004"
+      # root, which rootless podman already maps to podsync (5004) on the host.
     ];
     volumes = [
       "/var/lib/podsync/config.toml:/app/config.toml:ro"
       "/var/lib/podsync/data:/app/data"
       "/var/lib/podsync/db:/app/db"
       # podsync downloads to /tmp before moving into data_dir, so without this the
-      # full-size media transits the container's overlay in /var/lib/containers
+      # full-size media transits the container's overlay
       "/var/lib/podsync/tmp:/tmp"
       # needed by downloader.custom_binary above - the nixpkgs yt-dlp is a wrapper
       # script that execs bash/python out of the store
@@ -545,7 +630,22 @@ in
     uid = 5002;
     group = "putioarr";
     description = "putioarr service user";
-    createHome = false;
+    # rootless podman image store; /var/lib/putioarr is the /config volume
+    home = "/var/lib/podman-putioarr";
+    createHome = true;
+    linger = true;
+    subUidRanges = [
+      {
+        startUid = 296608;
+        count = 65536;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 296608;
+        count = 65536;
+      }
+    ];
   };
   # serviceConfig = {
   #   # prevent systemd from making StateDirectory 0700
@@ -595,9 +695,11 @@ in
       '';
   };
   virtualisation.oci-containers.containers.putioarr = {
+    podman.user = "putioarr";
     serviceName = "putioarr";
-    # To update:
-    # > sudo podman pull putioarr:latest
+    # To update (rootless - image store belongs to the putioarr user now):
+    # > sudo -u putioarr HOME=/var/lib/podman-putioarr XDG_RUNTIME_DIR=/run/user/5002 \
+    #     podman pull ghcr.io/wouterdebie/putioarr:latest
     # To run from local:
     # > sudo podman build -t putioarr-local -f docker/Dockerfile .
     # image = "localhost/putioarr-local:latest";
@@ -611,8 +713,9 @@ in
       "/var/lib/putioarr/downloads:/var/lib/putioarr/downloads"
     ];
     environment = {
-      PUID = "5002";
-      PGID = "5002";
+      # rootless: container uid 0 maps to host uid 5002 (putioarr) - see lidarr
+      PUID = "0";
+      PGID = "0";
       UMASK = "007";
       UMASK_SET = "007";
       TZ = "Europe/London";
