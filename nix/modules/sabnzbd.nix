@@ -442,23 +442,8 @@ in
   users.users.audiobookshelf.extraGroups = [
     "emby-server" # access to emby-library
     "readarr" # access to files created by readarr
+    "podsync"
   ];
-  # audiobookshelf refuses to fetch podcast feeds from non-unicast addresses (it wraps
-  # axios in ssrf-req-filter), and tailscale addresses are in the 100.64.0.0/10 CGNAT
-  # range - so adding the podsync feed fails with "Call to 100.65.97.33 is blocked".
-  # Whitelist just the hosts involved rather than DISABLE_SSRF_REQUEST_FILTER=1, which
-  # would turn the filter off for every URL.
-  # nb the enclosure URLs in the feed use podsync's server.hostname, and episode
-  # downloads go through the same filter - so that name has to be listed too, otherwise
-  # the feed parses but every episode download is blocked. Matching is on exact hostname.
-  systemd.services.audiobookshelf.environment.SSRF_REQUEST_FILTER_WHITELIST =
-    builtins.concatStringsSep ","
-      [
-        "100.65.97.33" # podsync feed url
-        "hm90.tail7f031.ts.net" # podsync server.hostname, used by the episode enclosures
-        "hm90"
-      ];
-
   users.groups.audiobookrequest = {
     gid = 5001;
   };
@@ -579,7 +564,15 @@ in
               format = "audio";
               quality = "high";
               opml = true;
+              # audiobookshelf reads these files in place rather than downloading its own
+              # copy, so this is the retention policy for the abs library too.
               clean.keep_last = 100;
+              # nb needs a podsync newer than 2026-03-07 - see the image pin below.
+              filename_template = "{{pub_date}}_{{title}}_{{id}}";
+              youtube_dl_args = [
+                "--embed-metadata"
+                "--embed-thumbnail"
+              ];
             };
           };
         };
@@ -594,10 +587,8 @@ in
   virtualisation.oci-containers.containers.podsync = {
     podman.user = "podsync";
     serviceName = "podsync";
-    # To update (rootless - the image store belongs to the podsync user now):
-    # > sudo -u podsync HOME=/var/lib/podman-podsync XDG_RUNTIME_DIR=/run/user/5004 \
-    #     podman pull ghcr.io/mxpv/podsync:latest
-    image = "ghcr.io/mxpv/podsync:latest";
+    # change back to nightly when they do a release
+    image = "ghcr.io/mxpv/podsync@sha256:c4028e4f4e901e385cb36c49a65fc6502788b232bc46c3b513e30678ec87ef14";
     extraOptions = [
       "--network=host"
       # nb not a linuxserver image, so PUID/PGID do nothing here. The container runs as
