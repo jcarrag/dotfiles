@@ -64,6 +64,9 @@ with self.pkgs; {
           port = "1081";
         };
       };
+    sockets = {
+      harmonia.socketConfig.FreeBind = true;
+    };
     timers = {
     };
     user = {
