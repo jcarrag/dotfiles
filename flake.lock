@@ -1081,11 +1081,11 @@
         "rustOverlay": "rustOverlay"
       },
       "locked": {
-        "lastModified": 1789393426,
-        "narHash": "sha256-JtXzJzi0gVw5zaL8QLMy2ws+xQ+vlFKzI8rYjC0IYUg=",
+        "lastModified": 1789394318,
+        "narHash": "sha256-WA8/uTgEKB5GzftXF2QGGJb/DoS48MJSatU0sug5Gbo=",
         "owner": "jcarrag",
         "repo": "ynab-updater",
-        "rev": "2bf9b9b345a5e6f752803e62ca3c235d47347902",
+        "rev": "f1fd19e74f7a79d18bb3dbf6d8a595d2b1a114ff",
         "type": "github"
       },
       "original": {
