@@ -106,4 +106,10 @@ in
     publicKeys = trusted-systems;
     armor = true;
   };
+  # FxA session token from `mozwire --print-token`, used non-interactively
+  # by `mozwire relay save` to refresh WireGuard relay configs at boot.
+  "mozwire_token.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
 }
