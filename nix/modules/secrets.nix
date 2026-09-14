@@ -163,11 +163,6 @@ in
               owner = "james";
               group = "users";
             }
-            {
-              name = "mozwire_token";
-              owner = "wireproxy";
-              mode = "0400";
-            }
           ]
         else
           [ ]
@@ -242,10 +237,4 @@ in
         [ ]
     )
   );
-
-  users.groups.wireproxy = lib.mkIf (hostName == "lunar-fwk" || hostName == "fwk") { };
-  users.users.wireproxy = lib.mkIf (hostName == "lunar-fwk" || hostName == "fwk") {
-    isSystemUser = true;
-    group = "wireproxy";
-  };
 }

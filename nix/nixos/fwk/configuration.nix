@@ -12,6 +12,7 @@
     ../../modules/hyprland-notifier.nix
     ../../modules/sunshine.nix
     ../../modules/tailscale-drive.nix
+    ../../modules/wireproxy.nix
   ];
 
   # https://alexbakker.me/post/nixos-pci-passthrough-qemu-vfio.html
