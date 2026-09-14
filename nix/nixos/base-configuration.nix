@@ -168,6 +168,7 @@ in
       rename
       ripgrep
       stow
+      unstable.strace-tui
       tldr
       tree
       usbutils
@@ -670,6 +671,7 @@ in
     };
     pipewire = {
       enable = true;
+      wireplumber.enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
@@ -702,6 +704,9 @@ in
     tumbler.enable = true;
     tzupdate.enable = true;
     udev = {
+      packages = [
+        pkgs.probe-rs-tools
+      ];
       # https://yulistic.gitlab.io/2017/12/linux-keymapping-with-udev-hwdb
       # https://wiki.archlinux.org/title/map_scancodes_to_keycodes
       # (trailing newline between rules & all-caps in ids are needed)
@@ -848,6 +853,8 @@ in
 
   # time.timeZone = "Europe/London";
 
+  users.groups.plugdev = { };
+
   users.extraUsers.james = {
     createHome = true;
     homeMode = "751";
@@ -861,6 +868,7 @@ in
       "docker"
       "dialout"
       "emby-server"
+      "plugdev"
     ];
     group = "users";
     home = "/home/james";
