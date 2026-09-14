@@ -828,6 +828,9 @@ in
   };
   services.sabnzbd = {
     enable = true;
+    # nixpkgs defaults this to a non-null path when stateVersion < 26.05, which
+    # triggers the deprecation warning even though we only ever set `settings`.
+    configFile = null;
     settings = {
       misc = {
         host = "100.65.97.33";
@@ -844,10 +847,11 @@ in
       };
       servers = {
         frugal = {
-          enable = 1;
+          enable = true;
           name = "frugal";
+          displayname = "frugal";
           host = "eunews.frugalusenet.com";
-          ssl = 1;
+          ssl = true;
           port = 563;
           username = "@sabnzbd_frugal_user@";
           password = "@sabnzbd_frugal_pass@";
@@ -855,10 +859,11 @@ in
           priority = 0;
         };
         eweka = {
-          enable = 1;
+          enable = true;
           name = "eweka";
+          displayname = "eweka";
           host = "news.eweka.nl";
-          ssl = 1;
+          ssl = true;
           port = 563;
           username = "@sabnzbd_eweka_user@";
           password = "@sabnzbd_eweka_pass@";
@@ -866,10 +871,11 @@ in
           priority = 1;
         };
         blocknews = {
-          enable = 1;
+          enable = true;
           name = "blocknews";
+          displayname = "blocknews";
           host = "eunews.blocknews.net";
-          ssl = 1;
+          ssl = true;
           port = 563;
           username = "@sabnzbd_blocknews_user@";
           password = "@sabnzbd_blocknews_pass@";
