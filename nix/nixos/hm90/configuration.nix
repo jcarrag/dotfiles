@@ -1,7 +1,6 @@
 # EliteMini HM90
 {
   pkgs,
-  config,
   lib,
   ...
 }:
@@ -15,6 +14,37 @@
     ../../modules/sunshine.nix
     # ../../modules/archivebox.nix
   ];
+
+  # QNAP NAS
+  networking.interfaces.eth1.ipv4.addresses = [
+    {
+      address = "192.168.13.1";
+      prefixLength = 24;
+    }
+  ];
+  services.dnsmasq.settings = {
+    port = 0; # disable DNS (to prevent :53 conflict with resolved)
+    interface = [
+      "enp193s0f3u1" # FIXME - replace with correct NIC
+    ];
+    dhcp-range = [
+      "192.168.13.2,192.168.13.2,12h"
+    ];
+    dhcp-host = [
+      "24:5E:BE:40:71:2E,192.168.13.2,qnap,infinite"
+    ];
+  };
+  fileSystems."/mnt/qnap-media" = {
+    device = "192.168.13.2:/share/library";
+    fsType = "nfs";
+    options = [
+      "nofail"
+      "x-systemd.automount"
+      "x-systemd.device-timeout=10s"
+      "x-systemd.mount-timeout=10s"
+      "noatime"
+    ];
+  };
 
   boot.kernelParams = [
     # Disable USB autosuspend (to fix SSD over USB becoming unreachable)

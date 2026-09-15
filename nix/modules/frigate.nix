@@ -25,15 +25,21 @@
       enable = true;
       settings = {
         port = 0; # disable DNS (to prevent :53 conflict with resolved)
-        interface = "enp6s0"; # label: 2.5G LAN (vs. label: 🖧 )
+        interface = [
+          "enp6s0" # label: 2.5G LAN (vs. label: 🖧 )
+        ];
         bind-interfaces = true;
-        dhcp-range = "192.168.1.100,192.168.1.200,12h"; # default dahua address is 192.168.1.108
+        dhcp-range = [
+          "192.168.1.100,192.168.1.200,12h" # default dahua address is 192.168.1.108
+        ];
         dhcp-option = [
           # "3,192.168.1.1" # Gateway (commented to deny the camera internet access)
           "42,192.168.1.1" # NTP
         ];
-        # to access the webui: ssh -L 8080:192.168.1.2:80 hm90
-        dhcp-host = "fc:5f:49:41:9b:4e,192.168.1.2,front_porch_cam,infinite";
+        dhcp-host = [
+          # to access the webui: ssh -L 8080:192.168.1.2:80 hm90
+          "fc:5f:49:41:9b:4e,192.168.1.2,front_porch_cam,infinite"
+        ];
       };
     };
   };
