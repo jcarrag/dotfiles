@@ -47,6 +47,14 @@ let
         ExecStartPre = "${refresh_conf}";
         ExecStart = run_wireproxy;
 
+        # NetworkManager-wait-online is disabled (base-configuration.nix,
+        # nixpkgs#180175), so network-online.target is reached without any
+        # real connectivity check. At boot, ExecStartPre's DNS lookup to
+        # vpn.mozilla.org can race WiFi association/DHCP and fail; retry
+        # rather than staying dead until the next manual restart.
+        Restart = "on-failure";
+        RestartSec = "5s";
+
         # Neither mozwire nor wireproxy need root: wireproxy tunnels
         # WireGuard entirely in userspace (no kernel wg interface, no
         # CAP_NET_ADMIN needed) and mozwire only needs to read its token
