@@ -2,9 +2,13 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }:
 
+let
+  pam_fde_boot_pw = pkgs.callPackage ../../modules/pam-fde-boot-pw.nix { };
+in
 {
   imports = [
     ../../modules/immich-camera-sync.nix
@@ -19,8 +23,40 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Needed so the LUKS passphrase entered at boot is cached in the kernel
+  # keyring (as key "cryptsetup"), which pam_fde_boot_pw then reads on
+  # session open to auto-unlock gnome-keyring below.
+  boot.initrd.systemd.enable = true;
+
   boot.initrd.luks.devices."luks-12b3e52f-f52d-4d93-bf9b-45aa1aa8260c".device =
     "/dev/disk/by-uuid/12b3e52f-f52d-4d93-bf9b-45aa1aa8260c";
+
+  # Autologin straight into Hyprland (via UWSM) using greetd, and reuse the
+  # LUKS passphrase (typed once at boot) to unlock the login keyring too.
+  # Login password must match the LUKS passphrase for the keyring unlock
+  # to succeed. Replaces lightdm's autoLogin, which had no mechanism to
+  # feed a password to pam_gnome_keyring.
+  services.greetd = {
+    enable = true;
+    settings = {
+      initial_session = {
+        command = "${lib.getExe config.programs.uwsm.package} start -F -D Hyprland -- ${config.programs.hyprland.package}/bin/start-hyprland";
+        user = "james";
+      };
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --remember --asterisks --cmd 'uwsm start -F -D Hyprland -- start-hyprland'";
+      };
+    };
+  };
+
+  security.pam.services.greetd.rules.session.fde_boot_pw = {
+    control = "optional";
+    modulePath = "${pam_fde_boot_pw}/lib/security/pam_fde_boot_pw.so";
+    args = [ "inject_for=gkr" ];
+    # Must run before gnome_keyring's own session rule so the password it
+    # stashes is available for gnome_keyring to consume.
+    order = config.security.pam.services.greetd.rules.session.gnome_keyring.order - 10;
+  };
 
   # https://alexbakker.me/post/nixos-pci-passthrough-qemu-vfio.html
   # https://forum.level1techs.com/t/nixos-vfio-pcie-passthrough/130916
@@ -47,10 +83,6 @@
   programs.bash.hyprland-notifier.enable = true;
 
   services = {
-    displayManager.autoLogin = {
-      enable = true;
-      user = "james";
-    };
     harmonia.cache = {
       enable = true;
       # nix-store --generate-binary-cache-key fwk.tail7f031.ts.net harmonia.pem harmonia.pub
