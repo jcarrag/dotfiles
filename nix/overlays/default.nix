@@ -20,6 +20,20 @@ let
           ''
         else
           overlaidPkg;
+
+      throwAfterDate =
+        expiryDate: value:
+        let
+          today = readFile "${
+            super.runCommand "timestamp" { env.when = self._self.lastModified; } ''
+              echo -n `date -d @$when +%Y-%m-%d` > $out
+            ''
+          }";
+        in
+        if today >= expiryDate then
+          throw "This value expired on ${expiryDate}. Go fix or remove it!"
+        else
+          value;
     })
   ]
   ++ map import [

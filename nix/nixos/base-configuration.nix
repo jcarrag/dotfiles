@@ -399,6 +399,8 @@ in
         "widget.wayland.fractional-scale.enabled" = false;
         # defer to 1password
         "browser.formfill.enable" = false;
+        # firefox doesn't support streaming mkv yet - https://bugzilla.mozilla.org/show_bug.cgi?id=2000420
+        "media.mkv.enabled" = pkgs.throwAfterDate "2026-12-1" false;
       };
       policies = {
         Containers = {
