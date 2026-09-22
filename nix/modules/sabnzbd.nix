@@ -553,20 +553,15 @@ in
             custom_binary = "${pkgs.unstable.yt-dlp}/bin/yt-dlp";
             timeout = 15; # minutes
           };
-          # keep_last for feeds that don't set their own clean policy
-          cleanup.keep_last = 20;
           feeds = {
             audio_rss = {
               url = "https://www.youtube.com/playlist?list=@podsync_playlist_id@";
               private_feed = true;
-              page_size = 20;
-              update_period = "12h";
+              page_size = 100;
+              update_period = "60m";
               format = "audio";
               quality = "high";
               opml = true;
-              # audiobookshelf reads these files in place rather than downloading its own
-              # copy, so this is the retention policy for the abs library too.
-              clean.keep_last = 100;
               # nb needs a podsync newer than 2026-03-07 - see the image pin below.
               filename_template = "{{pub_date}}_{{title}}_{{id}}";
               youtube_dl_args = [
