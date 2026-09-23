@@ -563,10 +563,20 @@ in
               quality = "high";
               opml = true;
               # nb needs a podsync newer than 2026-03-07 - see the image pin below.
-              filename_template = "{{pub_date}}_{{title}}_{{id}}";
+              # no {{pub_date}}: podsync's is max(playlistItem, video).PublishedAt
+              # (pkg/builder/youtube.go:365), ie the date it was added to the playlist.
+              filename_template = "{{title}}_{{id}}";
+              # --parse-metadata is what makes the episode date right in abs.
+              # --embed-metadata alone writes upload_date raw as "20260512", which
+              # ffmpeg's default ID3v2.3 writer can only fit in TYER - so it truncates to
+              # "2026" and abs does new Date("2026") => everything published 1 Jan.
+              # Reformatting to "2026-05-12" first survives v2.3 intact. Don't use
+              # -id3v2_version 4 instead: it keeps "20260512", which new Date() rejects.
               youtube_dl_args = [
                 "--embed-metadata"
                 "--embed-thumbnail"
+                "--parse-metadata"
+                "%(upload_date>%Y-%m-%d)s:(?P<meta_date>.+)"
               ];
             };
           };
