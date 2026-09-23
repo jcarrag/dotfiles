@@ -16,16 +16,17 @@
   ];
 
   # QNAP NAS
-  networking.interfaces.eth1.ipv4.addresses = [
+  networking.interfaces.qnap0.ipv4.addresses = [
     {
       address = "192.168.13.1";
       prefixLength = 24;
     }
   ];
   services.dnsmasq.settings = {
-    port = 0; # disable DNS (to prevent :53 conflict with resolved)
+    # commented out to avoid illegal duplicate "port = 0" config lines
+    # port = 0; # disable DNS (to prevent :53 conflict with resolved)
     interface = [
-      "enp193s0f3u1" # FIXME - replace with correct NIC
+      "qnap0"
     ];
     dhcp-range = [
       "192.168.13.2,192.168.13.2,12h"
@@ -258,6 +259,12 @@
   };
 
   systemd = lib.attrsets.recursiveUpdate pkgs.systemd-services {
+    # QNAP NAS USB NIC - see comment above networking.interfaces.qnap0
+    network.links."10-qnap0" = {
+      matchConfig.MACAddress = "4c:e1:73:42:3e:d3";
+      linkConfig.Name = "qnap0";
+    };
+
     # rootless DOCKER_HOST is created as /run/user/1000/docker.sock but services
     # using docker expect it to be at /run/docker.sock (e.g. storyteller)
     # FIXME remove
