@@ -1,0 +1,35 @@
+diff -ru a/src/main.rs b/src/main.rs
+--- a/src/main.rs	2026-09-17 09:31:01.882091307 +0100
++++ b/src/main.rs	2026-09-17 09:31:21.719723727 +0100
+@@ -392,7 +392,7 @@
+                             } else {
+                                 ""
+                             },
+-                            server.public_key,
++                            server.public_key.as_ref().unwrap(),
+                             allowed_ips,
+                             ip,
+                             port
+diff -ru a/src/relay.rs b/src/relay.rs
+--- a/src/relay.rs	2026-09-17 09:31:01.882117146 +0100
++++ b/src/relay.rs	2026-09-17 09:31:13.592596751 +0100
+@@ -75,7 +75,7 @@
+     pub hostname: String,
+     pub ipv4_addr_in: Ipv4Addr,
+     ipv6_addr_in: Ipv6Addr,
+-    pub public_key: PublicKey,
++    pub public_key: Option<PublicKey>,
+     pub multihop_port: u16,
+ }
+ 
+@@ -136,6 +136,10 @@
+         self.countries
+             .iter()
+             .flat_map(|country| country.cities.iter().flat_map(|city| city.relays.iter()))
++            // Mullvad occasionally lists a relay (e.g. bg-sof-wg-003) with a
++            // null public_key, presumably one being decommissioned. It's
++            // unusable as a peer, so skip it rather than fail everything.
++            .filter(|relay| relay.public_key.is_some())
+     }
+ }
+ 
