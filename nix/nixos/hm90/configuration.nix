@@ -324,6 +324,14 @@
     services.webdav.after = pkgs.tailscaleAfter;
     services.webdav.wantedBy = pkgs.tailscaleWantedBy;
     services.webdav.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+
+    services.ynab-updater-hl.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+    services.ynab-updater-hl.after = pkgs.tailscaleAfter;
+    services.ynab-updater-hl.requires = pkgs.tailscaleRequires;
+
+    services.ynab-updater-saxo.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+    services.ynab-updater-saxo.after = pkgs.tailscaleAfter;
+    services.ynab-updater-saxo.requires = pkgs.tailscaleRequires;
   };
 
   users.groups.calibre = { };
