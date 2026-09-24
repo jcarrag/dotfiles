@@ -23,29 +23,29 @@
     }
   ];
   services.dnsmasq.settings = {
-    # commented out to avoid illegal duplicate "port = 0" config lines
-    # port = 0; # disable DNS (to prevent :53 conflict with resolved)
+    # port = 0 is already set in ../../modules/frigate.nix
     interface = [
       "qnap0"
     ];
     dhcp-range = [
       "192.168.13.2,192.168.13.2,12h"
     ];
+    dhcp-option = [
+      # no option 3 (gateway) -> the QNAP has no route to the internet.
+      # NTP is served by hm90's chrony instead (same pattern as the frigate cam).
+      # NB: QNAP reads NTP from its own settings, not DHCP - set 192.168.13.1 in
+      # Control Panel > System > General Settings > Time.
+      "tag:qnap0,42,192.168.13.1"
+    ];
     dhcp-host = [
       "24:5E:BE:40:71:2E,192.168.13.2,qnap,infinite"
     ];
   };
-  fileSystems."/mnt/qnap-media" = {
-    device = "192.168.13.2:/share/library";
-    fsType = "nfs";
-    options = [
-      "nofail"
-      "x-systemd.automount"
-      "x-systemd.device-timeout=10s"
-      "x-systemd.mount-timeout=10s"
-      "noatime"
-    ];
-  };
+  # Serve NTP to the QNAP (chrony itself is enabled in ../../modules/frigate.nix)
+  services.chrony.extraConfig = "allow 192.168.13.0/24";
+  networking.firewall.interfaces.qnap0.allowedUDPPorts = [
+    123 # NTP
+  ];
 
   boot.kernelParams = [
     # Disable USB autosuspend (to fix SSD over USB becoming unreachable)
@@ -61,7 +61,25 @@
     pkgs.mergerfs
   ];
 
+  # Emby's library lives on the QNAP NFS share (emby can't re-path a library, so
+  # the share is mounted directly at the path emby already knows).
+  # nofail: don't drop to emergency mode if the QNAP is unplugged at boot.
+  # automount: if the mount fails (QNAP absent), accesses get an error and the
+  #            next access retries, rather than exposing an empty local dir.
+  # emby-server has RequiresMountsFor on this path (see systemd block) so it
+  # refuses to start rather than scanning an empty library and purging its DB.
   fileSystems."/home/james/emby-library" = {
+    device = "192.168.13.2:/share/library";
+    fsType = "nfs";
+    options = [
+      "nofail"
+      "x-systemd.automount"
+      "x-systemd.mount-timeout=10s"
+      "noatime"
+    ];
+  };
+
+  fileSystems."/home/james/emby-library_bak" = {
     depends = [
       "/home/james/emby-library_not_mergerfs"
       "/mnt/2TBm2enclosure"
@@ -264,6 +282,8 @@
       matchConfig.MACAddress = "4c:e1:73:42:3e:d3";
       linkConfig.Name = "qnap0";
     };
+    # don't start emby against an unmounted (empty) library dir
+    services.emby-server.unitConfig.RequiresMountsFor = "/home/james/emby-library";
 
     # rootless DOCKER_HOST is created as /run/user/1000/docker.sock but services
     # using docker expect it to be at /run/docker.sock (e.g. storyteller)

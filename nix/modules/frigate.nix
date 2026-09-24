@@ -34,7 +34,9 @@
         ];
         dhcp-option = [
           # "3,192.168.1.1" # Gateway (commented to deny the camera internet access)
-          "42,192.168.1.1" # NTP
+          # NTP - scoped to the camera NIC so other dnsmasq subnets (e.g. qnap0)
+          # aren't told to use an address they can't reach
+          "tag:enp6s0,42,192.168.1.1"
         ];
         dhcp-host = [
           # to access the webui: ssh -L 8080:192.168.1.2:80 hm90
