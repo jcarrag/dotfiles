@@ -836,6 +836,19 @@ in
     # nixpkgs defaults this to a non-null path when stateVersion < 26.05, which
     # triggers the deprecation warning even though we only ever set `settings`.
     configFile = null;
+    # preStart regenerates sabnzbd.ini from `settings` on every start, so the
+    # placeholders must be substituted here rather than by an activation script
+    secretValues = lib.listToAttrs (
+      map (name: lib.nameValuePair "@${name}@" config.age.secrets.${name}.path) [
+        "sabnzbd_api_key"
+        "sabnzbd_frugal_user"
+        "sabnzbd_frugal_pass"
+        "sabnzbd_eweka_user"
+        "sabnzbd_eweka_pass"
+        "sabnzbd_blocknews_user"
+        "sabnzbd_blocknews_pass"
+      ]
+    );
     settings = {
       misc = {
         host = "100.65.97.33";
