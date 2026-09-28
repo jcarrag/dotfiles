@@ -569,9 +569,9 @@ in
           "--prefer-vk-device 1002:7550" # rx9070xt `lspci -nn | grep -E 'VGA'`
           "--force-grab-cursor"
           "--expose-wayland"
-          # "--hdr-enabled" # disable until hyprland support is better
+          "--hdr-enabled" # disable until hyprland support is better
           "--adaptive-sync" # variable refresh rate
-          "-r 60" # refresh rate
+          # "-r 60" # refresh rate
           "-s 3" # mouse sensitvity
           "-w 3840" # render width
           "-h 2160" # render width
@@ -763,7 +763,7 @@ in
         KERNEL=="card*", KERNELS=="0000:69:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x15bf", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
         # TODO: move to nuc
         KERNEL=="card*", KERNELS=="0000:00:02.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/nuc-intel-igpu"
-        KERNEL=="card*", KERNELS=="0000:09:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
+        KERNEL=="card*", KERNELS=="0000:03:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
         # TODO: move to hm90
         KERNEL=="card*", KERNELS=="0000:03:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x731f", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-5700xt"
         KERNEL=="card*", KERNELS=="0000:08:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x1636", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"

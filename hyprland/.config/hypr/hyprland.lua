@@ -364,7 +364,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd('if [ $HOSTNAME == "lunar-fwk" ]; then firefox -P lunar; fi', { workspace = "3 silent" })
 	hl.exec_cmd('if [ $HOSTNAME == "lunar-fwk" ]; then slack; fi', { workspace = "4 silent" })
 	hl.exec_cmd(
-		'if [ $HOSTNAME != "lunar-fwk" ]; then steam -nochatui -nofriendsui -silent; fi',
+		'if [ $HOSTNAME != "lunar-fwk" || $HOSTNAME != "nuc" ]; then steam -nochatui -nofriendsui -silent; fi',
 		{ workspace = "1 silent" }
 	)
 	hl.exec_cmd('if [ $HOSTNAME != "nuc" ]; then firefox -P personal; fi', { workspace = "1 silent" })

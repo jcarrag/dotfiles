@@ -10,6 +10,10 @@
   imports = [
   ];
 
+  boot.kernelParams = [
+    "pci=realloc"
+  ];
+
   services = {
     greetd = {
       enable = true;
