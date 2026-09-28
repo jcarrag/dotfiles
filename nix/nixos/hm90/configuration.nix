@@ -173,7 +173,7 @@
     _sunshine = {
       enable = true;
       bindAddress = "100.65.97.33";
-      adapterName = "/dev/dri/amd-5700xt";
+      adapterName = "/dev/dri/amd-5700xt-render";
     };
     syncthing = {
       enable = true;

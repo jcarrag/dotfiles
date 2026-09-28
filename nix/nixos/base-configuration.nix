@@ -758,14 +758,18 @@ in
         # TODO: move to lunar-fwk
         KERNEL=="card*", KERNELS=="0000:07:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
         KERNEL=="card*", KERNELS=="0000:c1:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x15bf", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
+        KERNEL=="renderD*", KERNELS=="0000:c1:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x15bf", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu-render"
         # TODO: move to fwk
         KERNEL=="card*", KERNELS=="0000:07:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
         KERNEL=="card*", KERNELS=="0000:69:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x15bf", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
+        KERNEL=="renderD*", KERNELS=="0000:69:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x15bf", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu-render"
         # TODO: move to nuc
         KERNEL=="card*", KERNELS=="0000:00:02.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/nuc-intel-igpu"
         KERNEL=="card*", KERNELS=="0000:03:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt"
+        KERNEL=="renderD*", KERNELS=="0000:03:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x7550", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-rx9070xt-render"
         # TODO: move to hm90
         KERNEL=="card*", KERNELS=="0000:03:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x731f", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-5700xt"
+        KERNEL=="renderD*", KERNELS=="0000:03:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x731f", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-5700xt-render"
         KERNEL=="card*", KERNELS=="0000:08:00.0", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x1636", DRIVERS=="amdgpu", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
       '';
     };

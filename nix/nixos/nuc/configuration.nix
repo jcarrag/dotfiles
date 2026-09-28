@@ -8,6 +8,7 @@
 
 {
   imports = [
+    ../../modules/sunshine.nix
   ];
 
   boot.kernelParams = [
@@ -26,6 +27,11 @@
           command = "${pkgs.tuigreet}/bin/tuigreet --remember --asterisks --cmd 'uwsm start -F -D Hyprland -- start-hyprland'";
         };
       };
+    };
+    _sunshine = {
+      enable = true;
+      bindAddress = "100.114.72.23";
+      adapterName = "/dev/dri/amd-rx9070xt-render";
     };
     tailscale = {
       enable = true;

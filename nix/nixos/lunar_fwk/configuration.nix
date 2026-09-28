@@ -94,7 +94,7 @@ in
     _sunshine = {
       enable = true;
       bindAddress = "100.102.227.124";
-      adapterName = "/dev/dri/amd-igpu";
+      adapterName = "/dev/dri/amd-igpu-render";
     };
     syncthing = {
       enable = true;
