@@ -899,6 +899,8 @@ in
     EDITOR = "nvim";
     # hyprland/wayland
     NIXOS_OZONE_WL = "1";
+    # eGPU
+    AQ_DRM_DEVICES = "/dev/dri/amd-rx9070xt:/dev/dri/amd-5700xt:/dev/dri/amd-igpu:/dev/dri/nuc-intel-igpu";
     # hyprcursors, also run (for consistent cursor theme/size across apps):
     #   dconf write /org/gnome/desktop/interface/cursor-theme "'catppuccin-mocha-mauve-cursors'"
     #   dconf write /org/gnome/desktop/interface/cursor-size 30
