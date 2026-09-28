@@ -24,29 +24,30 @@ let
     let
       mozillavpnDir = "/var/lib/wireproxy";
       stableConf = "${region}.conf";
-      privkeyFile = "${mozillavpnDir}/${region}.privkey";
+      # One key (and so one Mozilla device slot) shared by every region on
+      # this host. Accounts cap out at 5 devices, and Mozilla replaces an
+      # existing device when a new key is added under the same name, so
+      # per-region keys registered under the hostname evicted each other.
+      privkeyFile = "${mozillavpnDir}/privkey";
       refresh_conf = pkgs.writeShellScript "refresh_${region}_conf" ''
         set -euo pipefail
         scratch=$(mktemp -d)
         trap 'rm -rf "$scratch"' EXIT
 
-        # Reuse one persistent WireGuard key across runs rather than letting
-        # mozwire generate (and register) a fresh one every time. Mozilla
-        # accounts cap out at 5 registered device pubkeys, and a fresh
-        # keypair per retry burns through that limit within a few restarts
-        # (as happened when this unit was given Restart=on-failure).
+        # All regions start together at boot; serialise key generation and
+        # registration so they don't each create or upload a key.
+        exec 9>"${mozillavpnDir}/mozwire.lock"
+        ${pkgs.util-linux}/bin/flock 9
+
         if [ ! -s "${privkeyFile}" ]; then
           ${pkgs.wireguard-tools}/bin/wg genkey > "${privkeyFile}"
         fi
 
-        # Per-region --name: mozwire defaults it to the hostname, and Mozilla
-        # replaces an existing device when a new key is added under the same
-        # name, so NL and US would silently evict each other's key.
         ${mozwire}/bin/mozwire relay save "^${region}-" \
           -o "$scratch" \
           -n 1 \
           --no-browser \
-          --name "${config.networking.hostName}-${region}" \
+          --name "${config.networking.hostName}" \
           --privkey "$(cat "${privkeyFile}")" \
           --token "$(cat /run/agenix/mozwire_token)"
         picked=$(find "$scratch" -maxdepth 1 -name '*.conf' -print -quit)
