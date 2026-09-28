@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   ...
 }:
@@ -24,31 +25,6 @@ let
       mozillavpnDir = "/var/lib/wireproxy";
       stableConf = "${region}.conf";
       privkeyFile = "${mozillavpnDir}/${region}.privkey";
-      wait_for_network = pkgs.writeShellScript "wait_for_network_${region}" ''
-        set -euo pipefail
-
-        # network-online.target fires as soon as interfaces are configured,
-        # not once WiFi association/DHCP has actually completed
-        # (NetworkManager-wait-online is disabled - see base-configuration.nix,
-        # nixpkgs#180175). At boot this unit can start ~10s before the
-        # network is genuinely usable: mozwire's HTTPS calls in
-        # refresh_conf may happen to succeed regardless (e.g. cached DNS,
-        # a lucky retry inside reqwest), but wireproxy's own raw UDP
-        # WireGuard handshake has no such retry and can wedge for the rest
-        # of the boot if it's attempted into a dead network. DNS resolving
-        # isn't itself sufficient evidence (that's exactly what happened at
-        # the 2026-09-23 boot: mozwire's HTTPS fetch succeeded but the UDP
-        # handshake still failed), so also require an actual UDP round trip
-        # by resolving over a UDP DNS query specifically.
-        for _ in $(seq 1 30); do
-          if ${pkgs.dig}/bin/dig +short +time=2 +tries=1 -p 53 api.mullvad.net >/dev/null 2>&1; then
-            exit 0
-          fi
-          sleep 1
-        done
-        echo "wait_for_network_${region}: network did not become ready in time" >&2
-        exit 1
-      '';
       refresh_conf = pkgs.writeShellScript "refresh_${region}_conf" ''
         set -euo pipefail
         scratch=$(mktemp -d)
@@ -63,10 +39,14 @@ let
           ${pkgs.wireguard-tools}/bin/wg genkey > "${privkeyFile}"
         fi
 
+        # Per-region --name: mozwire defaults it to the hostname, and Mozilla
+        # replaces an existing device when a new key is added under the same
+        # name, so NL and US would silently evict each other's key.
         ${mozwire}/bin/mozwire relay save "^${region}-" \
           -o "$scratch" \
           -n 1 \
           --no-browser \
+          --name "${config.networking.hostName}-${region}" \
           --privkey "$(cat "${privkeyFile}")" \
           --token "$(cat /run/agenix/mozwire_token)"
         picked=$(find "$scratch" -maxdepth 1 -name '*.conf' -print -quit)
@@ -103,10 +83,7 @@ let
         StartLimitBurst = 5;
       };
       serviceConfig = {
-        ExecStartPre = [
-          "${wait_for_network}"
-          "${refresh_conf}"
-        ];
+        ExecStartPre = "${refresh_conf}";
         ExecStart = run_wireproxy;
 
         Restart = "on-failure";
