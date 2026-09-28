@@ -384,7 +384,7 @@ hl.on("hyprland.start", function()
 	-- this should be solved via:
 	-- > systemd.services.tailscaled.after = [ "systemd-networkd-wait-online.service" ];
 	-- but this is broken on NixOS atm: https://github.com/NixOS/nixpkgs/issues/180175#issuecomment-2731401156
-	hl.exec_cmd("sleep 5; systemd-cat -t syncthingtray syncthingtray --wait")
+	hl.exec_cmd('if [ $HOSTNAME != "nuc" ]; then sleep 5 && systemd-cat -t syncthingtray syncthingtray --wait; fi')
 
 	-- I think these services are starting before hyprland has finished
 	-- initialising the IPC socket env var.
