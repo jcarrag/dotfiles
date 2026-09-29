@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -21,6 +22,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    systemd.user.services.sunshine.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     services.sunshine = {
       enable = true;
       capSysAdmin = true;
