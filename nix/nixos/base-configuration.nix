@@ -850,6 +850,22 @@ in
             "KEY_LEFTALT" = "KEY_LEFTMETA";
           };
         }
+        {
+          name = "swap alt_l / meta_l";
+          # reswap the bindings back for the underlying RDP host
+          device.only = [ "Keyboard passthrough" ];
+          remap = {
+            "KEY_LEFTMETA" = "KEY_LEFTALT";
+          };
+        }
+        {
+          name = "swap meta_l / alt_l";
+          # reswap the bindings back for the underlying RDP host
+          device.only = [ "Keyboard passthrough" ];
+          remap = {
+            "KEY_LEFTALT" = "KEY_LEFTMETA";
+          };
+        }
       ];
     };
   };
