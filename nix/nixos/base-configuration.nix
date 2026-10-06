@@ -805,6 +805,7 @@ in
           device.only = [ "AT Translated Set 2 keyboard" ];
           application.not = [
             ".gamescope-wrapped"
+            "streaming_client" # steam remote play
             "com.moonlight_stream.Moonlight"
           ];
           remap = {
@@ -816,6 +817,7 @@ in
           device.only = [ "AT Translated Set 2 keyboard" ];
           application.not = [
             ".gamescope-wrapped"
+            "streaming_client" # steam remote play
             "com.moonlight_stream.Moonlight"
           ];
           remap = {
@@ -830,6 +832,7 @@ in
             ".gamescope-wrapped"
             "gamescope"
             "dota2"
+            "streaming_client" # steam remote play
             "com.moonlight_stream.Moonlight"
           ];
           remap = {
@@ -844,6 +847,7 @@ in
             ".gamescope-wrapped"
             "gamescope"
             "dota2"
+            "streaming_client" # steam remote play
             "com.moonlight_stream.Moonlight"
           ];
           remap = {
