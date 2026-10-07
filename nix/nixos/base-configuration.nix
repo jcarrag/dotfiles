@@ -548,10 +548,6 @@ in
       indicator = true;
     };
     noisetorch.enable = true;
-    # gamescope = {
-    #   enable = true;
-    #   capSysNice = true;
-    # };
     steam = {
       enable = true;
       gamescopeSession = {
@@ -562,7 +558,7 @@ in
           "--expose-wayland"
           "--hdr-enabled"
           "--adaptive-sync" # vrr or pin to 60 via "--nested-refresh 60"
-          "--mouse-sensitivity 3"
+          "--mouse-sensitivity 4"
           "--cursor-scale-height 3840"
           "--force-windows-fullscreen"
           "--output-width 3840"
