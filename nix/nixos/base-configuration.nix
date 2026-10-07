@@ -556,14 +556,23 @@ in
           "--prefer-vk-device 1002:7550" # rx9070xt `lspci -nn | grep -E 'VGA'`
           "--force-grab-cursor"
           "--expose-wayland"
-          "--hdr-enabled"
           "--adaptive-sync" # vrr or pin to 60 via "--nested-refresh 60"
           "--mouse-sensitivity 4"
-          "--cursor-scale-height 3840"
+          "--cursor-scale-height 1080"
           "--force-windows-fullscreen"
           "--output-width 3840"
           "--output-height 2160"
-        ];
+        ]
+        # casting HDR from linux is not yet supported https://github.com/ValveSoftware/steam-for-linux/issues/13086
+        ++ (
+          if config.networking.hostName != "nuc" then
+            [
+              (pkgs.throwAfterDate "2027-03-1" "--hdr-enabled")
+            ]
+          else
+            [ ]
+        );
+
       };
       remotePlay.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
