@@ -561,13 +561,10 @@ in
           "--force-grab-cursor"
           "--expose-wayland"
           "--hdr-enabled"
-          "--adaptive-sync" # vrr
-          # "--nested-refresh 60"
+          "--adaptive-sync" # vrr or pin to 60 via "--nested-refresh 60"
           "--mouse-sensitivity 3"
           "--cursor-scale-height 3840"
           "--force-windows-fullscreen"
-          # "--nested-width 3840" # game width
-          # "--nested-height 2160" # game height
           "--output-width 3840"
           "--output-height 2160"
         ];
