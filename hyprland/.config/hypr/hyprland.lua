@@ -370,6 +370,7 @@ hl.on("hyprland.start", function()
 		'if [ $HOSTNAME != "lunar-fwk" ] && [ $HOSTNAME != "nuc" ]; then steam-gamescope; fi',
 		{ workspace = "9 silent" }
 	)
+	hl.exec_cmd('if [ $HOSTNAME == "nuc" ]; then steam-gamescope; fi', { workspace = "1 silent" })
 	hl.exec_cmd('if [ $HOSTNAME != "nuc" ]; then firefox -P personal; fi', { workspace = "1 silent" })
 	-- Discord runs as a transient user unit so systemd will SIGKILL it on stop.
 	-- It neither handles nor ignores SIGTERM (SigCgt=0x10000, SigIgn=0x1002), so
