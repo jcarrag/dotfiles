@@ -922,6 +922,8 @@ in
     #   dconf write /org/gnome/desktop/interface/cursor-size 30
     HYPRCURSOR_THEME = "catppuccin-mocha-mauve-cursors";
     HYPRCURSOR_SIZE = 30;
+    XCURSOR_THEME = "catppuccin-mocha-mauve-cursors";
+    XCURSOR_SIZE = 48; # in pixels: monitor scaling * logical = 1.6 * 30 = 48;
     # fcitx
     QT_IM_MODULE = "fcitx";
   };
