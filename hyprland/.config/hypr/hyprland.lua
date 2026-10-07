@@ -1,10 +1,3 @@
--- Hyprland config, lua flavour. Ported from hyprland.conf.
--- Hyprland prefers hyprland.lua over hyprland.conf when both exist, so the
--- old .conf is kept around as a fallback: delete/rename this file to revert.
---
--- See https://wiki.hypr.land/Configuring/Basics/Variables/
-
--- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 -- scale hm90 fake hdmi x2
 hl.monitor({ output = "desc:XMD Mi TV", mode = "3840x2160@60.00000", position = "auto", scale = "1.33333" })
 -- scale xps screen x2
@@ -12,13 +5,20 @@ hl.monitor({ output = "desc:Samsung Display Corp. 0x4163", mode = "preferred", p
 -- fwk screen
 hl.monitor({ output = "desc:BOE 0x0BCA", mode = "preferred", position = "auto", scale = "1.33333" })
 -- home LG monitor
--- disable hdr as it makes monitor dim: cm = "hdredid", bitdepth = 10
 hl.monitor({
 	output = "desc:LG Electronics LG HDR 4K 0x0003EE6B",
 	mode = "highres",
 	position = "auto-left",
 	scale = "1.6",
-}) -- vrr = 1
+	vrr = 2, -- fullscreen only
+	-- hdr config --
+	cm = "hdredid",
+	bitdepth = 10,
+	-- increase brightness, how to find the max supported by monitor:
+	-- for c in /sys/class/drm/card*-*; do [ "$(cat $c/status)" = connected ] && echo "$c"; done
+	-- nix shell nixpkgs#edid-decode -c edid-decode /sys/class/drm/card1-DP-9/edid | grep -A6 "HDR Static Metadata"
+	sdr_max_luminance = 200,
+})
 -- JetKVM
 hl.monitor({
 	output = "desc:Toshiba America Info Systems Inc T749-fHD720 0x88888800",
@@ -93,7 +93,6 @@ hl.window_rule({
 	name = "gamescope",
 	match = { class = "^gamescope$" },
 	fullscreen = true,
-	monitor = "2",
 })
 
 -- hl.window_rule({
@@ -193,6 +192,10 @@ hl.config({
 		-- these two are tri-state ints (0 = disable, 1 = enable, 2 = auto), not bools
 		use_cpu_buffer = 1,
 		no_hardware_cursors = 1,
+	},
+
+	render = {
+		cm_auto_hdr = 2,
 	},
 
 	misc = {

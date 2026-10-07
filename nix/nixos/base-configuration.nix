@@ -548,35 +548,28 @@ in
       indicator = true;
     };
     noisetorch.enable = true;
-    gamescope = {
-      enable = true;
-      capSysNice = true;
-    };
+    # gamescope = {
+    #   enable = true;
+    #   capSysNice = true;
+    # };
     steam = {
       enable = true;
       gamescopeSession = {
         enable = true;
-        # env = {
-        #   # doesn't do anything?
-        #   WLR_DRM_DEVICES = "/dev/dri/amd-rx9070xt";
-        # };
         args = [
-          #  with over 2 lines
-          #  gamescope --steam --prefer-vk-device 1002:7550 --force-grab-cursor --expose-wayland --hdr-enabled --adaptive-sync -r 60 -s 3 -w 3840 -h 2160 -W 3840 -H 2160 -- steam -tenfoot -pipewire-dmabuf
-          #  gamescope --steam --prefer-vk-device 1002:7550 --force-grab-cursor --expose-wayland --hdr-enabled --adaptive-sync -r 60 -s 3 -w 3840 -h 2160 -W 3840 -H 2160 -- steam -tenfoot -pipewire-dmabuf
-          # "--prefer-vk-device" # rx9070xt `lspci -nn | grep -E 'VGA'`
-          # "1002:7550" # must be over 2 lines? `cat $(which steam-gamescope)`
           "--prefer-vk-device 1002:7550" # rx9070xt `lspci -nn | grep -E 'VGA'`
           "--force-grab-cursor"
           "--expose-wayland"
-          "--hdr-enabled" # disable until hyprland support is better
-          "--adaptive-sync" # variable refresh rate
-          # "-r 60" # refresh rate
-          "-s 3" # mouse sensitvity
-          "-w 3840" # render width
-          "-h 2160" # render width
-          "-W 3840" # display width
-          "-H 2160" # display width
+          "--hdr-enabled"
+          "--adaptive-sync" # vrr
+          # "--nested-refresh 60"
+          "--mouse-sensitivity 3"
+          "--cursor-scale-height 3840"
+          "--force-windows-fullscreen"
+          # "--nested-width 3840" # game width
+          # "--nested-height 2160" # game height
+          "--output-width 3840"
+          "--output-height 2160"
         ];
       };
       remotePlay.openFirewall = true;
@@ -805,6 +798,7 @@ in
           device.only = [ "AT Translated Set 2 keyboard" ];
           application.not = [
             ".gamescope-wrapped"
+            "gamescope"
             "streaming_client" # steam remote play
             "com.moonlight_stream.Moonlight"
           ];
@@ -817,6 +811,7 @@ in
           device.only = [ "AT Translated Set 2 keyboard" ];
           application.not = [
             ".gamescope-wrapped"
+            "gamescope"
             "streaming_client" # steam remote play
             "com.moonlight_stream.Moonlight"
           ];
