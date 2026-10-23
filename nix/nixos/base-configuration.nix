@@ -585,6 +585,22 @@ in
     sudo.extraConfig = ''
       Defaults timestamp_timeout=-1
     '';
+    # Kolide's Linux agent reads the system CA bundle through osquery's `certificates`
+    # table, which parses OpenSSL `TRUSTED CERTIFICATE` blocks as ordinary trusted
+    # roots and ignores their "Rejected for" flags. The default NixOS bundle keeps
+    # blocklisted roots in that form, so Kolide still reports them as trusted.
+    # useCompatibleBundle installs the plain-PEM bundle, which omits them entirely.
+    # Verify with Kolide's own osqueryd (should print 0 for blocked_seen):
+    #
+    #   /var/kolide-k2/k2device.kolide.com/updates/osqueryd/*/osqueryd -S \
+    #     --database_path /tmp/osq-check --disable_logging --disable_events --disable_extensions \
+    #     "select count(*) total,
+    #             sum(common_name like '%AAA Certificate%'
+    #              or common_name like 'emSign ECC Root CA - G3'
+    #              or common_name like 'emSign Root CA - C1'
+    #              or common_name like 'emSign ECC Root CA - C3') blocked_seen
+    #      from certificates where path = '/etc/ssl/certs/ca-certificates.crt';"
+    pki.useCompatibleBundle = pkgs.throwAfterDate "2026-12-1" true;
   };
 
   services = {
