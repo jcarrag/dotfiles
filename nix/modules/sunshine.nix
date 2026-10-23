@@ -30,6 +30,9 @@ in
         # https://github.com/LizardByte/Sunshine/pull/4481
         bind_address = cfg.bindAddress;
         encoder = "vaapi";
+        # Sunshine >= 2026.9 tries the xdg-desktop-portal backend first, which pops a
+        # hyprland-share-picker dialog and blocks forever on a headless box.
+        capture = "wlr";
         adapter_name = cfg.adapterName;
         csrf_allowed_origins = "https://100.114.72.23,https://100.65.97.33,https://100.124.115.79,https://100.102.227.124,https://100.91.170.36,https://100.100.51.100,https://100.108.41.69";
       };
