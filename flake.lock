@@ -18,27 +18,6 @@
         "type": "github"
       }
     },
-    "agenix_2": {
-      "inputs": {
-        "darwin": "darwin",
-        "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs_4",
-        "systems": "systems_3"
-      },
-      "locked": {
-        "lastModified": 1770165109,
-        "narHash": "sha256-9VnK6Oqai65puVJ4WYtCTvlJeXxMzAp/69HhQuTdl/I=",
-        "owner": "ryantm",
-        "repo": "agenix",
-        "rev": "b027ee29d959fda4b60b57566d64c98a202e0feb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ryantm",
-        "repo": "agenix",
-        "type": "github"
-      }
-    },
     "crane": {
       "locked": {
         "lastModified": 1785782307,
@@ -51,29 +30,6 @@
       "original": {
         "owner": "ipetkov",
         "repo": "crane",
-        "type": "github"
-      }
-    },
-    "darwin": {
-      "inputs": {
-        "nixpkgs": [
-          "ynab-updater",
-          "agenix",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1744478979,
-        "narHash": "sha256-dyN+teG9G82G+m+PX/aSAagkC+vUv0SgUw3XkPhQodQ=",
-        "owner": "lnl7",
-        "repo": "nix-darwin",
-        "rev": "43975d782b418ebf4969e9ccba82466728c2851b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lnl7",
-        "ref": "master",
-        "repo": "nix-darwin",
         "type": "github"
       }
     },
@@ -159,28 +115,6 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "home-manager": {
-      "inputs": {
-        "nixpkgs": [
-          "ynab-updater",
-          "agenix",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1745494811,
-        "narHash": "sha256-YZCh2o9Ua1n9uCvrvi5pRxtuVNml8X2a03qIFfRKpFs=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "abfad3d2958c9e6300a883bd443512c55dfeb1be",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
         "type": "github"
       }
     },
@@ -293,22 +227,6 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1754028485,
-        "narHash": "sha256-IiiXB3BDTi6UqzAZcf2S797hWEPCRZOwyNThJIYhUfk=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "59e69648d345d6e8fef86158c555730fa12af9de",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-25.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_5": {
-      "locked": {
         "lastModified": 1789264731,
         "narHash": "sha256-iR1Jj6svMpvLxPWA40qp+WUpg3MStLXJy5TZrP2cPes=",
         "rev": "02f5696b0e6097e589076d886b317b83ff0437d7",
@@ -320,7 +238,7 @@
         "type": "indirect"
       }
     },
-    "nixpkgs_6": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1744536153,
         "narHash": "sha256-awS2zRgF4uTwrOKwwiJcByDzDOdo3Q1rPZbiHQg/N38=",
@@ -350,7 +268,7 @@
     },
     "rustOverlay": {
       "inputs": {
-        "nixpkgs": "nixpkgs_6"
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
         "lastModified": 1789372034,
@@ -382,21 +300,6 @@
       }
     },
     "systems_2": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "systems_3": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
@@ -467,8 +370,10 @@
     },
     "ynab-updater": {
       "inputs": {
-        "agenix": "agenix_2",
-        "nixpkgs": "nixpkgs_5",
+        "agenix": [
+          "agenix"
+        ],
+        "nixpkgs": "nixpkgs_4",
         "rustOverlay": "rustOverlay"
       },
       "locked": {

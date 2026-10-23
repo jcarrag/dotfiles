@@ -8,7 +8,10 @@
     agenix.url = "github:ryantm/agenix";
     xremap.url = "github:xremap/nix-flake";
     # ynab-updater.url = "git+file:///home/james/dev/my/ynab_updater";
-    ynab-updater.url = "github:jcarrag/ynab-updater";
+    ynab-updater = {
+      url = "github:jcarrag/ynab-updater";
+      inputs.agenix.follows = "agenix";
+    };
     neovim = {
       url = "github:jcarrag/neovim";
       inputs.nixpkgs.follows = "nixpkgs";
