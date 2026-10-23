@@ -778,6 +778,7 @@ in
       '';
     };
     xremap = {
+      enable = true;
       debug = false;
       watch = true;
       serviceMode = "user";
