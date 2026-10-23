@@ -303,6 +303,17 @@ hl.bind(
 )
 hl.bind(mainMod .. " + M", hl.dsp.exit())
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+-- Window switcher: list open windows in rofi; picking one focuses it, which
+-- switches to the workspace it lives on (the window itself stays put).
+-- Column 1 (the address) is hidden by rofi but returned with the selection.
+local windowSwitcher = [[
+hyprctl clients -j |
+	jq -r 'sort_by(.workspace.id) | .[] | select(.mapped) | "\(.address)\t\(.workspace.name)\t\(.class)\t\(.title)"' |
+	rofi -dmenu -i -p window -display-columns 2,3,4 |
+	cut -f1 |
+	xargs -r -I{} hyprctl dispatch 'hl.dsp.focus({ window = "address:{}" })'
+]]
+hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(windowSwitcher))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("rofi -show run -show-icons"))
 hl.bind(
 	mainMod .. " + SHIFT + E",
