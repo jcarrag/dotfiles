@@ -116,6 +116,15 @@ in
               owner = "slskd";
             }
             {
+              name = "kavita_token_key";
+              owner = "kavita";
+            }
+            {
+              # readeck runs with DynamicUser, systemd reads the EnvironmentFile as root
+              name = "readeck_env";
+              owner = "root";
+            }
+            {
               name = "deluge_ssh_config";
               owner = "root";
               mode = "0444";

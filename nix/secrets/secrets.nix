@@ -80,6 +80,14 @@ in
     publicKeys = trusted-systems;
     armor = true;
   };
+  "kavita_token_key.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
+  "readeck_env.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
   "slskd_env.age" = {
     publicKeys = trusted-systems;
     armor = true;

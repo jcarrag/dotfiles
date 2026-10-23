@@ -1,0 +1,132 @@
+diff --git a/Kavita.API/Services/IBookService.cs b/Kavita.API/Services/IBookService.cs
+index 40b819a..3f17522 100644
+--- a/Kavita.API/Services/IBookService.cs
++++ b/Kavita.API/Services/IBookService.cs
+@@ -55,4 +55,9 @@ public interface IBookService
+     Task<int> GetWordCountBetweenXPaths(string bookFilePath, string startXpath, int startPage, string endXpath, int endPage, CancellationToken ct = default);
+     Task<string> CopyImageToTempFromBook(int chapterId, BookmarkDto bookmarkDto, string cachedBookPath, CancellationToken ct = default);
+     Task<BookResourceResultDto> GetResourceAsync(string bookFilePath, string requestedKey, CancellationToken ct = default);
++    /// <summary>
++    /// Resolves an element id inside a given page (reading order index) of an epub to a body-relative xpath
++    /// (//body/section/h2[1]). Returns null if the page or element cannot be found.
++    /// </summary>
++    Task<string?> GetXPathForElementId(string bookFilePath, int page, string elementId, CancellationToken ct = default);
+ }
+diff --git a/Kavita.Services/BookService.cs b/Kavita.Services/BookService.cs
+index b8c76ed..75fdf83 100644
+--- a/Kavita.Services/BookService.cs
++++ b/Kavita.Services/BookService.cs
+@@ -1950,6 +1950,54 @@ public partial class BookService(
+         }
+     }
+ 
++    /// <summary>
++    /// The web reader stores its scroll position as id("...") whenever the element has an id. KOReader only
++    /// understands structural xpaths, so this resolves the id against the raw xhtml and builds a body-relative
++    /// path in the same style KOReader itself emits: an index is only added when the element has siblings
++    /// of the same name.
++    /// </summary>
++    public async Task<string?> GetXPathForElementId(string bookFilePath, int page, string elementId, CancellationToken ct = default)
++    {
++        if (string.IsNullOrEmpty(elementId)) return null;
++
++        try
++        {
++            using var book = await EpubReader.OpenBookAsync(bookFilePath, LenientBookReaderOptions);
++            var bookPages = await book.GetReadingOrderAsync();
++            if (page < 0 || page >= bookPages.Count) return null;
++
++            var content = await bookPages[page].ReadContentAsync();
++            var doc = new HtmlDocument { OptionFixNestedTags = true };
++            doc.LoadHtml(content);
++
++            var node = doc.GetElementbyId(elementId);
++            if (node == null) return null;
++
++            var parts = new List<string>();
++            for (var current = node; current != null && current.NodeType == HtmlNodeType.Element; current = current.ParentNode)
++            {
++                if (current.Name.Equals("body", StringComparison.OrdinalIgnoreCase))
++                {
++                    parts.Reverse();
++                    return "//body/" + string.Join('/', parts);
++                }
++
++                var sameName = current.ParentNode?.ChildNodes
++                    .Where(n => n.NodeType == HtmlNodeType.Element && n.Name.Equals(current.Name, StringComparison.OrdinalIgnoreCase))
++                    .ToList() ?? [current];
++                var index = sameName.IndexOf(current) + 1;
++                parts.Add(sameName.Count > 1 ? $"{current.Name.ToLowerInvariant()}[{index}]" : current.Name.ToLowerInvariant());
++            }
++
++            return null;
++        }
++        catch (Exception ex)
++        {
++            logger.LogWarning(ex, "Could not resolve element id {ElementId} on page {Page} of {FilePath}", elementId, page, bookFilePath);
++            return null;
++        }
++    }
++
+     [GeneratedRegex(@"\.\./")]
+     private static partial Regex ParentDirectoryRegex();
+ }
+diff --git a/Kavita.Services/Helpers/KoreaderHelper.cs b/Kavita.Services/Helpers/KoreaderHelper.cs
+index a6d9ca3..17b6d08 100644
+--- a/Kavita.Services/Helpers/KoreaderHelper.cs
++++ b/Kavita.Services/Helpers/KoreaderHelper.cs
+@@ -27,6 +27,22 @@ public static partial class KoreaderHelper
+     [GeneratedRegex(@"^#_doc_fragment_?(\d+)")]
+     private static partial Regex DocFragmentHashRegex();
+ 
++    /// <summary>
++    /// Matches the id("some-id") / id('some-id') selector the web reader saves as BookScrollId, id captured in Group 1
++    /// </summary>
++    [GeneratedRegex(@"^id\((?:""|')?([^""')]+)(?:""|')?\)", RegexOptions.IgnoreCase)]
++    private static partial Regex IdSelectorRegex();
++
++    /// <summary>
++    /// Extracts the element id from an id("...") xpath selector, or null if the xpath is not one.
++    /// </summary>
++    public static string? GetElementIdFromXPath(string? xpath)
++    {
++        if (string.IsNullOrWhiteSpace(xpath)) return null;
++        var match = IdSelectorRegex().Match(xpath.Trim());
++        return match.Success ? match.Groups[1].Value : null;
++    }
++
+     /// <summary>
+     /// Hashes the document according to a custom Koreader hashing algorithm.
+     /// Look at the util.partialMD5 method in the attached link.
+diff --git a/Kavita.Services/KoreaderService.cs b/Kavita.Services/KoreaderService.cs
+index c87030f..2764f71 100644
+--- a/Kavita.Services/KoreaderService.cs
++++ b/Kavita.Services/KoreaderService.cs
+@@ -16,6 +16,7 @@ namespace Kavita.Services;
+ 
+ public class KoreaderService(
+     IReaderService readerService,
++    IBookService bookService,
+     IUnitOfWork unitOfWork,
+     ILocalizationService localizationService,
+     ILogger<KoreaderService> logger)
+@@ -96,6 +97,19 @@ public class KoreaderService(
+         var koreaderProgress = $"{progressDto?.PageNum + 1 ?? 0}";
+         if (file.Format == MangaFormat.Epub)
+         {
++            // The web reader saves id("...") selectors, which KOReader cannot scroll to; GetKoreaderPosition would
++            // otherwise degrade them to the start of the xhtml file. Resolve the id to a structural xpath first.
++            var elementId = KoreaderHelper.GetElementIdFromXPath(progressDto?.BookScrollId);
++            if (progressDto != null && elementId != null)
++            {
++                var resolved = await bookService.GetXPathForElementId(file.FilePath, progressDto.PageNum, elementId, ct);
++                if (resolved != null)
++                {
++                    logger.LogDebug("Resolved web reader scroll id {ScrollId} to {XPath} for KOReader", elementId.Sanitize(), resolved.Sanitize());
++                    progressDto.BookScrollId = resolved;
++                }
++            }
++
+             koreaderProgress = KoreaderHelper.GetKoreaderPosition(progressDto);
+         }
+ 

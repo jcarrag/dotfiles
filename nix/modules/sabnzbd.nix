@@ -37,6 +37,8 @@ in
     "audiobookshelf"
     "audiobookrequest"
     "podsync"
+    "kavita"
+    "readeck"
   ];
   fileSystems = {
     # TODO add lidarr
@@ -64,6 +66,12 @@ in
     };
     "/home/james/arr_backup/jellyseerr" = {
       device = "/var/lib/jellyseerr";
+      options = [ "bind" ];
+      fsType = "none";
+    };
+    # sqlite db + one zip per bookmark (the archived page content)
+    "/home/james/arr_backup/readeck" = {
+      device = "/var/lib/readeck/data";
       options = [ "bind" ];
       fsType = "none";
     };
@@ -495,6 +503,235 @@ in
 
   ##
   ##
+  #### Kavita (ebooks + manga for KOReader: OPDS, OPDS-PS and KOReader progress sync)
+  # Libraries are added in the web UI after first start (admin account is created
+  # there too): point a "Book" library at /home/james/calibre_library and a "Manga"
+  # library at /home/james/manga (turn on "Folder Watching" in the library settings so
+  # suwayomi/mokuro writes show up without a manual scan). Kavita only reads from
+  # them - its own state (db, covers, bookmarks) lives in /var/lib/kavita.
+  # KOReader: OPDS catalogue at http://hm90.tail7f031.ts.net:5050/api/opds/<api-key>,
+  # progress sync server at http://hm90.tail7f031.ts.net:5050/api/koreader/<api-key>
+  # (api key from the user's settings page, "3rd Party Clients").
+  services.kavita = {
+    enable = true;
+    # 26.05 ships 0.8.5; unstable has 0.9.x (book metadata, newer KOReader sync).
+    # Patched so web-reader positions round-trip to KOReader, see overlays/kavita.nix
+    package = pkgs.kavita-koreader-sync;
+    # > head -c 64 /dev/urandom | base64 --wrap=0
+    tokenKeyFile = config.age.secrets.kavita_token_key.path;
+    settings = {
+      IpAddresses = "100.65.97.33";
+      # not the 5000 default: something already listens on 127.0.0.1:5000
+      Port = 5050;
+    };
+  };
+  users.users.kavita.extraGroups = [
+    "calibre" # read access to calibre_library (shared with calibre-web/calibre-server)
+  ];
+  systemd.services.kavita = mergeArrPermissions "kavita" {
+    serviceConfig.BindPaths = [
+      "/home/james/calibre_library"
+      "/home/james/manga"
+    ];
+    serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+    serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+    after = pkgs.tailscaleAfter;
+    wantedBy = pkgs.tailscaleWantedBy;
+    requires = pkgs.tailscaleRequires;
+  };
+
+  ##
+  ##
+  #### Suwayomi (manga downloader feeding kavita) + mokuro (OCR for the koreader plugin)
+  # Suwayomi runs Mihon/Tachiyomi extensions server-side: add series in its web UI and
+  # it polls for new chapters and downloads them as CBZ into /home/james/manga, laid
+  # out as mangas/<source>/<series>/<chapter>.cbz, which kavita's Manga library picks up.
+  # Install extensions from the keiyoushi repo in Browse > Extensions (filter by 日本語
+  # for raw sources). nb server.conf is regenerated from `settings` on every start, so
+  # anything changed in Settings > Server in the UI is lost - put it here instead.
+  services.suwayomi-server = {
+    enable = true;
+    package = pkgs.suwayomi-server_2-4; # see overlays/suwayomi-server.nix
+    settings.server = {
+      ip = "100.65.97.33";
+      port = 4567; # the 8080 default is taken
+      downloadsPath = "/home/james/manga";
+      downloadAsCbz = true;
+      # 2.4 key (2.1's extensionRepos is dead); keiyoushi's protobuf index. The 26.05
+      # module still writes an empty extensionRepos too, which 2.4 ignores.
+      extensionStores = [
+        "https://github.com/keiyoushi/extensions/raw/repo/index.pb"
+      ];
+      # serve the web UI bundled in the jar rather than downloading a newer one at
+      # startup, and never check for UI updates
+      webUIFlavor = "WebUI";
+      webUIChannel = "BUNDLED";
+      webUIUpdateCheckInterval = 0;
+      # KCEF is an embedded Chromium used by a few sources to get past Cloudflare. The
+      # release jar downloads it (hundreds of MB) on first start and needs a JetBrains
+      # JDK; MangaDex and the raw sources do not need it
+      kcefEnabled = false;
+      # library update every 12h, downloading whatever is new
+      globalUpdateInterval = 12;
+      updateMangas = true;
+      autoDownloadNewChapters = true;
+      autoDownloadNewChaptersLimit = 0; # unlimited
+      excludeEntryWithUnreadChapters = false;
+    };
+  };
+  users.users.suwayomi.extraGroups = [
+    "kavita" # write access to /home/james/manga via the default ACL below
+  ];
+  systemd.services.suwayomi-server = {
+    serviceConfig.BindPaths = [ "/home/james/manga" ];
+    serviceConfig.ProtectHome = lib.mkForce "tmpfs";
+    serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+    after = pkgs.tailscaleAfter;
+    requires = pkgs.tailscaleRequires;
+  };
+  # mokuro OCRs each page and writes a <volume>.mokuro json of text boxes next to the
+  # cbz. The koreader plugin (github.com/Magyarapointe/mokuroreader-koreader) wants
+  # that json *inside* the cbz, so this job adds it to the archive and then treats its
+  # presence as the "already processed" marker. The sidecar is kept for desktop use. Runs hourly over the whole manga tree,
+  # so volumes james drops in by hand get the same treatment as suwayomi downloads.
+  # CPU only (no CUDA on the AMD cards): a ~200 page volume takes a few minutes. First
+  # run downloads the OCR models (~500 MB) into /var/lib/mokuro.
+  systemd.services.mokuro = {
+    description = "OCR new manga volumes with mokuro";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    path = [
+      pkgs.mokuro
+      pkgs.unzip
+      pkgs.zip
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.coreutils
+    ];
+    script = ''
+      mapfile -d "" -t cbzs < <(find /home/james/manga -name '*.cbz' -mmin +10 -print0)
+      todo=()
+      for f in "''${cbzs[@]}"; do
+        unzip -l "$f" | grep -q '\.mokuro$' || todo+=("$f")
+      done
+      if [ "''${#todo[@]}" -eq 0 ]; then
+        echo "nothing to do"
+        exit 0
+      fi
+      echo "processing ''${#todo[@]} volume(s)"
+      # one invocation for all volumes: loading the models dominates a single volume.
+      # Paths must come before the flags: mokuro's CLI (python-fire with *paths) drops
+      # positionals that follow a flag and then reports "Found no paths to process"
+      mokuro "''${todo[@]}" --disable_confirmation --legacy_html=False --ignore_errors
+      for f in "''${todo[@]}"; do
+        m="''${f%.cbz}.mokuro"
+        if [ ! -f "$m" ]; then
+          echo "mokuro produced nothing for $f" >&2
+          continue
+        fi
+        # -j: archive root, next to the images. The sidecar stays too: mokuro's web
+        # reader (reader.mokuro.app) opens it alongside the cbz for reading on a
+        # desktop, and kavita ignores the unknown extension
+        zip -q -j "$f" "$m"
+        # per-page OCR cache; the .mokuro inside the cbz is the only copy we keep
+        rm -rf "$(dirname "$f")/_ocr/$(basename "''${f%.cbz}")"
+        rmdir --ignore-fail-on-non-empty "$(dirname "$f")/_ocr" 2>/dev/null || true
+      done
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      # same user as the downloader, so suwayomi's files can be rewritten in place
+      User = "suwayomi";
+      Group = "kavita";
+      UMask = "0002";
+      StateDirectory = "mokuro";
+      Environment = [
+        "HOME=/var/lib/mokuro"
+        "XDG_CACHE_HOME=/var/lib/mokuro/cache"
+        "HF_HOME=/var/lib/mokuro/huggingface"
+        # pytorch sizes its intra-op pool from OMP_NUM_THREADS
+        "OMP_NUM_THREADS=10"
+        "MKL_NUM_THREADS=10"
+      ];
+      BindPaths = [ "/home/james/manga" ];
+      ProtectHome = "tmpfs";
+      Nice = 19;
+      CPUWeight = 20;
+      IOWeight = 20;
+      # pytorch otherwise grabs all 16 cores. The thread cap is what actually keeps
+      # it off the other cores; the quota is a backstop for anything not covered
+      # by the thread env vars
+      CPUQuota = "1000%";
+    };
+  };
+  systemd.timers.mokuro = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "hourly";
+      RandomizedDelaySec = "10m";
+      Persistent = true;
+    };
+  };
+
+  ##
+  ##
+  #### Readeck (read-it-later: browser extension saves pages, KOReader pulls EPUBs)
+  # First start: create the admin account in the web UI. Then install the browser
+  # extension (https://readeck.org/en/docs/browser-extension) pointed at the URL
+  # below, and on the kindle either add the OPDS catalogue
+  # https://readeck.carragher.dev/opds (import the browser "reading list" folder
+  # via Settings > Import > Browser bookmarks) or install a readeck.koplugin for
+  # read/archive state sync.
+  services.readeck = {
+    enable = true;
+    # 26.05 ships 0.19; unstable has 0.23.x
+    package = pkgs.unstable.readeck;
+    # READECK_SECRET_KEY=<random string>; EnvironmentFile is read by systemd itself,
+    # so the file stays root-owned
+    environmentFile = config.age.secrets.readeck_env.path;
+    settings = {
+      main.log_level = "info";
+      server = {
+        host = "100.65.97.33";
+        port = 8070;
+        # readeck rejects requests whose Host header is not in this list
+        allowed_hosts = [
+          "readeck.carragher.dev" # via caddy on linode, over tailscale
+          "100.65.97.33"
+          "hm90"
+          "hm90.tail7f031.ts.net"
+        ];
+        # used for absolute links in OPDS feeds and exported EPUBs, so it has to be
+        # the address the ereader uses
+        # base_url = "https://readeck.carragher.dev"; # FIXME: uncomment
+        # forwarded headers (client ip, https scheme) are only honoured from these.
+        # The default set is loopback + rfc1918, which misses the tailscale range
+        trusted_proxies = [
+          "127.0.0.0/8"
+          "::1/128"
+          "100.64.0.0/10"
+        ];
+      };
+    };
+  };
+  # the module defaults to DynamicUser, which leaves /var/lib/readeck owned by a
+  # throwaway uid that syncthing (james) cannot read. Use a static user:group instead
+  # so james can be added to the group for the arr_backup bind mount above.
+  users.users.readeck = {
+    isSystemUser = true;
+    group = "readeck";
+  };
+  users.groups.readeck = { };
+  systemd.services.readeck = mergeArrPermissions "readeck" {
+    serviceConfig.DynamicUser = lib.mkForce false;
+    serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+    after = pkgs.tailscaleAfter;
+    wantedBy = pkgs.tailscaleWantedBy;
+    requires = pkgs.tailscaleRequires;
+  };
+
+  ##
+  ##
   #### Podsync
   users.groups.podsync = {
     gid = 5004;
@@ -771,6 +1008,19 @@ in
     "d  /var/lib/podsync/data 0750 podsync podsync - -"
     "d  /var/lib/podsync/db 0750 podsync podsync - -"
     "d  /var/lib/podsync/tmp 0750 podsync podsync - -"
+
+    # the arr_backup bind mount creates its source dir root:root before readeck ever
+    # starts, so readeck cannot write into it. StateDirectory only fixes the parent.
+    "d  /var/lib/readeck/data 0750 readeck readeck - -"
+
+    # kavita's manga library: suwayomi downloads into mangas/<source>/<series>/, james
+    # drops volumes into <series>/ dirs by hand, mokuro rewrites both, kavita only reads. The default
+    # ACL (d:) is inherited by every new dir/file regardless of the creator's umask,
+    # which is what lets suwayomi/mokuro write into james-created dirs and vice versa.
+    # Same owner (james) as /home/james, so tmpfiles does not see it as an unsafe
+    # path transition (unlike music-library above)
+    "d  /home/james/manga 2775 james kavita - -"
+    "A+ /home/james/manga - - - - d:group:kavita:rwx,group:kavita:rwx"
 
     "Z /var/lib/slskd/downloads 2775 slskd lidarr - -" # ensure lidarr can delete from slskd download dir
 

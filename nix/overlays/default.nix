@@ -24,11 +24,9 @@ let
       throwAfterDate =
         expiryDate: value:
         let
-          today = readFile "${
-            super.runCommand "timestamp" { env.when = self._self.lastModified; } ''
-              echo -n `date -d @$when +%Y-%m-%d` > $out
-            ''
-          }";
+          today = readFile "${super.runCommand "timestamp" { env.when = self._self.lastModified; } ''
+            echo -n `date -d @$when +%Y-%m-%d` > $out
+          ''}";
         in
         if today >= expiryDate then
           throw "This value expired on ${expiryDate}. Go fix or remove it!"
@@ -41,12 +39,14 @@ let
     ./anki.nix
     ./asciichart.nix
     ./calibre-web.nix
+    ./kavita.nix
     ./emby-server.nix
     ./immich-upload-google-takeout.nix
     ./feather-font/feather-font.nix
     ./ferdi.nix
     ./rscls.nix
     ./scripts.nix
+    ./suwayomi-server.nix
     ./systemd-services.nix
     ./taffybar
     ./tmate.nix

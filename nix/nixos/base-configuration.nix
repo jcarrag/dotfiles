@@ -322,6 +322,8 @@ in
     allowBroken = true;
     permittedInsecurePackages = [
       "mupdf-1.17.0" # k2pdfopt dep
+      # FIXME immich 2.x is EOL in nixpkgs 26.05 (CVE-2026-59258, CVE-2026-82272); upgrade to 3.x (unstable)
+      "immich-2.7.5"
     ];
     # necessary for wayland
     # https://github.com/NixOS/nixpkgs/issues/162562#issuecomment-1229444338
