@@ -262,6 +262,175 @@
     };
   };
 
+  # Frigate can wedge without exiting: when the Coral drops off USB the
+  # watchdog fails to reload the detector, then tries to restart Frigate by
+  # terminating PID 1 (it assumes it is the container's init). On NixOS that
+  # raises psutil.NoSuchProcess, the watchdog thread dies, and the service sits
+  # "active (running)" with a dead detector: skipped_fps == camera_fps,
+  # detection_fps == 0, no live view, recording maintainer discarding segments.
+  # Restart=on-failure never fires because nothing exits. Poll the internal
+  # stats API and restart the unit after a few consecutive unhealthy readings.
+  systemd.services.frigate-healthcheck = {
+    description = "Restart frigate when its detector has silently died";
+    after = [ "frigate.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RuntimeDirectory = "frigate-healthcheck";
+      RuntimeDirectoryPreserve = true;
+      LoadCredential = [
+        "pushover_user:${config.age.secrets.pushover_user.path}"
+        "pushover_api_key:${config.age.secrets.pushover_api_key.path}"
+      ];
+      ExecStart = lib.getExe (
+        pkgs.writers.writePython3Bin "frigate-healthcheck" { flakeIgnore = [ "E302" "E305" "E501" ]; } ''
+          import json
+          import os
+          import subprocess
+          import sys
+          import urllib.parse
+          import urllib.request
+
+          # Consecutive unhealthy checks before restarting (checks run every 2min)
+          STRIKES = 3
+          # Leave a freshly started frigate alone while cameras and models spin up
+          STARTUP_GRACE_S = 300
+          STATE = "/run/frigate-healthcheck/strikes"
+          # Restarts issued without a healthy reading in between. Hits 2 when the
+          # first restart did not fix things, which is when a human needs telling.
+          RESTARTS = "/run/frigate-healthcheck/restarts"
+
+          def log(msg):
+              print(msg, flush=True)
+
+          def systemctl(*args):
+              return subprocess.run(["systemctl", *args], capture_output=True, text=True)
+
+          def counter_get(path):
+              try:
+                  with open(path) as f:
+                      return int(f.read().strip() or 0)
+              except (FileNotFoundError, ValueError):
+                  return 0
+
+          def counter_set(path, n):
+              with open(path, "w") as f:
+                  f.write(str(n))
+
+          def strikes_get():
+              return counter_get(STATE)
+
+          def strikes_set(n):
+              counter_set(STATE, n)
+
+          def credential(name):
+              with open(os.path.join(os.environ["CREDENTIALS_DIRECTORY"], name)) as f:
+                  return f.read().strip()
+
+          def pushover(title, message):
+              try:
+                  data = urllib.parse.urlencode({
+                      "token": credential("pushover_api_key"),
+                      "user": credential("pushover_user"),
+                      "title": title,
+                      "message": message,
+                      "priority": 1,
+                  }).encode()
+                  req = urllib.request.Request("https://api.pushover.net/1/messages.json", data=data)
+                  with urllib.request.urlopen(req, timeout=15) as resp:
+                      resp.read()
+                  log(f"sent pushover: {title}")
+              except Exception as e:  # noqa: BLE001
+                  log(f"failed to send pushover: {e}")
+
+          def frigate_uptime_s():
+              out = systemctl("show", "frigate", "-p", "ActiveEnterTimestampMonotonic", "--value").stdout.strip()
+              with open("/proc/uptime") as f:
+                  now = float(f.read().split()[0])
+              return now - int(out or 0) / 1e6
+
+          def unhealthy_reasons(stats):
+              reasons = []
+              for name, det in stats.get("detectors", {}).items():
+                  pid = det.get("pid")
+                  if not pid or not os.path.exists(f"/proc/{pid}"):
+                      reasons.append(f"detector {name} process {pid} is not running")
+              for name, cam in stats.get("cameras", {}).items():
+                  if not cam.get("detection_enabled", True):
+                      continue
+                  camera_fps = cam.get("camera_fps", 0)
+                  process_fps = cam.get("process_fps", 0)
+                  skipped_fps = cam.get("skipped_fps", 0)
+                  # frames arrive but (almost) all are dropped before processing
+                  if camera_fps >= 1 and process_fps < 0.5 and skipped_fps >= camera_fps * 0.8:
+                      reasons.append(f"camera {name}: camera_fps={camera_fps} process_fps={process_fps} skipped_fps={skipped_fps}")
+              return reasons
+
+          def main():
+              if systemctl("is-active", "--quiet", "frigate").returncode != 0:
+                  log("frigate is not active; nothing to check")
+                  strikes_set(0)
+                  return
+              uptime = frigate_uptime_s()
+              if uptime < STARTUP_GRACE_S:
+                  log(f"frigate started {uptime:.0f}s ago; within startup grace")
+                  strikes_set(0)
+                  return
+              # Port 5001 is the internal API behind nginx; the proxy normally sets
+              # these headers after its /auth subrequest, and frigate trusts them.
+              req = urllib.request.Request(
+                  "http://127.0.0.1:5001/stats",
+                  headers={"remote-user": "anonymous", "remote-role": "admin"},
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=15) as resp:
+                      stats = json.load(resp)
+                  reasons = unhealthy_reasons(stats)
+              except Exception as e:  # noqa: BLE001
+                  reasons = [f"stats API unreachable: {e}"]
+              if not reasons:
+                  if strikes_get() or counter_get(RESTARTS):
+                      log("healthy again; clearing strikes")
+                  strikes_set(0)
+                  counter_set(RESTARTS, 0)
+                  return
+              strikes = strikes_get() + 1
+              strikes_set(strikes)
+              log(f"unhealthy ({strikes}/{STRIKES}): " + "; ".join(reasons))
+              if strikes < STRIKES:
+                  return
+              restarts = counter_get(RESTARTS) + 1
+              counter_set(RESTARTS, restarts)
+              log(f"restarting frigate (restart {restarts} since last healthy reading)")
+              strikes_set(0)
+              detail = "\n".join(reasons)
+              if restarts == 2:
+                  pushover(
+                      "Frigate not recovering",
+                      f"Restarted frigate on {os.uname().nodename} but it is still unhealthy; restarting again. Check the Coral USB connection.\n\n{detail}",
+                  )
+              r = systemctl("restart", "frigate")
+              if r.returncode != 0:
+                  log(f"restart failed: {r.stderr.strip()}")
+                  pushover(
+                      "Frigate restart failed",
+                      f"systemctl restart frigate on {os.uname().nodename} failed:\n{r.stderr.strip()}\n\n{detail}",
+                  )
+                  sys.exit(1)
+
+          main()
+        ''
+      );
+    };
+  };
+  systemd.timers.frigate-healthcheck = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "5min";
+      OnUnitActiveSec = "2min";
+      AccuracySec = "30s";
+    };
+  };
+
   systemd.services.frigate = {
     # The upstream module only orders frigate after network.target, which is up
     # long before DNS resolves. semantic_search and lpr fetch their models from
