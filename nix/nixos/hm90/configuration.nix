@@ -66,8 +66,8 @@
   # nofail: don't drop to emergency mode if the QNAP is unplugged at boot.
   # automount: if the mount fails (QNAP absent), accesses get an error and the
   #            next access retries, rather than exposing an empty local dir.
-  # emby-server has RequiresMountsFor on this path (see systemd block) so it
-  # refuses to start rather than scanning an empty library and purging its DB.
+  # emby-server waits for this mount in ExecStartPre (see systemd block) so it
+  # doesn't start and scan an empty library (purging its DB) if the QNAP is slow.
   fileSystems."/home/james/emby-library" = {
     device = "192.168.13.2:/share/library";
     fsType = "nfs";
@@ -266,7 +266,23 @@
       linkConfig.Name = "qnap0";
     };
     # don't start emby against an unmounted (empty) library dir
-    services.emby-server.unitConfig.RequiresMountsFor = "/home/james/emby-library";
+    services.emby-server.serviceConfig = {
+      ExecStartPre = lib.mkBefore [
+        "${pkgs.bash}/bin/bash -c 'until ${pkgs.util-linux}/bin/findmnt -t nfs,nfs4 /home/james/emby-library >/dev/null; do ls /home/james/emby-library >/dev/null 2>&1; sleep 5; done'"
+      ];
+      TimeoutStartSec = "infinity";
+    };
+
+    services.redis-immich.serviceConfig = {
+      TimeoutStartSec = "10min";
+      Restart = "on-failure";
+      RestartSec = "10s";
+    };
+    services.redis-dawarich.serviceConfig = {
+      TimeoutStartSec = "10min";
+      Restart = "on-failure";
+      RestartSec = "10s";
+    };
 
     # rootless DOCKER_HOST is created as /run/user/1000/docker.sock but services
     # using docker expect it to be at /run/docker.sock (e.g. storyteller)
