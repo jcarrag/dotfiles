@@ -48,7 +48,13 @@ in
 {
   age = {
     identityPaths = [
-      "/home/james/.ssh/id_ed25519"
+      # The on-disk user key is kept only so `agenix -e/-r` can run from a
+      # laptop; the 1Password SSH agent can't serve it (no agent support in
+      # age). https://github.com/ryantm/agenix/pull/451 adds an opt-in
+      # age-plugin-sshagent workflow -- when it lands, re-encrypt to the
+      # plugin recipient, drop this path and delete ~/.ssh/id_ed25519.
+      (pkgs.throwAfterDate "2027-03-28" "/home/james/.ssh/id_ed25519")
+      # Host keys: what activation actually decrypts with.
       "/etc/ssh/ssh_host_ed25519_key"
     ];
     secrets = builtins.listToAttrs (
