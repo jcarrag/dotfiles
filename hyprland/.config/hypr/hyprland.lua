@@ -374,6 +374,14 @@ hl.on("hyprland.start", function()
 
 	hl.exec_cmd("systemd-cat -t waybar waybar")
 
+	-- 1Password's SSH agent socket (~/.1password/agent.sock) and git signing
+	-- (op-ssh-sign) only work while the app is running, so start it with the
+	-- session rather than relying on the browser extension to spawn it.
+	-- Only the hosts that import nix/modules/1password-ssh.nix.
+	hl.exec_cmd(
+		'if [ $HOSTNAME == "fwk" ] || [ $HOSTNAME == "lunar-fwk" ]; then systemd-cat -t 1password 1password --silent; fi'
+	)
+
 	-- This must go first for xdg-open events to use the lunar profile
 	hl.exec_cmd('if [ $HOSTNAME == "lunar-fwk" ]; then firefox -P lunar; fi', { workspace = "3 silent" })
 	hl.exec_cmd('if [ $HOSTNAME == "lunar-fwk" ]; then slack; fi', { workspace = "4 silent" })

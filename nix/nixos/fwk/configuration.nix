@@ -7,6 +7,8 @@
 
 {
   imports = [
+    ../../modules/1password-ssh.nix
+    ../../modules/fingerprint.nix
     ../../modules/immich-camera-sync.nix
     ../../modules/gdrive-sync.nix
     ../../modules/hyprland-notifier.nix
