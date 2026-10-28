@@ -6,9 +6,14 @@
 with (import ../sshPublicKeys.nix);
 let
   trusted-systems = [
+    # user keys (needed to edit secrets; see age.identityPaths in modules/secrets.nix)
     hm90_james
     fwk_james
     lunar-fwk_james
+    # host keys (decryption at activation)
+    hm90_host
+    fwk_host
+    lunar-fwk_host
   ];
 in
 {
