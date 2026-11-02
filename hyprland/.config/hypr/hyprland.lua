@@ -86,6 +86,14 @@ hl.window_rule({
 	stay_focused = true,
 })
 
+hl.window_rule({
+	name = "feh",
+	match = { class = "^feh$" },
+	float = true,
+	size = "monitor_w/2 window_h*monitor_w/2/window_w",
+	center = true,
+})
+
 -- static effect - eval once on initial_title/initial_class
 -- hl.window_rule({ name = "1password-float", match = { class = "^1password$" }, float = true })
 

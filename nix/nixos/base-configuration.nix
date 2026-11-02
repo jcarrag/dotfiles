@@ -99,6 +99,7 @@ in
       dnsmasq
       unstable.sunsetr
       hyprsunset
+      feh # image viewer
       file
       hexyl # binary viewer
       adwaita-icon-theme
@@ -931,6 +932,14 @@ in
       "x-scheme-handler/https" = "brave-browser.desktop";
       "x-scheme-handler/about" = "brave-browser.desktop";
       "x-scheme-handler/unknown" = "brave-browser.desktop";
+      "image/jpeg" = [ "feh.desktop" ];
+      "image/png" = [ "feh.desktop" ];
+      "image/gif" = [ "feh.desktop" ];
+      "image/webp" = [ "feh.desktop" ];
+      "image/heic" = [ "feh.desktop" ];
+      "image/heif" = [ "feh.desktop" ];
+      "image/heic-sequence" = [ "feh.desktop" ];
+      "image/heif-sequence" = [ "feh.desktop" ];
     };
   };
 
