@@ -273,12 +273,21 @@ in
       ];
       checkReversePath = "loose";
     };
-    nameservers = [ "8.8.8.8" ];
+    nameservers = [
+      "1.1.1.1#cloudflare-dns.com"
+      "1.0.0.1#cloudflare-dns.com"
+      "2606:4700:4700::1111#cloudflare-dns.com"
+      "2606:4700:4700::1001#cloudflare-dns.com"
+    ];
     networkmanager = {
       enable = true;
       plugins = [
         pkgs.networkmanager-openvpn
       ];
+      connectionConfig = {
+        "ipv4.ignore-auto-dns" = true;
+        "ipv6.ignore-auto-dns" = true;
+      };
     };
     search = [ "tail7f031.ts.net" ];
   };
@@ -708,9 +717,7 @@ in
     };
     resolved = {
       enable = true;
-      settings.Resolve.domains = [
-        "8.8.8.8"
-      ];
+      settings.Resolve.DNSOverTLS = "opportunistic";
       # mDNS is provided by avahi
       # settings = {
       #   MulticastDNS = "no";
