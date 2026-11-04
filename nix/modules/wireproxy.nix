@@ -73,22 +73,30 @@ let
       wants = [ "network-online.target" ];
       # NetworkManager-wait-online is disabled (base-configuration.nix,
       # nixpkgs#180175), so network-online.target is reached without any
-      # real connectivity check. At boot, ExecStartPre's DNS lookup to
-      # vpn.mozilla.org can race WiFi association/DHCP and fail; retry
-      # rather than staying dead until the next manual restart. Bounded via
-      # StartLimit* so a persistent failure (e.g. account/API issue) can't
-      # loop indefinitely - the persisted privkey above means these retries
-      # no longer burn through Mozilla's 5-device cap either way.
+      # real connectivity check and at boot mozwire's HTTPS call in
+      # ExecStartPre races WiFi association/DHCP/DNS. There is no way to
+      # take the network out of that call (mozwire always fetches
+      # /vpn/account first, even with a cached token), so instead tolerate
+      # its failure: the "-" prefix lets ExecStart run anyway, on the
+      # ${stableConf} cached from the last successful refresh. That conf
+      # stays valid across boots (persistent privkey; mozwire never
+      # re-uploads a pubkey already in the device list) and its Endpoint is
+      # a bare IP, so wireproxy starts offline and handshakes once the
+      # network is up. If there is no cached conf yet, wireproxy fails on
+      # the missing file and Restart below retries with backoff rather than
+      # hitting a start limit. Retries are free w.r.t. Mozilla's 5-device
+      # cap for the same reason.
       unitConfig = {
-        StartLimitIntervalSec = "5m";
-        StartLimitBurst = 5;
+        StartLimitIntervalSec = 0;
       };
       serviceConfig = {
-        ExecStartPre = "${refresh_conf}";
+        ExecStartPre = "-${refresh_conf}";
         ExecStart = run_wireproxy;
 
         Restart = "on-failure";
         RestartSec = "5s";
+        RestartSteps = 6;
+        RestartMaxDelaySec = "5m";
 
         # Neither mozwire nor wireproxy need root: wireproxy tunnels
         # WireGuard entirely in userspace (no kernel wg interface, no
