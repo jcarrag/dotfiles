@@ -46,6 +46,7 @@ let
     ./ferdi.nix
     ./rscls.nix
     ./scripts.nix
+    ./sunsetr.nix
     ./suwayomi-server.nix
     ./systemd-services.nix
     ./taffybar

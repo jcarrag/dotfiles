@@ -1,0 +1,135 @@
+diff --git a/src/commands/test.rs b/src/commands/test.rs
+index 47efa62..6a2c42a 100644
+--- a/src/commands/test.rs
++++ b/src/commands/test.rs
+@@ -17,13 +17,10 @@ use std::sync::mpsc::Sender;
+ /// `sender` before breaking, letting the main loop process them once test mode returns.
+ fn handle_test_mode_signal(msg: SignalMessage, sender: &Sender<SignalMessage>) -> ControlFlow<()> {
+     match msg {
+-        SignalMessage::TestMode(new_params) => {
+-            if new_params.temperature == 0 {
+-                log_indented!("Exiting test mode, restoring normal operation...");
+-                ControlFlow::Break(())
+-            } else {
+-                ControlFlow::Continue(())
+-            }
++        SignalMessage::TestMode(_) => ControlFlow::Continue(()),
++        SignalMessage::TestModeExit => {
++            log_indented!("Exiting test mode, restoring normal operation...");
++            ControlFlow::Break(())
+         }
+         SignalMessage::Reload(config) => {
+             log_decorated!("Reload signal received, exiting test mode...");
+@@ -117,7 +114,7 @@ pub fn handle_test_command(temperature: u32, gamma: f64, debug_enabled: bool) ->
+                             log_info!("sunsetr process (PID {pid}) exited, ending test mode");
+                         } else {
+                             log_decorated!("Restoring normal operation...");
+-                            let _ = crate::io::instance::send_test_signal(pid, 0, 0.0);
++                            let _ = crate::io::instance::send_test_exit_signal(pid);
+                             log_decorated!("Test complete");
+                         }
+                     }
+@@ -622,15 +619,9 @@ mod tests {
+     }
+ 
+     #[test]
+-    fn test_mode_zero_temperature_breaks() {
++    fn test_mode_exit_breaks() {
+         let (tx, rx) = std::sync::mpsc::channel();
+-        let result = handle_test_mode_signal(
+-            SignalMessage::TestMode(TestModeParams {
+-                temperature: 0,
+-                gamma: 0.0,
+-            }),
+-            &tx,
+-        );
++        let result = handle_test_mode_signal(SignalMessage::TestModeExit, &tx);
+         assert!(result.is_break());
+         assert!(rx.try_recv().is_err());
+     }
+diff --git a/src/core/mod.rs b/src/core/mod.rs
+index 4263fa5..def7045 100644
+--- a/src/core/mod.rs
++++ b/src/core/mod.rs
+@@ -983,6 +983,7 @@ impl Core {
+                             result?;
+                         }
+                     }
++                    crate::io::signals::SignalMessage::TestModeExit => {}
+                     crate::io::signals::SignalMessage::Shutdown => {
+                         #[cfg(debug_assertions)]
+                         eprintln!(
+diff --git a/src/io/instance.rs b/src/io/instance.rs
+index aad8ee5..2622366 100644
+--- a/src/io/instance.rs
++++ b/src/io/instance.rs
+@@ -165,12 +165,19 @@ pub fn send_reload_signal(pid: u32) -> Result<()> {
+ }
+ 
+ pub fn send_test_signal(pid: u32, temp: u32, gamma: f64) -> Result<()> {
++    send_test_file(pid, &format!("{}\n{}", temp, gamma))
++}
++
++pub fn send_test_exit_signal(pid: u32) -> Result<()> {
++    send_test_file(pid, "exit")
++}
++
++fn send_test_file(pid: u32, content: &str) -> Result<()> {
+     use nix::sys::signal::{Signal, kill};
+     use nix::unistd::Pid;
+ 
+     let test_file_path = format!("/tmp/sunsetr-test-{}.tmp", pid);
+-    std::fs::write(&test_file_path, format!("{}\n{}", temp, gamma))
+-        .context("Failed to write test parameters")?;
++    std::fs::write(&test_file_path, content).context("Failed to write test parameters")?;
+ 
+     kill(Pid::from_raw(pid as i32), Signal::SIGUSR1)
+         .map_err(|e| anyhow::anyhow!("Failed to send test signal: {}", e))
+diff --git a/src/io/signals.rs b/src/io/signals.rs
+index 3ef6585..1fb4485 100644
+--- a/src/io/signals.rs
++++ b/src/io/signals.rs
+@@ -24,6 +24,7 @@ pub struct TestModeParams {
+ pub enum SignalMessage {
+     Reload(Box<crate::config::Config>),
+     TestMode(TestModeParams),
++    TestModeExit,
+     Shutdown,
+     TimeChange,
+     ResumeFromSleep,
+@@ -59,6 +60,7 @@ impl SignalState {
+                     latest_config = Some(cfg);
+                 }
+                 msg @ (SignalMessage::TestMode(_)
++                | SignalMessage::TestModeExit
+                 | SignalMessage::Shutdown
+                 | SignalMessage::TimeChange
+                 | SignalMessage::ResumeFromSleep) => {
+@@ -121,16 +123,21 @@ pub fn setup_signal_handler(debug_enabled: bool) -> Result<SignalState> {
+ 
+                     if let Ok(content) = std::fs::read_to_string(&test_file_path) {
+                         let lines: Vec<&str> = content.trim().lines().collect();
+-                        if lines.len() == 2
++                        if lines == ["exit"] {
++                            log_pipe!();
++                            log_info!("Received test mode exit signal");
++                            if signal_sender_clone
++                                .send(SignalMessage::TestModeExit)
++                                .is_err()
++                            {
++                                break;
++                            }
++                        } else if lines.len() == 2
+                             && let (Ok(temp), Ok(gamma)) =
+                                 (lines[0].parse::<u32>(), lines[1].parse::<f64>())
+                         {
+                             log_pipe!();
+-                            if temp == 0 {
+-                                log_info!("Received test mode exit signal");
+-                            } else {
+-                                log_info!("Received test mode signal");
+-                            }
++                            log_info!("Received test mode signal");
+ 
+                             let test_params = TestModeParams {
+                                 temperature: temp,
