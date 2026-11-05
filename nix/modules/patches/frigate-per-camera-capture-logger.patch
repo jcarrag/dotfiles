@@ -1,0 +1,26 @@
+--- a/frigate/video.py	2026-11-05 13:02:13.880905022 +0000
++++ b/frigate/video.py	2026-11-05 13:02:13.921362391 +0000
+@@ -112,6 +112,8 @@
+     current_frame: Value,
+     stop_event: MpEvent,
+ ) -> None:
++    # per-camera logger so these errors can be muted via logger.logs
++    cam_logger = logger.getChild(config.name)
+     frame_size = frame_shape[0] * frame_shape[1]
+     frame_rate = EventsPerSecond()
+     frame_rate.start()
+@@ -144,12 +146,12 @@
+                 if stop_event.is_set():
+                     break
+ 
+-                logger.error(
++                cam_logger.error(
+                     f"{config.name}: Unable to read frames from ffmpeg process."
+                 )
+ 
+                 if ffmpeg_process.poll() is not None:
+-                    logger.error(
++                    cam_logger.error(
+                         f"{config.name}: ffmpeg process is not running. exiting capture thread..."
+                     )
+                     break

@@ -44,6 +44,7 @@ let
     ./immich-upload-google-takeout.nix
     ./feather-font/feather-font.nix
     ./ferdi.nix
+    ./frigate.nix
     ./rscls.nix
     ./scripts.nix
     ./sunsetr.nix

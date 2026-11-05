@@ -95,7 +95,32 @@
   ];
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
     80 # frigate nginx
+    1935 # go2rtc RTMP ingest (iphone)
   ];
+
+  # Separate service on NixOS (frigate's own `go2rtc:` section is ignored).
+  # Accepts an RTMP push from my phone (rtmp://hm90.tail7f031.ts.net:1935/iphone)
+  # and restreams it over RTSP for frigate. No publish auth, so RTMP binds to
+  # the tailscale address only (ip_nonlocal_bind above covers boot ordering).
+  services.go2rtc = {
+    enable = true;
+    settings = {
+      # frigate's ffmpeg re-polls the iphone stream every ~2s while the phone
+      # isn't pushing, and each attempt logs a WRN from the rtsp module
+      # ("streams: unknown error"). Real failures are still logged at ERR.
+      log.rtsp = "error";
+      api.listen = "127.0.0.1:1984"; # frigate's nginx proxies to this
+      rtsp.listen = "127.0.0.1:8554";
+      rtmp.listen = "100.65.97.33:1935";
+      webrtc.listen = "100.65.97.33:8555";
+      streams = {
+        # empty source = push-only stream; RTMP app name = stream name
+        iphone = [ ];
+      };
+    };
+  };
+  # drop the frigate module's unused (pre-0.13) nginx-rtmp server on :1935
+  services.nginx.appendConfig = lib.mkForce "";
 
   # nginx lacks permission to read the recordings directory otherwise
   users.extraUsers.frigate.extraGroups = [ "nginx" ];
@@ -113,9 +138,21 @@
         session_length = 2700000; # ~1 month
         refresh_time = 2700000; # ~1 month
         failed_login_rate_limit = "1/second;5/minute;20/hour";
+        # read-only, listed cameras only (admin/viewer see all); assign in Settings > Users
+        roles = {
+          household = [ "front_porch_cam" ];
+        };
       };
       ffmpeg = {
         hwaccel_args = "preset-vaapi";
+      };
+      # iphone is usually offline; mute the per-retry "ffmpeg crashed" spam.
+      # frigate.video.<camera> needs the patch in ../overlays/frigate.nix.
+      # Raise back to error when debugging the stream.
+      logger.logs = {
+        "watchdog.iphone" = "critical";
+        "ffmpeg.iphone.detect" = "critical";
+        "frigate.video.iphone" = "critical";
       };
       detectors.coral = {
         type = "edgetpu";
@@ -211,6 +248,13 @@
           icon = "LuCar";
           order = 0;
         };
+        phone = {
+          cameras = [
+            "iphone"
+          ];
+          icon = "LuSmartphone";
+          order = 1;
+        };
       };
       # TODO replace hostname & ip with cameras' final locations (also set on cameras)
       # TODO configure new cameras' encoding:
@@ -257,6 +301,35 @@
             "0.068,0.193,0.202,0.119,0.19,0.174,0.139,0.206,0.144,0.331,0.116,0.375,0.11,0.228"
           ];
           webui_url = "http://192.168.1.2";
+        };
+        # Intermittent RTMP push from my phone via go2rtc (above).
+        iphone = {
+          enabled = true;
+          # detect role/resolution are mandatory even with detection off;
+          # match the phone's stream (1080p portrait)
+          detect = {
+            enabled = false;
+            width = 1080;
+            height = 1920;
+            fps = 5;
+          };
+          ffmpeg = {
+            inputs = [
+              {
+                path = "rtsp://127.0.0.1:8554/iphone";
+                input_args = "preset-rtsp-restream";
+                roles = [
+                  "detect"
+                  "record"
+                ];
+              }
+            ];
+            # worst-case delay before a new broadcast appears (watchdog poll)
+            retry_interval = 2;
+          };
+          live.streams = {
+            iphone = "iphone";
+          };
         };
       };
     };
