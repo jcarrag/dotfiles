@@ -881,7 +881,12 @@ in
         {
           name = "swap alt_l / meta_l";
           # reswap the bindings back for the underlying RDP host
-          device.only = [ "Keyboard passthrough" ];
+          # Sunshine < 2026.9 named its virtual keyboard "Keyboard passthrough";
+          # the libvirtualhid backend calls it "libvirtualhid Keyboard"
+          device.only = [
+            "Keyboard passthrough"
+            "libvirtualhid Keyboard"
+          ];
           remap = {
             "KEY_LEFTMETA" = "KEY_LEFTALT";
           };
@@ -889,7 +894,12 @@ in
         {
           name = "swap meta_l / alt_l";
           # reswap the bindings back for the underlying RDP host
-          device.only = [ "Keyboard passthrough" ];
+          # Sunshine < 2026.9 named its virtual keyboard "Keyboard passthrough";
+          # the libvirtualhid backend calls it "libvirtualhid Keyboard"
+          device.only = [
+            "Keyboard passthrough"
+            "libvirtualhid Keyboard"
+          ];
           remap = {
             "KEY_LEFTALT" = "KEY_LEFTMETA";
           };
