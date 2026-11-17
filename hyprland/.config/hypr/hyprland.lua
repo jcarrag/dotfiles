@@ -422,10 +422,6 @@ hl.on("hyprland.start", function()
 	-- They work once they've been restarted though
 	hl.exec_cmd('sh -c "systemctl restart --user xremap.service nm-applet.service"')
 
-	-- fcitx5
-	hl.exec_cmd("systemd-cat -t fcitx5 fcitx5 -d -r")
-	hl.exec_cmd("systemd-cat -t fcitx5-remote fcitx5-remote -r")
-
 	-- I might need to run this first: sudo tailscale set --operator=$USER
 	hl.exec_cmd("systemd-cat -t tailscale-systray tailscale systray")
 end)
