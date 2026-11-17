@@ -19,6 +19,7 @@ in
     ../../modules/opensnitch.nix
     ../../modules/sunshine.nix
     ../../modules/tailscale-drive.nix
+    ../../modules/wireplumber-bap-autoswitch.nix
     ../../modules/wireproxy.nix
   ];
 
