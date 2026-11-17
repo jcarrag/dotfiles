@@ -122,7 +122,9 @@ in
   # FxA session token from `mozwire --print-token`, used non-interactively
   # by `mozwire relay save` to refresh WireGuard relay configs at boot.
   "mozwire_token.age" = {
-    publicKeys = trusted-systems;
+    # nuc only runs wireproxy, so it is a recipient of this secret alone
+    # rather than a member of trusted-systems.
+    publicKeys = trusted-systems ++ [ nuc_host ];
     armor = true;
   };
 }
