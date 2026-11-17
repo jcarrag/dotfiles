@@ -214,6 +214,7 @@ in
       settings = {
         General = {
           Experimental = true;
+          KernelExperimental = true;
           FastConnectable = true;
         };
         Policy = {
