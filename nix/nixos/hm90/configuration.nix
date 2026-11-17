@@ -12,6 +12,7 @@
     ../../modules/frigate.nix
     ../../modules/sabnzbd.nix
     ../../modules/sunshine.nix
+    ../../modules/wireproxy.nix
     # ../../modules/archivebox.nix
   ];
 
