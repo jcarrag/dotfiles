@@ -9,6 +9,7 @@
 {
   imports = [
     ../../modules/sunshine.nix
+    ../../modules/wireproxy.nix
   ];
 
   boot.kernelParams = [
