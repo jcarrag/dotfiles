@@ -119,6 +119,13 @@ in
     publicKeys = trusted-systems;
     armor = true;
   };
+  # Full rclone.conf containing a [gdrive] remote (type = drive) with its OAuth
+  # token. Generate with `rclone config` on a machine with a browser, then
+  # paste the resulting ~/.config/rclone/rclone.conf here.
+  "rclone_conf.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
   # FxA session token from `mozwire --print-token`, used non-interactively
   # by `mozwire relay save` to refresh WireGuard relay configs at boot.
   "mozwire_token.age" = {

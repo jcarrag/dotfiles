@@ -1,15 +1,25 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
-  # run `rclone config` to initialise API key
-  # Choose: n (new remote) → name it "gdrive" → type "drive" → follow OAuth prompts
+  # The rclone config (with the "gdrive" remote and its OAuth token) comes from
+  # the rclone_conf agenix secret, so no per-host `rclone config` is needed.
+  # To (re)generate it, on a machine with a browser run `rclone config`:
+  # n (new remote) → name it "gdrive" → type "drive" → follow OAuth prompts,
+  # then `agenix -e rclone_conf.age` and paste ~/.config/rclone/rclone.conf.
   # https://rclone.org/drive/#making-your-own-client-id
+  # The OAuth client must be published ("In production"), otherwise Google
+  # expires the refresh token after 7 days.
   environment.systemPackages = [ pkgs.rclone ];
 
   systemd.user.services.gdrive-sync = {
     description = "Google Drive bidirectional sync via rclone bisync";
     serviceConfig = {
       Type = "oneshot";
+      # rclone rewrites its config when it refreshes the access token and the
+      # agenix file is read-only, so work from a per-run copy in $XDG_RUNTIME_DIR.
+      RuntimeDirectory = "gdrive-sync";
+      Environment = "RCLONE_CONFIG=%t/gdrive-sync/rclone.conf";
+      ExecStartPre = "${pkgs.coreutils}/bin/install -m600 ${config.age.secrets.rclone_conf.path} %t/gdrive-sync/rclone.conf";
       ExecStart = pkgs.writeShellScript "gdrive-sync" ''
         set -euo pipefail
 
@@ -35,8 +45,8 @@
             --conflict-resolve newer \
             --conflict-loser num \
             --create-empty-src-dirs \
-            --resilient
-            --recover
+            --resilient \
+            --recover \
             --verbose
         fi
       '';

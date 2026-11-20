@@ -156,6 +156,12 @@ in
               group = "users";
             }
             {
+              # rclone.conf with the "gdrive" remote, see modules/gdrive-sync.nix
+              name = "rclone_conf";
+              owner = "james";
+              group = "users";
+            }
+            {
               name = "frigate_number_plates";
               owner = "frigate";
               group = "frigate";
@@ -175,6 +181,12 @@ in
             }
             {
               name = "immich_api_key";
+              owner = "james";
+              group = "users";
+            }
+            {
+              # rclone.conf with the "gdrive" remote, see modules/gdrive-sync.nix
+              name = "rclone_conf";
               owner = "james";
               group = "users";
             }
