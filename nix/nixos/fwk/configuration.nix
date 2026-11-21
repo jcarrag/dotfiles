@@ -56,6 +56,7 @@
       signKeyPaths = [ "/home/james/secrets/harmonia.pem" ];
       settings = {
         bind = "100.124.115.79:5555";
+        priority = 30;
       };
     };
     _sunshine = {
