@@ -1077,9 +1077,6 @@ in
       "tailscaled.service"
     ];
     wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      ExecStartPre = pkgs.tailscaleWaitOnline;
-    };
   };
   services.sabnzbd = {
     enable = true;

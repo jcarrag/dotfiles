@@ -295,7 +295,6 @@
       "A+ /var/lib/storyteller - - - - group:storyteller:rwx"
       "a+ /var/lib/storyteller - - - - default:group:storyteller:rwx"
     ];
-    services.storyteller.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     # services.storyteller.serviceConfig.ExecStartPre = lib.mkMerge [
     #   (lib.mkBefore pkgs.tailscaleWaitOnline)
     #   # rootless docker is a user system service, so cannot be specified in this
@@ -308,14 +307,12 @@
     services.storyteller.serviceConfig.StartLimitBurst = 0;
     services.storyteller.serviceConfig.RestartSec = 30;
 
-    services.calibre-web.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     services.calibre-web.serviceConfig.BindPaths = [ "/home/james/calibre_library" ];
     services.calibre-web.serviceConfig.ProtectHome = lib.mkForce "tmpfs";
     services.calibre-web.after = pkgs.tailscaleAfter;
     services.calibre-web.wantedBy = pkgs.tailscaleWantedBy;
     services.calibre-web.requires = pkgs.tailscaleRequires;
 
-    services.calibre-server.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     services.calibre-server.serviceConfig.BindPaths = [ "/home/james/calibre_library" ];
     services.calibre-server.serviceConfig.ProtectHome = lib.mkForce "tmpfs";
     services.calibre-server.after = pkgs.tailscaleAfter;
@@ -324,13 +321,10 @@
 
     services.webdav.after = pkgs.tailscaleAfter;
     services.webdav.wantedBy = pkgs.tailscaleWantedBy;
-    services.webdav.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
 
-    services.ynab-updater-hl.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     services.ynab-updater-hl.after = pkgs.tailscaleAfter;
     services.ynab-updater-hl.requires = pkgs.tailscaleRequires;
 
-    services.ynab-updater-saxo.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     services.ynab-updater-saxo.after = pkgs.tailscaleAfter;
     services.ynab-updater-saxo.requires = pkgs.tailscaleRequires;
   };

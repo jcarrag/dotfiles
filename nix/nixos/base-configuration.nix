@@ -18,7 +18,13 @@ in
     kernelPackages = unstable.linuxPackages_latest;
     # kernelPackages = pkgs.linuxPackages_latest;
     loader.systemd-boot.enable = true;
+    loader.systemd-boot.configurationLimit = 10;
     loader.efi.canTouchEfiVariables = true;
+    # Let services bind to their tailscale 100.x address before tailscaled has
+    # assigned it, so nothing has to poll/wait for tailscale at boot. The kernel
+    # starts delivering to the socket as soon as the address appears.
+    kernel.sysctl."net.ipv4.ip_nonlocal_bind" = 1;
+    kernel.sysctl."net.ipv6.ip_nonlocal_bind" = 1;
   };
 
   environment.systemPackages =
@@ -42,6 +48,7 @@ in
       unstable.chiaki
       entr
       evince
+      koreader
       google-chrome
       numbat
       unstable.obsidian
@@ -97,7 +104,7 @@ in
       catppuccin-cursors.mochaMauve
       comma # run any program without installation
       dnsmasq
-      unstable.sunsetr
+      sunsetr # unstable + overlay patch, see nix/overlays/sunsetr.nix
       hyprsunset
       feh # image viewer
       file
@@ -151,6 +158,7 @@ in
       jqp
       gitFull
       git-crypt
+      github-cli
       glances
       gnome-connections # vnc client
       btop
@@ -214,6 +222,7 @@ in
       settings = {
         General = {
           Experimental = true;
+          # Enables the kernel ISO socket, which BAP (LE Audio / LC3) needs
           KernelExperimental = true;
           FastConnectable = true;
         };
@@ -274,6 +283,9 @@ in
       ];
       checkReversePath = "loose";
     };
+    # Cloudflare over DNS-over-TLS (hostname after # is used for cert validation).
+    # NetworkManager is told to ignore DHCP-supplied DNS so these are actually used
+    # rather than the router; see services.resolved for the DoT mode.
     nameservers = [
       "1.1.1.1#cloudflare-dns.com"
       "1.0.0.1#cloudflare-dns.com"
@@ -447,14 +459,14 @@ in
             autoSetupRemote = true;
           };
         }
-        {
-          rebase = {
-            autoSquash = true;
-            autoStash = true;
-            rebaseMerges = true; # == no-rebase-cousins
-            updateRefs = true;
-          };
-        }
+        # {
+        #   rebase = {
+        #     autoSquash = true;
+        #     autoStash = true;
+        #     rebaseMerges = true; # == no-rebase-cousins
+        #     updateRefs = true;
+        #   };
+        # }
         {
           rerere = {
             enabled = true;
@@ -718,6 +730,8 @@ in
     };
     resolved = {
       enable = true;
+      # Opportunistic rather than strict: strict breaks captive portals and
+      # plain-DNS per-link servers (tailscale MagicDNS, openvpn-pushed DNS).
       settings.Resolve.DNSOverTLS = "opportunistic";
       # mDNS is provided by avahi
       # settings = {

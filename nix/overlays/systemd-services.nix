@@ -1,10 +1,6 @@
 self: super:
 
 with self.pkgs; {
-  # wait for tailscale to bind
-  tailscaleWaitOnline = lib.mkBefore [
-    "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 5; done'"
-  ];
   tailscaleAfter = lib.mkAfter [
     "tailscaled.service"
   ];
@@ -16,7 +12,6 @@ with self.pkgs; {
   ];
   systemd-services = {
     services = {
-      harmonia.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
       harmonia.after = pkgs.tailscaleAfter;
       harmonia.wantedBy = pkgs.tailscaleWantedBy;
       harmonia.requires = pkgs.tailscaleRequires;
@@ -26,10 +21,21 @@ with self.pkgs; {
       harmonia.serviceConfig.PrivateNetwork = lib.mkForce false;
       harmonia.serviceConfig.IPAddressDeny = lib.mkForce "";
 
-      syncthing.serviceConfig.ExecStartPre = self.pkgs.tailscaleWaitOnline;
       syncthing.after = pkgs.tailscaleAfter;
       syncthing.wantedBy = pkgs.tailscaleWantedBy;
       syncthing.requires = pkgs.tailscaleRequires;
+
+      # syncthing-init curls the GUI on the tailscale 100.x address. Until
+      # tailscaled has assigned that address the kernel routes it out the
+      # default route (ip_nonlocal_bind only helps the listener), so offline
+      # the curl can never succeed. Keep the oneshot out of multi-user.target so
+      # it cannot hold up graphical.target/login, and retry it in the background
+      # until it succeeds, like harmonia/sunshine.
+      syncthing-init.wantedBy = lib.mkForce [ "syncthing.service" ];
+      syncthing-init.serviceConfig.TimeoutStartSec = 60;
+      syncthing-init.serviceConfig.Restart = "on-failure";
+      syncthing-init.serviceConfig.RestartSec = 30;
+      syncthing-init.unitConfig.StartLimitIntervalSec = 0;
     };
     sockets = {
       harmonia.socketConfig.FreeBind = true;

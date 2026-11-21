@@ -32,6 +32,16 @@
 
   boot.initrd.luks.devices."luks-48a9193e-31e4-4437-8cb2-5d603ad4269f".device = "/dev/disk/by-uuid/48a9193e-31e4-4437-8cb2-5d603ad4269f";
 
+  # Unlock the second LUKS volume only after the first has succeeded.
+  # Concurrent prompts let a mistyped passphrase end up as the last entry in
+  # the kernel keyring cache, which pam_fde_boot_pw then hands to gnome-keyring
+  # as the login password; accepting the resulting "no longer matches" dialog
+  # would overwrite the keyring password with the typo.
+  boot.initrd.systemd.services."systemd-cryptsetup@luks\\x2d48a9193e\\x2d31e4\\x2d4437\\x2d8cb2\\x2d5d603ad4269f" = {
+    overrideStrategy = "asDropin";
+    after = [ "systemd-cryptsetup@luks\\x2d12b3e52f\\x2df52d\\x2d4d93\\x2dbf9b\\x2d45aa1aa8260c.service" ];
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/64C7-3C83";
     fsType = "vfat";

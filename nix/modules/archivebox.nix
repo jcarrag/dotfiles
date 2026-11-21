@@ -27,7 +27,6 @@
 
   systemd.services.webdav.after = pkgs.tailscaleAfter;
   systemd.services.webdav.wantedBy = pkgs.tailscaleWantedBy;
-  systemd.services.webdav.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
   services.webdav = {
     enable = true;
     user = "james";
@@ -56,7 +55,6 @@
     wantedBy = pkgs.tailscaleWantedBy;
     serviceConfig = {
       WorkingDirectory = "/home/james/bookmarks_sync/archivebox";
-      ExecStartPre = pkgs.tailscaleWaitOnline;
       ExecStart = "${pkgs.archivebox}/bin/archivebox server";
     };
   };

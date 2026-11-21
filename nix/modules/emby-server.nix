@@ -87,7 +87,6 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStartPre = pkgs.tailscaleWaitOnline;
         ExecStart = "${cfg.package}/bin/emby-server";
         Restart = "on-failure";
         User = cfg.user;

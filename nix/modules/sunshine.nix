@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -22,7 +21,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.user.services.sunshine.serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     # Sometimes, after a version bump, moonlight fails to pair with "Unauthorized" -
     # in this case, unpair all devices in sunshine & it will work
     services.sunshine = {

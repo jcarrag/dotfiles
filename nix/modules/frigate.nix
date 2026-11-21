@@ -6,9 +6,6 @@
 }:
 
 {
-  # Allow services to bind to IPs (like Tailscale) before the interface is fully up
-  boot.kernel.sysctl."net.ipv4.ip_nonlocal_bind" = 1;
-
   environment.systemPackages = [
     pkgs.mergerfs
   ];
@@ -531,8 +528,11 @@
     ];
 
     serviceConfig.ExecStartPre = lib.mkMerge [
-      # mkBefore, so this blocks ahead of the module's own ExecStartPre steps
-      pkgs.tailscaleWaitOnline
+      # mkBefore, so this blocks ahead of the module's own ExecStartPre steps.
+      # Deliberately unbounded: see the comment above.
+      (lib.mkBefore [
+        "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip addr show dev tailscale0 | ${pkgs.gnugrep}/bin/grep -q -E \"inet 100(\.[0-9]{1,3}){3}\"; do sleep 5; done'"
+      ])
 
       # not a systemActivation script because frigate.service writes config at start
       (lib.mkAfter [
