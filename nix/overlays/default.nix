@@ -45,6 +45,7 @@ let
     ./feather-font/feather-font.nix
     ./ferdi.nix
     ./frigate.nix
+    ./gamescope.nix
     ./rscls.nix
     ./scripts.nix
     ./sunsetr.nix

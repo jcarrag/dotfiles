@@ -1,5 +1,15 @@
 -- scale hm90 fake hdmi x2
-hl.monitor({ output = "desc:XMD Mi TV", mode = "3840x2160@60.00000", position = "auto", scale = "1.33333" })
+hl.monitor({
+	output = "desc:XMD Mi TV",
+	mode = "3840x2160@60.00000",
+	position = "auto",
+	scale = "1.33333",
+	-- hdr, so nested gamescope turns hdr output on and can offer an hdr remote play stream
+	cm = "hdredid",
+	bitdepth = 10,
+	-- the dummy plug's edid advertises hdr (pq) but not bt2020; without this hyprland stays srgb
+	supports_wide_color = 1,
+})
 -- scale xps screen x2
 hl.monitor({ output = "desc:Samsung Display Corp. 0x4163", mode = "preferred", position = "auto", scale = "2" })
 -- fwk screen

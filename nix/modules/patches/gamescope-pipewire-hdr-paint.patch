@@ -1,0 +1,40 @@
+Companion to https://github.com/ValveSoftware/gamescope/pull/2270, adapted from
+the diff proposed in that PR's comments.
+
+The PR advertises a 10-bit BT.2020/PQ format on gamescope's PipeWire node, but
+paint_pipewire still encodes gamma 2.2 with the SDR screenshot LUTs, so the
+stream would be tagged HDR while carrying SDR pixels. Encode PQ with the HDR
+LUTs when the negotiated format is the 10-bit one.
+
+Unlike the upstream suggestion this keys on the negotiated format instead of
+g_bOutputHDREnabled, so a consumer that picks BGRx/NV12 while HDR is on still
+gets SDR pixels.
+
+--- a/src/steamcompmgr.cpp
++++ b/src/steamcompmgr.cpp
+@@ -2309,17 +2309,22 @@
+ 	if ( !s_pPipewireBuffer || !s_pPipewireBuffer->texture )
+ 		return;
+ 
++	// Follow the format the consumer negotiated, not the output's HDR state:
++	// a consumer that picked an 8-bit format must still get SDR pixels.
++	const bool bHDRStream = s_pPipewireBuffer->video_info.format == SPA_VIDEO_FORMAT_xBGR_210LE;
++
+ 	struct FrameInfo_t frameInfo = {};
+ 	frameInfo.applyOutputColorMgmt = true;
+-	frameInfo.outputEncodingEOTF   = EOTF_Gamma22;
++	frameInfo.outputEncodingEOTF   = bHDRStream ? EOTF_PQ : EOTF_Gamma22;
+ 	frameInfo.allowVRR             = false;
+ 	frameInfo.bFadingOut           = false;
+ 
+ 	// Apply screenshot-style color management.
++	auto& luts = bHDRStream ? g_ScreenshotColorMgmtLutsHDR : g_ScreenshotColorMgmtLuts;
+ 	for ( uint32_t nInputEOTF = 0; nInputEOTF < EOTF_Count; nInputEOTF++ )
+ 	{
+-		frameInfo.lut3D[nInputEOTF]     = g_ScreenshotColorMgmtLuts[nInputEOTF].vk_lut3d;
+-		frameInfo.shaperLut[nInputEOTF] = g_ScreenshotColorMgmtLuts[nInputEOTF].vk_lut1d;
++		frameInfo.lut3D[nInputEOTF]     = luts[nInputEOTF].vk_lut3d;
++		frameInfo.shaperLut[nInputEOTF] = luts[nInputEOTF].vk_lut1d;
+ 	}
+ 
+ 	const uint64_t ulFocusAppId = s_pPipewireBuffer->gamescope_info.focus_appid;

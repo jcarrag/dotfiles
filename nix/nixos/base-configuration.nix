@@ -352,6 +352,9 @@ in
     # https://github.com/NixOS/nixpkgs/issues/162562#issuecomment-1229444338
     packageOverrides = pkgs: {
       steam = pkgs.steam.override {
+        # steam's runtime container can't find mesa's gbm backend on nixos, so pipewire capture
+        # falls back from dmabuf to shm ("Couldn't create GBM device" in streaming_log.txt)
+        extraEnv.GBM_BACKENDS_PATH = "/run/opengl-driver/lib/gbm";
         extraPkgs =
           pkgs: with pkgs; [
             libxcursor
@@ -587,16 +590,10 @@ in
           "--force-windows-fullscreen"
           "--output-width 3840"
           "--output-height 2160"
-        ]
-        # casting HDR from linux is not yet supported https://github.com/ValveSoftware/steam-for-linux/issues/13086
-        ++ (
-          if config.networking.hostName != "nuc" then
-            [
-              (pkgs.throwAfterDate "2027-03-1" "--hdr-enabled")
-            ]
-          else
-            [ ]
-        );
+          # HDR in the Remote Play stream needs the patched gamescope in overlays/gamescope.nix
+          # https://github.com/ValveSoftware/gamescope/issues/2126
+          "--hdr-enabled"
+        ];
 
       };
       remotePlay.openFirewall = true;
