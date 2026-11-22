@@ -132,6 +132,7 @@ in
       crosspipe # pipewire
       rofi
       slurp # wayland paste to stdout
+      sox # audio lib used by cli
       syncthingtray
       swaynotificationcenter
       alacritty
