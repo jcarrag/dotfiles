@@ -29,6 +29,9 @@ mods = "Control|Super"
 [scrolling]
 history = 50000
 
+[selection]
+save_to_clipboard = true
+
 [[keyboard.bindings]]
 key = "Return"
 mods = "Shift"
