@@ -43,7 +43,10 @@
     };
   };
   networking = {
+    # The camera is untrusted IoT: only DHCP + NTP from it. Frigate pulls RTSP
+    # from the camera (outbound), so nothing else needs to be open here.
     firewall.interfaces.enp6s0.allowedUDPPorts = [
+      67 # DHCP (dnsmasq; its module doesn't open the firewall itself)
       123 # NTP
     ];
     interfaces.enp6s0 = {

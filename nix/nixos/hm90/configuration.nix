@@ -44,9 +44,10 @@
   };
   # Serve NTP to the QNAP (chrony itself is enabled in ../../modules/frigate.nix)
   services.chrony.extraConfig = "allow 192.168.13.0/24";
-  networking.firewall.interfaces.qnap0.allowedUDPPorts = [
-    123 # NTP
-  ];
+  # Point-to-point link to the QNAP alone (no route to the internet). Trusted
+  # rather than per-port: besides DHCP (67) and NTP (123), the NFS client can
+  # take inbound callbacks/lock traffic on ports that aren't fixed.
+  networking.firewall.trustedInterfaces = [ "qnap0" ];
 
   boot.kernelParams = [
     # Disable USB autosuspend (to fix SSD over USB becoming unreachable)
@@ -370,7 +371,9 @@
         storyteller = {
           podman.user = "storyteller";
           serviceName = "storyteller";
-          image = "registry.gitlab.com/storyteller-platform/storyteller:latest";
+          # pinned by digest (was :latest); after pulling, take the new digest from
+          # `podman image inspect -f '{{.RepoDigests}}' registry.gitlab.com/storyteller-platform/storyteller:latest`
+          image = "registry.gitlab.com/storyteller-platform/storyteller@sha256:2823b7b391e649d62a8e1ef240a200e5f9c0b3605423b19fe441ebd4cc3662c9";
           ports = [
             "100.65.97.33:8001:8001"
           ];

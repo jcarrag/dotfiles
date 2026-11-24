@@ -268,7 +268,10 @@ in
   networking = {
     resolvconf.dnsExtensionMechanism = false; # this broke wifi for a hostel router
     firewall = {
-      enable = false;
+      enable = true;
+      # Services bound to the tailscale 100.x address (or opened only on
+      # tailscale0 elsewhere) are meant to be reachable from the whole tailnet.
+      trustedInterfaces = [ "tailscale0" ];
       allowedTCPPorts = [
         5000 # airplay
         5001 # airplay
@@ -672,7 +675,17 @@ in
     };
     mozillavpn.enable = true;
     nixseparatedebuginfod2.enable = true;
-    openssh.enable = true;
+    openssh = {
+      enable = true;
+      # key-only: port 22 stays open on every interface (openFirewall default)
+      settings = {
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+      };
+    };
+    # only takes effect on hosts that enable tailscale; lets peers connect
+    # directly (UDP 41641) instead of falling back to DERP relays
+    tailscale.openFirewall = true;
     openvpn = {
       servers = {
         express-vpn-uk = {

@@ -89,6 +89,10 @@ in
     publicKeys = trusted-systems;
     armor = true;
   };
+  "dawarich_env.age" = {
+    publicKeys = trusted-systems;
+    armor = true;
+  };
   "readeck_env.age" = {
     publicKeys = trusted-systems;
     armor = true;

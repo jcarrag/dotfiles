@@ -126,6 +126,11 @@ in
               owner = "kavita";
             }
             {
+              # JWT_SECRET_KEY=<random>; read by systemd as root (EnvironmentFile)
+              name = "dawarich_env";
+              owner = "root";
+            }
+            {
               # readeck runs with DynamicUser, systemd reads the EnvironmentFile as root
               name = "readeck_env";
               owner = "root";

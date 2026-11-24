@@ -6,6 +6,16 @@
 }:
 
 let
+  # podsync shells out to this (downloader.custom_binary). Only its runtime closure
+  # is bind-mounted into the container, rather than all of /nix/store.
+  podsyncYtDlp = pkgs.unstable.yt-dlp;
+  # Import-from-derivation: reading the closure list needs yt-dlp realised at eval
+  # time (normally just a substitution from cache.nixos.org).
+  podsyncYtDlpClosure = lib.filter (p: p != "") (
+    lib.splitString "\n" (
+      builtins.readFile "${pkgs.closureInfo { rootPaths = [ podsyncYtDlp ]; }}/store-paths"
+    )
+  );
   mergeArrPermissions =
     name: attrs:
     lib.recursiveUpdate {
@@ -98,9 +108,11 @@ in
       PHOTON_API_HOST = "photon.komoot.io";
       PHOTON_API_USE_HTTPS = "true";
       STORE_GEODATA = "true";
-      # https://github.com/Freika/dawarich/issues/2570
-      JWT_SECRET_KEY = "NOOP";
     };
+    # JWT_SECRET_KEY must be set (https://github.com/Freika/dawarich/issues/2570),
+    # and must be secret: when set, dawarich signs its OTP-challenge, OAuth
+    # account-link and account-destroy tokens with it instead of secret_key_base.
+    extraEnvFiles = [ config.age.secrets.dawarich_env.path ];
   };
 
   ##
@@ -322,7 +334,9 @@ in
   virtualisation.oci-containers.containers.aurral = {
     podman.user = "aurral";
     serviceName = "aurral";
-    image = "ghcr.io/lklynet/aurral:latest";
+    # pinned by digest (was :latest); to update, pull the tag and copy the new
+    # digest from `podman image inspect -f '{{.RepoDigests}}' ghcr.io/lklynet/aurral:latest`
+    image = "ghcr.io/lklynet/aurral@sha256:16e9141adcc1c66b8a92fbc7ec7d89ce9d2d7aba69e27cb751fa19439175a8dd";
     ports = [
       "100.65.97.33:3003:3001"
       # FIXME use non-admin user for aurral
@@ -483,7 +497,8 @@ in
     # experimental support for readarr
     # > git fetch origin pull/191/head:pr-191 && git checkout pr-191
     # > sudo podman build -t markbeep/audiobookrequest:pr-191 .
-    image = "markbeep/audiobookrequest:pr-191";
+    # pinned by digest: the pr-191 tag is pulled from Docker Hub, not built locally
+    image = "docker.io/markbeep/audiobookrequest@sha256:0d23943baba30e9f7e9ac9f4459aad5c10e7870984fa02c9b74af4c3323bcbe8";
     # image = "markbeep/audiobookrequest:latest";
     extraOptions = [
       "--network=host"
@@ -534,7 +549,18 @@ in
       "/home/james/manga"
     ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
-    serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
+    serviceConfig.ExecStartPre = [
+      # Kavita resolves Assets/ (e.g. the anilist-no-image-placeholder.jpg that
+      # Kavita+ person-cover downloads are compared against) relative to its working
+      # directory, but the nix package only ships it inside the backend derivation.
+      # Without this every author photo download fails with FileNotFoundException.
+      (pkgs.writeShellScript "kavita-link-assets" ''
+        set -eu
+        cd /var/lib/kavita
+        if [ -d Assets ] && [ ! -L Assets ]; then rmdir Assets; fi
+        ln -sfnT ${pkgs.kavita-koreader-sync.backend}/lib/kavita-backend/Assets Assets
+      '').outPath
+    ];
     after = pkgs.tailscaleAfter;
     wantedBy = pkgs.tailscaleWantedBy;
     requires = pkgs.tailscaleRequires;
@@ -585,7 +611,6 @@ in
   systemd.services.suwayomi-server = {
     serviceConfig.BindPaths = [ "/home/james/manga" ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
-    serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     after = pkgs.tailscaleAfter;
     requires = pkgs.tailscaleRequires;
   };
@@ -724,7 +749,6 @@ in
   users.groups.readeck = { };
   systemd.services.readeck = mergeArrPermissions "readeck" {
     serviceConfig.DynamicUser = lib.mkForce false;
-    serviceConfig.ExecStartPre = pkgs.tailscaleWaitOnline;
     after = pkgs.tailscaleAfter;
     wantedBy = pkgs.tailscaleWantedBy;
     requires = pkgs.tailscaleRequires;
@@ -787,7 +811,7 @@ in
             # every container recreate, and blocks startup re-downloading it. Pin the
             # nixpkgs one instead; podsync turns self updates off for a custom binary.
             # Bump with `nix flake update unstable` when youtube breaks extraction again.
-            custom_binary = "${pkgs.unstable.yt-dlp}/bin/yt-dlp";
+            custom_binary = "${podsyncYtDlp}/bin/yt-dlp";
             timeout = 15; # minutes
           };
           feeds = {
@@ -843,10 +867,11 @@ in
       # podsync downloads to /tmp before moving into data_dir, so without this the
       # full-size media transits the container's overlay
       "/var/lib/podsync/tmp:/tmp"
-      # needed by downloader.custom_binary above - the nixpkgs yt-dlp is a wrapper
-      # script that execs bash/python out of the store
-      "/nix/store:/nix/store:ro"
-    ];
+    ]
+    # needed by downloader.custom_binary above - the nixpkgs yt-dlp is a wrapper
+    # script that execs bash/python out of the store. Mount only its closure, not
+    # the whole store (which would expose every other store path to the container).
+    ++ map (p: "${p}:${p}:ro") podsyncYtDlpClosure;
     environment = {
       TZ = "Europe/London";
     };
@@ -936,7 +961,9 @@ in
     # To run from local:
     # > sudo podman build -t putioarr-local -f docker/Dockerfile .
     # image = "localhost/putioarr-local:latest";
-    image = "ghcr.io/wouterdebie/putioarr:latest";
+    # pinned by digest (was :latest); after pulling, take the new digest from
+    # `podman image inspect -f '{{.RepoDigests}}' ghcr.io/wouterdebie/putioarr:latest`
+    image = "ghcr.io/wouterdebie/putioarr@sha256:ea51866af49fbafb00c1bbcdb608e81dac1c33dbb867d6e803a761aca57d5e1e";
     extraOptions = [
       "--network=host"
     ];
