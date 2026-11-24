@@ -43,7 +43,7 @@ in
     "radarr"
     "sonarr"
     "seerr"
-    "readarr"
+    "chaptarr"
     "audiobookshelf"
     "audiobookrequest"
     "podsync"
@@ -52,7 +52,7 @@ in
   ];
   fileSystems = {
     # TODO add lidarr
-    # TODO add readarr
+    # TODO add chaptarr (/var/lib/chaptarr/Backups)
     # TODO add audiobookshelf
     "/home/james/arr_backup/immich" = {
       device = "/var/lib/immich";
@@ -91,7 +91,7 @@ in
     "bazarr" # to read bazarr files
     "sonarr" # to read sonarr files
     "radarr" # to read radarr files
-    "readarr" # to read readarr files
+    "chaptarr" # to read chaptarr files
   ];
 
   ##
@@ -448,13 +448,60 @@ in
 
   ##
   ##
-  #### Readarr + audiobookrequest + audiobookshelf
-  services.readarr = {
-    enable = true;
+  #### Chaptarr + audiobookrequest + audiobookshelf
+  users.groups.chaptarr = {
+    gid = 5005;
   };
-  users.users.readarr.extraGroups = [
-    "emby-server" # access to emby-library
-    "sabnzbd" # access to sabnzbd downloads dir
+  users.users.chaptarr = {
+    isSystemUser = true;
+    uid = 5005;
+    group = "chaptarr";
+    description = "Chaptarr service user";
+    home = "/var/lib/podman-chaptarr";
+    createHome = true;
+    linger = true;
+    subUidRanges = [
+      {
+        startUid = 493216;
+        count = 65536;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 493216;
+        count = 65536;
+      }
+    ];
+    extraGroups = [
+      "emby-server" # write access to emby-library/audiobooks (group-writable)
+      "sabnzbd" # access to sabnzbd's complete dir (0770)
+    ];
+  };
+  virtualisation.oci-containers.containers.chaptarr = {
+    podman.user = "chaptarr";
+    serviceName = "chaptarr";
+    image = "docker.io/chaptarr/chaptarr:0.9.1000@sha256:bacb27cc04abe1900412df45ad5ad4e392368fe3e783012824b2ad768c72daa1";
+    ports = [
+      "100.65.97.33:8789:8789"
+    ];
+    extraOptions = [
+      "--group-add=keep-groups"
+    ];
+    volumes = [
+      "/var/lib/chaptarr:/config"
+      "/home/james/emby-library/audiobooks:/home/james/emby-library/audiobooks"
+      "/var/lib/sabnzbd/complete/readarr:/var/lib/sabnzbd/complete/readarr"
+      "/mnt/vps_downloads:/mnt/vps_downloads:ro,rslave"
+    ];
+    environment = {
+      PUID = "0";
+      PGID = "0";
+      UMASK = "002";
+      TZ = "Europe/London";
+    };
+  };
+  systemd.services.chaptarr.serviceConfig.ExecStartPre = lib.mkBefore [
+    "${pkgs.bash}/bin/bash -c 'until ${pkgs.util-linux}/bin/findmnt -t nfs,nfs4 /home/james/emby-library >/dev/null; do ls /home/james/emby-library >/dev/null 2>&1; sleep 5; done'"
   ];
   services.audiobookshelf = {
     enable = true;
@@ -463,7 +510,7 @@ in
   };
   users.users.audiobookshelf.extraGroups = [
     "emby-server" # access to emby-library
-    "readarr" # access to files created by readarr
+    "chaptarr" # access to files created by chaptarr
     "podsync"
   ];
   users.groups.audiobookrequest = {
@@ -494,12 +541,11 @@ in
   virtualisation.oci-containers.containers.audiobookrequest = {
     podman.user = "audiobookrequest";
     serviceName = "audiobookrequest";
-    # experimental support for readarr
-    # > git fetch origin pull/191/head:pr-191 && git checkout pr-191
-    # > sudo podman build -t markbeep/audiobookrequest:pr-191 .
-    # pinned by digest: the pr-191 tag is pulled from Docker Hub, not built locally
-    image = "docker.io/markbeep/audiobookrequest@sha256:0d23943baba30e9f7e9ac9f4459aad5c10e7870984fa02c9b74af4c3323bcbe8";
-    # image = "markbeep/audiobookrequest:latest";
+    # vanilla release (chaptarr support landed in 1.11); configure it under
+    # Settings > Prowlarr / Chaptarr with base URL http://100.65.97.33:8789 and
+    # chaptarr's API key. Pinned by digest; to update, pick a version from
+    # https://hub.docker.com/r/markbeep/audiobookrequest/tags and copy its digest
+    image = "docker.io/markbeep/audiobookrequest:2.0.1@sha256:5f6d9a794ee8ee939c7780d6fe49d70561d2b8a872fcd1d2f7e96a136a7580d0";
     extraOptions = [
       "--network=host"
       # The manual "--uidmap=0:5001"/"--gidmap=0:5001" pair is gone: under rootless
@@ -1089,11 +1135,10 @@ in
     "a+ /var/lib/radarr - - - - group:radarr:r-x"
     "Z  /var/lib/radarr 0750 radarr radarr - -"
 
-    "A+ /var/lib/readarr - - - - group:readarr:r-x"
-    "a+ /var/lib/readarr - - - - group:readarr:r-x"
-    "Z  /var/lib/readarr 0750 readarr readarr - -"
+    "d  /var/lib/chaptarr 0750 chaptarr chaptarr - -"
+    "d  /var/lib/sabnzbd/complete/readarr 0770 sabnzbd sabnzbd - -"
 
-    "d /var/lib/audiobookrequest 0777 audiobookrequest audiobookrequest -"
+    "d /var/lib/audiobookrequest 0750 audiobookrequest audiobookrequest -"
     "A+ /var/lib/audiobookrequest - - - - group:audiobookrequest:rwx"
     "a+ /var/lib/audiobookrequest - - - - group:audiobookrequest:rwx"
   ];
