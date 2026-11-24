@@ -34,6 +34,16 @@ let
         scratch=$(mktemp -d)
         trap 'rm -rf "$scratch"' EXIT
 
+        # At boot this races WiFi association/DHCP/DNS (see the comment on
+        # ExecStartPre below). Wait for DNS before calling mozwire, so the
+        # refresh normally succeeds and re-uploads our key if Mozilla has
+        # evicted it from the device list. If DNS never comes up, mozwire
+        # fails as before and wireproxy starts on the cached conf.
+        for _ in $(seq 30); do
+          ${pkgs.getent}/bin/getent hosts vpn.mozilla.org >/dev/null && break
+          sleep 2
+        done
+
         # All regions start together at boot; serialise key generation and
         # registration so they don't each create or upload a key.
         exec 9>"${mozillavpnDir}/mozwire.lock"
@@ -142,6 +152,26 @@ in
     file = ../secrets/mozwire_token.age;
     owner = "wireproxy";
     mode = "0400";
+  };
+
+  # The refresh (which re-registers our key if Mozilla evicted it) only runs
+  # when the units start. Restart them daily so an eviction while the
+  # machine is up recovers without a manual restart. Persistent catches up
+  # after suspend.
+  systemd.services.wireproxy-refresh = {
+    description = "Restart wireproxy units to refresh their WireGuard configs";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.systemd}/bin/systemctl try-restart wireproxyNL.service wireproxyUS.service";
+    };
+  };
+  systemd.timers.wireproxy-refresh = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "daily";
+      Persistent = true;
+      RandomizedDelaySec = "1h";
+    };
   };
 
   systemd.services.wireproxyNL = mkWireproxy {
