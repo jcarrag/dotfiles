@@ -52,15 +52,27 @@ local mi_tv = merge(config_4k_hdr, {
 	supports_wide_color = 1,
 })
 hl.monitor(merge(mi_tv, {}))
--- in hdr mode the monitor's own brightness is usually locked, so dim/brighten
--- sdr content in software instead. global so `hyprctl eval 'Hdr_brightness(-0.1)'` works too
-local sdr_brightness = 1.0
-function Hdr_brightness(delta)
-	sdr_brightness = math.min(1.5, math.max(0.2, sdr_brightness + delta))
+-- brightness keys step the laptop backlight (brillo) and, because hdr mode usually locks
+-- the monitor's own brightness, sdr brightness on the hdr monitors in software. the hdr
+-- level is derived from brillo's percentage rather than stepped separately, so both reach
+-- their limits together instead of drifting apart.
+-- global so `hyprctl eval 'Brightness(-10)'` works too; Brightness(0) just re-syncs.
+local SDR_MIN, SDR_MAX = 0.2, 1.5
+-- only used on hosts with no backlight (brillo fails); starts at sdrbrightness 1.0
+local brightness_pct = (1.0 - SDR_MIN) / (SDR_MAX - SDR_MIN) * 100
+function Brightness(step)
+	local p = io.popen(
+		string.format("brillo %s %d 2>/dev/null; brillo -G 2>/dev/null", step < 0 and "-U" or "-A", math.abs(step))
+	)
+	local pct = tonumber(p:read("*a"))
+	p:close()
+	brightness_pct = pct or math.min(100, math.max(0, brightness_pct + step))
+	local sdr = SDR_MIN + (SDR_MAX - SDR_MIN) * brightness_pct / 100
 	for _, cfg in ipairs({ lg_hdr_4k, lg_ultrafine, mi_tv }) do
-		hl.monitor(merge(cfg, { sdrbrightness = sdr_brightness }))
+		hl.monitor(merge(cfg, { sdrbrightness = sdr }))
 	end
 end
+Brightness(0)
 -- home asus monitor
 hl.monitor({
 	output = "desc:Ancor Communications Inc ASUS MG28U 0x0001052F",
@@ -262,12 +274,10 @@ hl.bind(
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
 
 hl.bind("XF86MonBrightnessUp", function()
-	hl.exec_cmd("brillo -A 10")
-	Hdr_brightness(0.1)
+	Brightness(10)
 end, { repeating = true })
 hl.bind("XF86MonBrightnessDown", function()
-	hl.exec_cmd("brillo -U 10")
-	Hdr_brightness(-0.1)
+	Brightness(-10)
 end, { repeating = true })
 
 hl.bind(mainMod .. " + CONTROL + o", hl.dsp.exec_cmd("swaync-client --toggle-panel"))
