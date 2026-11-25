@@ -1,22 +1,20 @@
--- scale hm90 fake hdmi x2
-hl.monitor({
-	output = "desc:XMD Mi TV",
-	mode = "3840x2160@60.00000",
-	position = "auto",
-	scale = "1.33333",
-	-- hdr, so nested gamescope turns hdr output on and can offer an hdr remote play stream
-	cm = "hdredid",
-	bitdepth = 10,
-	-- the dummy plug's edid advertises hdr (pq) but not bt2020; without this hyprland stays srgb
-	supports_wide_color = 1,
-})
+-- returns a new table with base's fields overridden by overrides; neither input is modified
+local function merge(base, overrides)
+	local out = {}
+	for k, v in pairs(base) do
+		out[k] = v
+	end
+	for k, v in pairs(overrides) do
+		out[k] = v
+	end
+	return out
+end
+
 -- scale xps screen x2
 hl.monitor({ output = "desc:Samsung Display Corp. 0x4163", mode = "preferred", position = "auto", scale = "2" })
 -- fwk screen
 hl.monitor({ output = "desc:BOE 0x0BCA", mode = "preferred", position = "auto", scale = "1.33333" })
--- home LG monitor
-hl.monitor({
-	output = "desc:LG Electronics LG HDR 4K 0x0003EE6B",
+local config_4k_hdr = {
 	mode = "highres",
 	position = "auto-left",
 	scale = "1.6",
@@ -28,49 +26,41 @@ hl.monitor({
 	-- for c in /sys/class/drm/card*-*; do [ "$(cat $c/status)" = connected ] && echo "$c"; done
 	-- nix shell nixpkgs#edid-decode -c edid-decode /sys/class/drm/card1-DP-9/edid | grep -A6 "HDR Static Metadata"
 	sdr_max_luminance = 200,
+}
+-- each HDR monitor's full config is kept in its own table, because hl.monitor
+-- resets any field it isn't given and Hdr_brightness() has to re-send all of them.
+-- hl.monitor gets a copy (merge(x, {})) so it can't modify the stored config.
+-- home LG monitor, alan's monitor
+local lg_hdr_4k = merge(config_4k_hdr, {
+	output = "desc:LG Electronics LG HDR 4K",
 })
--- JetKVM
-hl.monitor({
-	output = "desc:Toshiba America Info Systems Inc T749-fHD720 0x88888800",
-	mode = "preferred",
+hl.monitor(merge(lg_hdr_4k, {}))
+-- office monitors
+local lg_ultrafine = merge(config_4k_hdr, {
+	output = "desc:LG Electronics LG ULTRAFINE",
+	sdr_max_luminance = 400,
+})
+hl.monitor(merge(lg_ultrafine, {}))
+-- hm90 fake hdmi
+local mi_tv = merge(config_4k_hdr, {
+	output = "desc:XMD Mi TV",
 	position = "auto",
-	scale = "1",
+	-- hdr, so nested gamescope turns hdr output on and can offer an hdr remote play stream
+	cm = "hdredid",
+	bitdepth = 10,
+	-- the dummy plug's edid advertises hdr (pq) but not bt2020; without this hyprland stays srgb
+	supports_wide_color = 1,
 })
--- A01
-hl.monitor({
-	output = "desc:LG Electronics LG ULTRAFINE 309MARZBH982",
-	mode = "preferred",
-	position = "auto-left",
-	scale = "1.6",
-})
--- A02
-hl.monitor({
-	output = "desc:LG Electronics LG ULTRAFINE 306MABT6SK41",
-	mode = "preferred",
-	position = "auto-left",
-	scale = "1.6",
-})
--- A04
-hl.monitor({
-	output = "desc:LG Electronics LG ULTRAFINE 306MAKR6SJ93",
-	mode = "preferred",
-	position = "auto-right",
-	scale = "1.6",
-})
--- carl's desk
-hl.monitor({
-	output = "desc:LG Electronics LG ULTRAFINE 306MAEG6SK32",
-	mode = "preferred",
-	position = "auto-left",
-	scale = "1.6",
-})
--- alan's desk
-hl.monitor({
-	output = "desc:LG Electronics LG HDR 4K 0x00060147",
-	mode = "preferred",
-	position = "auto-left",
-	scale = "1.333334",
-})
+hl.monitor(merge(mi_tv, {}))
+-- in hdr mode the monitor's own brightness is usually locked, so dim/brighten
+-- sdr content in software instead. global so `hyprctl eval 'Hdr_brightness(-0.1)'` works too
+local sdr_brightness = 1.0
+function Hdr_brightness(delta)
+	sdr_brightness = math.min(1.5, math.max(0.2, sdr_brightness + delta))
+	for _, cfg in ipairs({ lg_hdr_4k, lg_ultrafine, mi_tv }) do
+		hl.monitor(merge(cfg, { sdrbrightness = sdr_brightness }))
+	end
+end
 -- home asus monitor
 hl.monitor({
 	output = "desc:Ancor Communications Inc ASUS MG28U 0x0001052F",
@@ -80,6 +70,13 @@ hl.monitor({
 })
 -- benq home
 hl.monitor({ output = "desc:BNQ BenQ GW2480 N8K0004401Q", mode = "preferred", position = "auto", scale = "1" })
+-- JetKVM
+hl.monitor({
+	output = "desc:Toshiba America Info Systems Inc T749-fHD720 0x88888800",
+	mode = "preferred",
+	position = "auto",
+	scale = "1",
+})
 -- fallback for other screens (must be last to be configured)
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "1.666667" })
 
@@ -264,8 +261,14 @@ hl.bind(
 )
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
 
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brillo -A 10"), { repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brillo -U 10"), { repeating = true })
+hl.bind("XF86MonBrightnessUp", function()
+	hl.exec_cmd("brillo -A 10")
+	Hdr_brightness(0.1)
+end, { repeating = true })
+hl.bind("XF86MonBrightnessDown", function()
+	hl.exec_cmd("brillo -U 10")
+	Hdr_brightness(-0.1)
+end, { repeating = true })
 
 hl.bind(mainMod .. " + CONTROL + o", hl.dsp.exec_cmd("swaync-client --toggle-panel"))
 hl.bind("CONTROL + SPACE", hl.dsp.exec_cmd("swaync-client --close-latest"))
