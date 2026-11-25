@@ -56,8 +56,25 @@
       base64Encode = pkgs.writeShellScriptBin "base_64_encode" ''
         ${pkgs.nodejs}/bin/node -e "console.log(Buffer.from(process.argv[1], 'utf8').toString('base64'))" -- "$@"
       '';
+      # Chromium tags its surfaces via wp_color_management_v1 (as sRGB at the 80-nit reference
+      # white), so Hyprland skips the monitor's sdr_max_luminance mapping and Slack renders much
+      # dimmer than untagged apps on an HDR output. Disabling the protocol makes it plain SDR again.
+      slack = pkgs.symlinkJoin {
+        name = "slack-no-wp-color";
+        paths = [ unstable.slack ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/slack --add-flags "--disable-features=WaylandWpColorManagerV1"
+          # the .desktop Exec points at the unwrapped store path; repoint it at the wrapper
+          for f in $out/share/applications/*.desktop; do
+            src=$(readlink -f "$f"); rm "$f"
+            sed "s|${unstable.slack}/bin/slack|$out/bin/slack|" "$src" > "$f"
+          done
+        '';
+      };
     in
     [
+      slack
       unstable.ngrok
       unstable.libimobiledevice
       airplay

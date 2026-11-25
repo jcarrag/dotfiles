@@ -33,7 +33,6 @@ in
       ### Communication
       unstable.discord
       unstable.signal-desktop
-      unstable.slack
       ### eGPU
       unstable.intel-gpu-tools
       unstable.mesa-demos
