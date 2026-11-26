@@ -184,4 +184,6 @@ in
     enable = true;
     setSocketVariable = true;
   };
+
+  virtualisation.podman.enable = true;
 }
