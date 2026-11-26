@@ -27,6 +27,15 @@ let
         StateDirectoryMode = lib.mkForce "0750";
       };
     } attrs;
+  # nofail: a missing backup dir must not drop boot into emergency mode
+  backupMount = device: {
+    inherit device;
+    fsType = "none";
+    options = [
+      "bind"
+      "nofail"
+    ];
+  };
 in
 {
   # TODO authelia
@@ -49,42 +58,37 @@ in
     "podsync"
     "kavita"
     "readeck"
+    "prowlarr"
+    "navidrome"
+    "suwayomi"
   ];
+  # Each app's own scheduled backups (consistent db snapshots, with their own
+  # retention) are synced rather than its live working dir. The few with no built-in
+  # backup (seerr, readeck) still sync their state dir.
   fileSystems = {
-    # TODO add lidarr
-    # TODO add chaptarr (/var/lib/chaptarr/Backups)
-    # TODO add audiobookshelf
-    "/home/james/arr_backup/immich" = {
-      device = "/var/lib/immich";
-      options = [ "bind" ];
-      fsType = "none";
-    };
-    "/home/james/arr_backup/bazarr/backup" = {
-      device = "/var/lib/bazarr";
-      options = [ "bind" ];
-      fsType = "none";
-    };
-    "/home/james/arr_backup/sonarr" = {
-      device = "/var/lib/sonarr/.config/NzbDrone/Backups";
-      options = [ "bind" ];
-      fsType = "none";
-    };
-    "/home/james/arr_backup/radarr" = {
-      device = "/var/lib/radarr/.config/Radarr/Backups";
-      options = [ "bind" ];
-      fsType = "none";
-    };
-    "/home/james/arr_backup/jellyseerr" = {
-      device = "/var/lib/jellyseerr";
-      options = [ "bind" ];
-      fsType = "none";
-    };
-    # sqlite db + one zip per bookmark (the archived page content)
-    "/home/james/arr_backup/readeck" = {
-      device = "/var/lib/readeck/data";
-      options = [ "bind" ];
-      fsType = "none";
-    };
+    # daily pg_dump (Administration > Settings > Backup). Originals are not in the
+    # dump, so upload/library/profile go too; thumbs and encoded-video are
+    # regenerable and left out
+    "/home/james/arr_backup/immich/backups" = backupMount "/var/lib/immich/backups";
+    "/home/james/arr_backup/immich/upload" = backupMount "/var/lib/immich/upload";
+    "/home/james/arr_backup/immich/library" = backupMount "/var/lib/immich/library";
+    "/home/james/arr_backup/immich/profile" = backupMount "/var/lib/immich/profile";
+    "/home/james/arr_backup/bazarr" = backupMount "/var/lib/bazarr/backup";
+    "/home/james/arr_backup/sonarr" = backupMount "/var/lib/sonarr/.config/NzbDrone/Backups";
+    "/home/james/arr_backup/radarr" = backupMount "/var/lib/radarr/.config/Radarr/Backups";
+    "/home/james/arr_backup/prowlarr" = backupMount "/var/lib/prowlarr/Backups";
+    "/home/james/arr_backup/lidarr" = backupMount "/var/lib/lidarr/Backups";
+    "/home/james/arr_backup/chaptarr" = backupMount "/var/lib/chaptarr/Backups";
+    # nb scheduled backups are off by default: enable them under Settings > Backups
+    "/home/james/arr_backup/audiobookshelf" =
+      backupMount "/var/lib/audiobookshelf/metadata/backups";
+    "/home/james/arr_backup/kavita" = backupMount "/var/lib/kavita/config/backups";
+    "/home/james/arr_backup/navidrome" = backupMount "/var/lib/navidrome-backups"; # see Backup below
+    "/home/james/arr_backup/suwayomi" = backupMount "/var/lib/suwayomi-server/backups"; # see backupPath below
+    # no built-in backup
+    "/home/james/arr_backup/jellyseerr" = backupMount "/var/lib/jellyseerr";
+    # no built-in backup: sqlite db + one zip per bookmark (the archived page content)
+    "/home/james/arr_backup/readeck" = backupMount "/var/lib/readeck/data";
   };
 
   users.users.emby-server.extraGroups = [
@@ -382,6 +386,14 @@ in
     settings = {
       Address = "100.65.97.33";
       MusicFolder = "/home/james/music-library/music";
+      # off unless Path/Schedule/Count are all set. Not under /var/lib/navidrome: the
+      # module forces that 0700, so syncthing (james) could not read it. The module
+      # adds this path to BindPaths itself
+      Backup = {
+        Path = "/var/lib/navidrome-backups";
+        Schedule = "0 3 * * *";
+        Count = 7;
+      };
     };
   };
   users.users.navidrome = {
@@ -649,6 +661,9 @@ in
       autoDownloadNewChapters = true;
       autoDownloadNewChaptersLimit = 0; # unlimited
       excludeEntryWithUnreadChapters = false;
+      # daily auto-backups are on by default (backupInterval = 1, backupTTL = 14 days),
+      # but land in .local/share/Tachidesk, which the module forces 0700
+      backupPath = "/var/lib/suwayomi-server/backups";
     };
   };
   users.users.suwayomi.extraGroups = [
@@ -1136,6 +1151,11 @@ in
     "Z  /var/lib/radarr 0750 radarr radarr - -"
 
     "d  /var/lib/chaptarr 0750 chaptarr chaptarr - -"
+    # backup dirs bind-mounted into arr_backup; chaptarr only creates its own on the
+    # first weekly backup
+    "d  /var/lib/chaptarr/Backups 0750 chaptarr chaptarr - -"
+    "d  /var/lib/navidrome-backups 0750 navidrome navidrome - -"
+    "d  /var/lib/suwayomi-server/backups 0750 suwayomi suwayomi - -"
     "d  /var/lib/sabnzbd/complete/readarr 0770 sabnzbd sabnzbd - -"
 
     "d /var/lib/audiobookrequest 0750 audiobookrequest audiobookrequest -"
