@@ -168,6 +168,8 @@
       dataDir = "/home/james/syncthing";
       guiAddress = "100.65.97.33:8384"; # hm90.tail7f031.ts.net
       settings = {
+        # peers connect over tailscale; the FritzBox refuses UPnP mappings anyway
+        options.natEnabled = false;
         devices = {
           hm90 = {
             id = "IEYHIZK-64FMYVQ-BUFCRXV-H5HXUE3-GI6LX52-6MKQTWA-TKBG4CD-DEBK5AY";

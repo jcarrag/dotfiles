@@ -201,6 +201,11 @@ in
     serviceConfig.BindPaths = [ "/home/james/music-library/music" ];
     serviceConfig.ProtectHome = lib.mkForce "tmpfs";
     serviceConfig.UMask = lib.mkForce "0002";
+    # .NET >= 8.0.33 keeps named mutexes under $XDG_RUNTIME_DIR; system services
+    # don't get one, so slskd can't take its singleton mutex and exits 0 at once
+    serviceConfig.RuntimeDirectory = "slskd";
+    serviceConfig.RuntimeDirectoryMode = "0700";
+    environment.XDG_RUNTIME_DIR = "/run/slskd";
   };
 
   ##
@@ -456,7 +461,12 @@ in
     group = "prowlarr";
   };
   users.groups.prowlarr = { };
-  systemd.services.prowlarr = mergeArrPermissions "prowlarr" { };
+  # the module defaults to DynamicUser, whose (id-mapped) /var/lib/private/prowlarr
+  # is owned by nobody:nogroup on disk, so syncthing (james) can't read Backups.
+  # Turning it off makes systemd move the dir back to /var/lib/prowlarr and chown it.
+  systemd.services.prowlarr = mergeArrPermissions "prowlarr" {
+    serviceConfig.DynamicUser = lib.mkForce false;
+  };
 
   ##
   ##
@@ -510,6 +520,26 @@ in
       PGID = "0";
       UMASK = "002";
       TZ = "Europe/London";
+    };
+  };
+  # chaptarr writes backup zips 0600 regardless of UMASK, so syncthing (james, in
+  # group chaptarr) can't read them. Make them group-readable whenever one appears.
+  systemd.paths.chaptarr-backup-perms = {
+    wantedBy = [ "multi-user.target" ];
+    pathConfig = {
+      PathChanged = [
+        "/var/lib/chaptarr/Backups/manual"
+        "/var/lib/chaptarr/Backups/scheduled"
+      ];
+    };
+  };
+  systemd.services.chaptarr-backup-perms = {
+    # also run once at boot to catch backups made while the path unit was down
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "chaptarr";
+      ExecStart = "${pkgs.coreutils}/bin/chmod -R g+rX /var/lib/chaptarr/Backups";
     };
   };
   systemd.services.chaptarr.serviceConfig.ExecStartPre = lib.mkBefore [
@@ -1146,11 +1176,19 @@ in
     "a+ /var/lib/sonarr - - - - group:sonarr:r-x"
     "Z  /var/lib/sonarr 0750 sonarr sonarr - -"
 
+    # moved back from /var/lib/private when DynamicUser was turned off, still owned
+    # by nobody:nogroup (systemd doesn't chown it on the way back)
+    "Z  /var/lib/prowlarr 0750 prowlarr prowlarr - -"
+
     "A+ /var/lib/radarr - - - - group:radarr:r-x"
     "a+ /var/lib/radarr - - - - group:radarr:r-x"
     "Z  /var/lib/radarr 0750 radarr radarr - -"
 
     "d  /var/lib/chaptarr 0750 chaptarr chaptarr - -"
+    # watched by chaptarr-backup-perms.path, so they must exist before chaptarr
+    # makes its first backup
+    "d  /var/lib/chaptarr/Backups/manual 0750 chaptarr chaptarr - -"
+    "d  /var/lib/chaptarr/Backups/scheduled 0750 chaptarr chaptarr - -"
     # backup dirs bind-mounted into arr_backup; chaptarr only creates its own on the
     # first weekly backup
     "d  /var/lib/chaptarr/Backups 0750 chaptarr chaptarr - -"
