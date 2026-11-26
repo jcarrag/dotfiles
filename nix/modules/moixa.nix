@@ -18,7 +18,10 @@
   #   modprobe -i vfio-pci
   # '';
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
 
   programs = {
     dconf.enable = true;

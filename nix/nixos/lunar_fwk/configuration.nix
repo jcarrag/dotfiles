@@ -180,5 +180,8 @@ in
   systemd = lib.attrsets.recursiveUpdate pkgs.systemd-services {
   };
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
 }

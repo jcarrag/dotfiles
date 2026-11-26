@@ -335,10 +335,18 @@ in
         "hm90.tail7f031.ts.net:MCfNHw7zYy994pMsO/bq1aduiMirFR5tuXYNv4/LAj8=" # harmonia
         "fwk.tail7f031.ts.net:VH6U0MFW2pggLXy51YiAGvr8gnC37HYLsM+6Nm1ivZU=" # harmonia
         "lunar-fwk.tail7f031.ts.net:uw0LlVOHeb06LtOH/weFSXh0YfI/ZwK5mYjN4Jjk7rs=" # harmonia
+        "cache.iog.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+        "jcarrag.cachix.org-1:FA5BLvAZdzLaJztyyou115tAQjT1cQsiAG03dm0AdvI="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+      # not used by default; only when a flake (nixConfig) or command asks for them
+      trusted-substituters = [
+        "https://cache.iog.io"
+        "https://jcarrag.cachix.org"
+        "https://nix-community.cachix.org"
       ];
       trusted-users = [
         "root"
-        "james"
       ];
     };
   };
@@ -608,7 +616,7 @@ in
   security = {
     rtkit.enable = true;
     sudo.extraConfig = ''
-      Defaults timestamp_timeout=-1
+      Defaults timestamp_timeout=1440
     '';
     # Kolide's Linux agent reads the system CA bundle through osquery's `certificates`
     # table, which parses OpenSSL `TRUSTED CERTIFICATE` blocks as ordinary trusted
@@ -948,9 +956,7 @@ in
       "users"
       "video"
       "audio"
-      "disk"
       "networkmanager"
-      "docker"
       "dialout"
       "emby-server"
       "plugdev"
